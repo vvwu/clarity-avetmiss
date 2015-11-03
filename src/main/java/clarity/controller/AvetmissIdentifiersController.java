@@ -1,19 +1,22 @@
 package clarity.controller;
 
+import java.util.List;
+
 import clarity.AvetmissApplicationService;
 import clarity.controller.payload.LabelValueReadModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.List;
-
-@Controller(value = "/identifiers/")
+@Controller
+@RequestMapping(value = "/identifiers")
 @EnableAutoConfiguration
 public class AvetmissIdentifiersController {
 
@@ -80,6 +83,21 @@ public class AvetmissIdentifiersController {
         return ResponseEntity.ok(fundingSourceIdentifiers);
     }
 
+    @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceStateIdentifier/{identifier}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<LabelValueReadModel> getFundingSourceStateIdentifier(@PathVariable(value = "identifier") String fundingSourceStateIdentifier) {
+        LabelValueReadModel fundingSourceState =
+                avetmissApplicationService.getFundingSourceStateByIdentifier(fundingSourceStateIdentifier);
+
+        if(fundingSourceState == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(fundingSourceState);
+    }
+
+
     @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceStateIdentifiersNonGovernmentFunded",
             produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -138,6 +156,20 @@ public class AvetmissIdentifiersController {
                 avetmissApplicationService.getStudyReasonIdentifiers();
 
         return ResponseEntity.ok(studyReasonIdentifiers);
+    }
+
+    @RequestMapping(method = RequestMethod.GET, value = "/studyReason/{identifier}",
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    ResponseEntity<LabelValueReadModel> getStudyReasonByIdentifier(@PathVariable(value = "identifier") String studyingReasonIdentifier) {
+        LabelValueReadModel studyReason =
+                avetmissApplicationService.getStudyReasonByIdentifier(studyingReasonIdentifier);
+
+        if(studyReason == null) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+
+        return ResponseEntity.ok(studyReason);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/indigenousStatus",

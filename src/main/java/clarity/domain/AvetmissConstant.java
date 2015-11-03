@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import static clarity.util.StringUtil.isNotBlank;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
@@ -673,6 +674,16 @@ public class AvetmissConstant {
                         "SSG"));
     }
 
+    public static LabelValue getFundingSourceState(String fundingSourceStateIdentifier) {
+        LabelValue label = getLabelValueByValue(getFundingSourceStateIdentifiers_GovernmentFunded(), fundingSourceStateIdentifier);
+        if(label != null) {
+            return label;
+        }
+
+        return getLabelValueByValue(getFundingSourceStateIdentifiers_NonGovernmentFunded(), fundingSourceStateIdentifier);
+    }
+
+
     // FundingSourceNational
     public static List<LabelValue> getFundingSourceNationalIdentifiers() {
         return newArrayList(
@@ -771,6 +782,10 @@ public class AvetmissConstant {
         return identifiers;
     }
 
+    public static LabelValue getStudyReason(String identifier) {
+        return getLabelValueByValue(getStudyReasonIdentifiers(), identifier);
+    }
+
     public static String getConcessionType(String concessionTypeIdentifier) {
         return getLabelByValue(getConcessionTypeIdentifiers(), concessionTypeIdentifier);
     }
@@ -779,6 +794,15 @@ public class AvetmissConstant {
         for (LabelValue id : identifiers) {
             if(id.getValue().equals(value)) {
                 return id.getLabel();
+            }
+        }
+        return null;
+    }
+
+    public static LabelValue getLabelValueByValue(List<LabelValue> identifiers, String value) {
+        for (LabelValue id : identifiers) {
+            if(id.getValue().equals(value)) {
+                return id;
             }
         }
         return null;

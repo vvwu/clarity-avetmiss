@@ -52621,3 +52621,5 @@ SWEWRD006A	Writing words and simple sentences	120101
 SWETIM007A	Understanding time and money	120101
 SWEPRN008A	Giving basic personal information	120101
 SWEEXC009A	Engaging in short exchanges	120101
+SWEINF204A	Comprehending & giving spoken information	120101
+SWESTO209A	Comprehending & composing story texts	120101

@@ -23,7 +23,9 @@ public class FileBasedUnitRepository implements UnitRepository {
     public FileBasedUnitRepository() {
 
         NtisUnitTextLineExtractor extractor = new NtisUnitTextLineExtractor();
-        List<Unit> units = new ClassPathTextResource<Unit>("assets/ntis_unit.txt").read(extractor);
+
+        /** The latest ntis_unit.txt and qualification (course) file can be downloaded from http://www.ncver.edu.au/publications/1452.html **/
+        List<Unit> units = new ClassPathTextResource<Unit>("ntis_unit.txt").read(extractor);
 
         this.unitByCode = newLinkedHashMap();
         for(Unit unit: units) {

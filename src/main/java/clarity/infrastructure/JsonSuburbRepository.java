@@ -22,7 +22,7 @@ public class JsonSuburbRepository implements SuburbRepository{
     private Map<Integer, List<Suburb>> suburbs;
 
     public JsonSuburbRepository() {
-        this("assets/suburbs.json");
+        this("suburbs.json");
     }
 
     public JsonSuburbRepository(String suburbFilePath) {

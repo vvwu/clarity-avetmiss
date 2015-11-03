@@ -63,9 +63,17 @@ public class AvetmissApplicationService {
     }
 
     public List<LabelValueReadModel> getFundingSourceStateIdentifiersGovernmentFunded() {
-        List<LabelValue> fundingSourceStateIdentifiers = AvetmissConstant.getFundingSourceStateIdentifiers_GovernmentFunded();
+        List<LabelValue> fundingSourceStateIdentifiers =
+                AvetmissConstant.getFundingSourceStateIdentifiers_GovernmentFunded();
 
         return toLabelValueReadModels(fundingSourceStateIdentifiers);
+    }
+
+    public LabelValueReadModel getFundingSourceStateByIdentifier(String identifier) {
+        LabelValue fundingSourceState =
+                AvetmissConstant.getFundingSourceState(identifier);
+
+        return toLabelValueReadModel(fundingSourceState);
     }
 
     public List<LabelValueReadModel> getFundingSourceStateIdentifiersNonGovernmentFunded() {
@@ -102,6 +110,12 @@ public class AvetmissApplicationService {
         List<LabelValue> studyReasonIdentifiers = AvetmissConstant.getStudyReasonIdentifiers();
 
         return toLabelValueReadModels(studyReasonIdentifiers);
+    }
+
+    public LabelValueReadModel getStudyReasonByIdentifier(String studyingReasonIdentifier) {
+        LabelValue studyReason = AvetmissConstant.getStudyReason(studyingReasonIdentifier);
+
+        return toLabelValueReadModel(studyReason);
     }
 
     public List<LabelValueReadModel> getIndigenousStatusIdentifiers() {
@@ -151,12 +165,16 @@ public class AvetmissApplicationService {
     private List<LabelValueReadModel> toLabelValueReadModels(List<LabelValue> labelValues) {
         List<LabelValueReadModel> readModels = Lists.newArrayList();
         for(LabelValue labelValue: labelValues) {
-            LabelValueReadModel readModel = new LabelValueReadModel();
-            readModel.label = labelValue.getLabel();
-
-            readModels.add(readModel);
+            readModels.add(toLabelValueReadModel(labelValue));
         }
         return readModels;
+    }
+
+    private LabelValueReadModel toLabelValueReadModel(LabelValue labelValue) {
+        LabelValueReadModel readModel = new LabelValueReadModel();
+        readModel.label = labelValue.getLabel();
+        readModel.value = labelValue.getValue();
+        return readModel;
     }
 
 }
