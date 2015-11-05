@@ -37,6 +37,7 @@ public class AvetmissInputFileApplicationService {
         List<Enrolment> rows
                 = Csv.read(new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8)), inputRowMapper);
 
+        errorList.addAll(inputRowMapper.errors());
         for(Enrolment enrolment: rows) {
             try {
                 loadUnitDetails(enrolment);

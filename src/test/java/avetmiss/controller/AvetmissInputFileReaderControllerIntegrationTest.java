@@ -1,30 +1,19 @@
 package avetmiss.controller;
 
-import avetmiss.Application;
 import avetmiss.BaseControllerIntegrationTest;
 import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
 import avetmiss.controller.payload.inputFile.EnrolmentRowReadModel;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.test.IntegrationTest;
-import org.springframework.boot.test.SpringApplicationConfiguration;
-import org.springframework.boot.test.TestRestTemplate;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.context.web.WebAppConfiguration;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URL;
 
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
