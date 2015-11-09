@@ -2,6 +2,8 @@ package avetmiss.infrastructure;
 
 import avetmiss.domain.Suburb;
 import avetmiss.domain.SuburbRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
@@ -15,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @Repository
 public class JsonSuburbRepository implements SuburbRepository{
@@ -35,25 +38,34 @@ public class JsonSuburbRepository implements SuburbRepository{
     }
 
     private Map<Integer, List<Suburb>> initializeSuburbs(String suburbFilePath) {
-        BasicJsonParser basicJsonParser = new BasicJsonParser();
+        Map<Integer, List<Suburb>> suburbsMap = newLinkedHashMap();
 
-        List<Object> suburbJsons =
-                basicJsonParser.parseList(asJson(suburbFilePath));
+        String json = asJson(suburbFilePath);
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<PostCodeJson> postcodes = objectMapper.readValue(json, new TypeReference<List<PostCodeJson>>(){});
 
-        Map<Integer, List<Suburb>> suburbsMap = Maps.newLinkedHashMap();
 
-        for(Object suburbJson: suburbJsons) {
-            Suburb suburb = jsonToSuburb((String) suburbJson, basicJsonParser);
+            for(PostCodeJson suburbJson: postcodes) {
+                Suburb suburb =
+                        new Suburb(suburbJson.name, suburbJson.postcode);
 
-            List<Suburb> existingSuburbs = suburbsMap.get(suburb.getPostCode());
+                List<Suburb> existingSuburbs = suburbsMap.get(suburb.getPostCode());
 
-            if(existingSuburbs == null) {
-                existingSuburbs = newArrayList();
-                suburbsMap.put(suburb.getPostCode(), existingSuburbs);
+                if(existingSuburbs == null) {
+                    existingSuburbs = newArrayList();
+                    suburbsMap.put(suburb.getPostCode(), existingSuburbs);
+                }
+
+                existingSuburbs.add(suburb);
             }
 
-            existingSuburbs.add(suburb);
+        } catch (IOException e) {
+            throw new IllegalStateException(e);
         }
+
+
+
 
         return suburbsMap;
     }

@@ -15,7 +15,7 @@ public class JsonSuburbRepositoryIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        this.instance = new JsonSuburbRepository("assets/suburbs.json");
+        this.instance = new JsonSuburbRepository("suburbs.json");
     }
 
     @Test

@@ -305,46 +305,6 @@ public class CSVLexer {
   /** zzAtEOF == true <=> the scanner is at the EOF */
   private boolean zzAtEOF;
 
-  /* user code: */
-	/**
-	 * Prints out tokens and line numbers from a file or System.in.
-	 * If no arguments are given, System.in will be used for input.
-	 * If more arguments are given, the first argument will be used as
-	 * the name of the file to use as input
-	 *
-	 * @param args program arguments, of which the first is a filename
-	 *
-	 * @since ostermillerutils 1.00.00
-	 */
-	public static void main(String[] args){
-		InputStream in;
-		try {
-			if (args.length > 0){
-				File f = new File(args[0]);
-				if (f.exists()){
-					if (f.canRead()){
-						in = new FileInputStream(f);
-					} else {
-						throw new IOException("Could not open " + args[0]);
-					}
-				} else {
-					throw new IOException("Could not find " + args[0]);
-				}
-			} else {
-				in = System.in;
-			}
-			CSVLexer shredder = new CSVLexer(in);
-			shredder.setCommentStart("#;!");
-			shredder.setEscapes("nrtf", "\n\r\t\f");
-			String t;
-			while ((t = shredder.getNextToken()) != null) {
-				System.out.println("" + shredder.getLineNumber() + " " + t);
-			}
-		} catch (IOException e){
-			System.out.println(e.getMessage());
-		}
-	}
-
 	private char delimiter = ',';
 	private char quote = '\"';
 
