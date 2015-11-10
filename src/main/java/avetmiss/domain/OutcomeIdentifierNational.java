@@ -1,12 +1,19 @@
 package avetmiss.domain;
 
+import avetmiss.util.Dates;
 import com.google.common.collect.Maps;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Date;
 import java.util.Map;
 
+import static org.apache.commons.lang.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class OutcomeIdentifierNational {
+    private Logger logger = LoggerFactory.getLogger(getClass());
+
     private final static Map<Integer, String> identifiers = Maps.newLinkedHashMap();
     static {
         identifiers.put(20, "Competency achieved/pass");
@@ -49,6 +56,14 @@ public class OutcomeIdentifierNational {
         this.code = aCode;
     }
 
+    public OutcomeIdentifierNational(int aCode) {
+        if(!identifiers.containsKey(aCode)) {
+            throw new IllegalArgumentException("OutcomeIdentifierNational code is invalid:" + aCode + ", only support: " + identifiers.keySet());
+        }
+
+        this.code = aCode;
+    }
+
     public int code() {
         return code;
     }
@@ -59,5 +74,18 @@ public class OutcomeIdentifierNational {
 
     public boolean isWithdrawn() {
         return OUTCOME_IDENTIFIER_WITHDRAWN == code();
+    }
+
+    // TODO: test case
+    public int selfCorrectedCode(String studentID, Date enrolmentEndDate) {
+        if(is90ContinuingEnrolmentInTheCurrentCollectionYear()
+                && (Dates.year(enrolmentEndDate) > Dates.currentYear())) {
+
+            logger.warn("Enrolment sid: {} outcomeIdentifier should be reported as 70, course end year: {} is in the future collection year",
+                    studentID, Dates.year(enrolmentEndDate));
+            return OutcomeIdentifierNational.CONTINUING_ENROLMENT_IN_THE_FUTURE_COLLECTION_YEAR;
+        }
+
+        return code;
     }
 }
