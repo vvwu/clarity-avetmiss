@@ -20,7 +20,7 @@ public class AvetmissNatFileGenerateController {
     @Autowired
     private AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService;
 
-    @RequestMapping(value = "nat.zip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = {"application/zip"})
+    @RequestMapping(value = "nat.zip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     ResponseEntity<byte[]> getNats(@RequestBody NatFilesRequest natFilesRequest) throws IOException {
         byte[] bytes = avetmissNatGenerationApplicationService.getNats(natFilesRequest);
 

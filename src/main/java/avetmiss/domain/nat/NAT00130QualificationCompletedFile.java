@@ -24,7 +24,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * files but only unique records for the Client Identifier/ Course Identifier/ Program (Course) Commencement Date
  * combination.
  */
-public class NAT00130QualificationCompletedFile {
+public class Nat00130QualificationCompletedFile {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 

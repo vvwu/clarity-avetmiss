@@ -4,9 +4,7 @@ import avetmiss.controller.payload.nat.*;
 import avetmiss.domain.UnitRepository;
 import avetmiss.domain.nat.*;
 import avetmiss.util.StringZipEntry;
-import com.google.common.base.Charsets;
 import com.google.common.collect.Lists;
-import com.google.common.io.CharStreams;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +31,7 @@ public class AvetmissNatGenerationApplicationService {
             return null;
         }
 
-        String content = new NAT00010TrainingOrganizationFile().export(nat00010TrainingOrganizationFileRequest);
+        String content = new Nat00010TrainingOrganizationFile().export(nat00010TrainingOrganizationFileRequest);
 
         logger.info("[nat00010TrainingOrganizationFile]: \n{}", content);
         return new StringZipEntry(content, "NAT00010.txt");
@@ -81,7 +79,7 @@ public class AvetmissNatGenerationApplicationService {
         }
 
         StringZipEntry entry1 = new StringZipEntry(new Nat00080ClientFile().export(requests), "NAT00080.txt");
-        StringZipEntry entry2 = new StringZipEntry(new NAT00085ClientPostalDetailsFile().export(requests), "NAT00085.txt");
+        StringZipEntry entry2 = new StringZipEntry(new Nat00085ClientPostalDetailsFile().export(requests), "NAT00085.txt");
         return Arrays.asList(entry1, entry2);
     }
 
@@ -90,7 +88,7 @@ public class AvetmissNatGenerationApplicationService {
             return null;
         }
 
-        String content = new NAT0009DisabilityFile().export(requests);
+        String content = new Nat0009DisabilityFile().export(requests);
 
         logger.info("[nat0009DisabilityFile]: \n{}", content);
         return new StringZipEntry(content, "NAT00090.txt");
@@ -102,7 +100,7 @@ public class AvetmissNatGenerationApplicationService {
             return null;
         }
 
-        String content = new NAT00100PriorEducationFile().export(requests);
+        String content = new Nat00100PriorEducationFile().export(requests);
 
         logger.info("[nat00100PriorEducationFile]: \n{}", content);
         return new StringZipEntry(content, "NAT00100.txt");
@@ -124,7 +122,7 @@ public class AvetmissNatGenerationApplicationService {
             return null;
         }
 
-        String content = new NAT00130QualificationCompletedFile().export(requests);
+        String content = new Nat00130QualificationCompletedFile().export(requests);
 
         logger.info("[nat00130QualificationCompletedFile]: \n{}", content);
         return new StringZipEntry(content, "NAT00130.txt");

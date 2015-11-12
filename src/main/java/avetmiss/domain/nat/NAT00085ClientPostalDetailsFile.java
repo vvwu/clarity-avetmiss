@@ -12,7 +12,7 @@ import static avetmiss.domain.Header.Header;
 import static avetmiss.util.StringUtil.isBlank;
 import static com.google.common.collect.Lists.newArrayList;
 
-public class NAT00085ClientPostalDetailsFile {
+public class Nat00085ClientPostalDetailsFile {
 
     private final static Header header = Header(
             of("Client (Student) Identifier", 10),
@@ -44,29 +44,29 @@ public class NAT00085ClientPostalDetailsFile {
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    private String[] exportOneRow(ClientFileRequest client) {
-        String studentID = client.studentID;
+    private String[] exportOneRow(ClientFileRequest clientFileRequest) {
+        String studentID = clientFileRequest.studentID;
 
         String addressPostalDeliveryBox = null;
         String telephoneNumberWork = null;
 
         return new String[] {
-                client.studentID,
-                client.title,
-                client.firstName,
-                client.lastName,
-                client.addressBuildingName,
-                client.addressFlatOrUnitDetails,
-                client.addressStreetNumber,
-                client.addressStreetName,
+                clientFileRequest.studentID,
+                clientFileRequest.title,
+                clientFileRequest.firstName,
+                clientFileRequest.lastName,
+                clientFileRequest.addressBuildingName,
+                clientFileRequest.addressFlatOrUnitDetails,
+                clientFileRequest.addressStreetNumber,
+                clientFileRequest.addressStreetName,
                 addressPostalDeliveryBox,
-                client.suburb,  // Address Location - Suburb, Locality or Town
-                postCode(studentID, client.postCode),
-                client.stateIdentifier,
-                client.contactPhoneNo,
+                clientFileRequest.suburb,  // Address Location - Suburb, Locality or Town
+                postCode(studentID, clientFileRequest.postCode),
+                clientFileRequest.stateIdentifier,
+                clientFileRequest.contactPhoneNo,
                 telephoneNumberWork,
-                client.contactMobile,
-                client.contactEmailAddress};
+                clientFileRequest.contactMobile,
+                clientFileRequest.contactEmailAddress};
     }
 
     public String postCode(String studentID, String aPostcode) {

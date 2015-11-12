@@ -9,7 +9,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 
-public class NAT0009DisabilityFile {
+public class Nat0009DisabilityFile {
 
     private final static Header header = Header.Header(
             Field.of("Client (Student) Identifier", 10),

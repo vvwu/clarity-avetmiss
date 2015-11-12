@@ -20,7 +20,7 @@ import static com.google.common.collect.Lists.newArrayList;
  * Description: This file contains a single record for information about the
  * training organisation that is providing the data.
  */
-public class NAT00010TrainingOrganizationFile {
+public class Nat00010TrainingOrganizationFile {
 
     public enum TrainingOrganisationTypeIdentifier {
         TAFE(31),
