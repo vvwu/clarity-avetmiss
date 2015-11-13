@@ -1,7 +1,5 @@
 package avetmiss.controller.payload.nat;
 
-import avetmiss.domain.OutcomeIdentifierNational;
-
 public class EnrolmentFileRequest {
     public String rtoIdentifier;
 

@@ -1,10 +1,10 @@
 package avetmiss.util;
 
-public class StringZipEntry {
-    private String content;
+public class NatFile {
     private String filename;
+    private String content;
 
-    public StringZipEntry(String content, String filename) {
+    public NatFile(String content, String filename) {
         this.content = content;
         this.filename = filename;
     }
