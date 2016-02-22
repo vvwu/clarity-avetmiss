@@ -9,8 +9,7 @@ public class Enrolment {
     private int rowNum;
     private int studentId;
     private String studentName;
-    private String courseIdentifier;
-    private String courseName;
+    private String courseCode;
     private String unitCode;
     private Date startDate;
     private Date endDate;
@@ -80,20 +79,12 @@ public class Enrolment {
         this.rowNum = rowNum;
     }
 
-    public String courseIdentifier() {
-        return courseIdentifier;
+    public String courseCode() {
+        return courseCode;
     }
 
-    public void setCourseIdentifier(String courseIdentifier) {
-        this.courseIdentifier = courseIdentifier;
-    }
-
-    public String courseName() {
-        return courseName;
-    }
-
-    public void setCourseName(String courseName) {
-        this.courseName = courseName;
+    public void setCourseCode(String courseCode) {
+        this.courseCode = courseCode;
     }
 
     public EnrolmentSubject getUnit() {

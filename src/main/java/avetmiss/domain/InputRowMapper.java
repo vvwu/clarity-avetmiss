@@ -63,8 +63,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         enrolment.setStudentId(studentID);
 
         enrolment.setStudentName(cols[COLUMN_B]);
-        enrolment.setCourseIdentifier(cols[COLUMN_C]);
-        enrolment.setCourseName(cols[COLUMN_D]);
+        enrolment.setCourseCode(cols[COLUMN_C]);
         enrolment.setUnitCode(cols[COLUMN_E]);
         String nominalHourStr = cols[COLUMN_G];
         String supervisedHourStr = cols[COLUMN_H];

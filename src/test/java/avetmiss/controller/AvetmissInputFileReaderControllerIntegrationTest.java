@@ -40,8 +40,7 @@ public class AvetmissInputFileReaderControllerIntegrationTest extends BaseContro
         assertThat(enrolmentRowReadModel.rowNum, is(2));
         assertThat(enrolmentRowReadModel.studentId, is(50038));
         assertThat(enrolmentRowReadModel.studentName, is("Syed MUSTAFA"));
-        assertThat(enrolmentRowReadModel.courseIdentifier, is("BSB60207"));
-        assertThat(enrolmentRowReadModel.courseName, is("Advanced Diploma of Business (BSB60207)"));
+        assertThat(enrolmentRowReadModel.courseCode, is("BSB60207"));
         assertThat(enrolmentRowReadModel.startDate, is("2015-02-16"));
         assertThat(enrolmentRowReadModel.endDate, is("2015-05-20"));
         assertThat(enrolmentRowReadModel.hoursAttended, is(nullValue()));

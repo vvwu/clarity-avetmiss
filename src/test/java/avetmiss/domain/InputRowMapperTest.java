@@ -17,7 +17,7 @@ public class InputRowMapperTest {
 
     private int studentId = 33642;
     private String studentName = "Nimesh Patel";
-    private String courseIdentifier = "SIT31107";
+    private String courseCode = "SIT31107";
     private String courseName = "Certificate III in Hospitality (Patisserie) (SIT31107)";
     private String unitCode = "SITXCOM002A";
     private String unitName = "Work in a socially diverse environment";
@@ -33,7 +33,7 @@ public class InputRowMapperTest {
     private String[] inputRow = {
             studentId + "",
             studentName,
-            courseIdentifier,
+            courseCode,
             courseName,
             unitCode,
             unitName,
@@ -64,7 +64,7 @@ public class InputRowMapperTest {
 
         assertThat(enrolment.getStudentId(), is(studentId));
         assertThat(enrolment.studentName(), is(studentName));
-        assertThat(enrolment.courseName(), is(courseName));
+        assertThat(enrolment.courseCode(), is(courseCode));
         assertThat(enrolment.getUnitCode(), is(unitCode));
         assertThat(enrolment.nominalHour(), is(nominalHours));
         assertThat(enrolment.hoursAttended(), is(hoursAttended));
@@ -139,7 +139,7 @@ public class InputRowMapperTest {
         String[] inputRow = {
                 studentId + "",
                 studentName,
-                courseIdentifier,
+                courseCode,
                 courseName,
                 unitCode,
                 unitName,

@@ -86,8 +86,7 @@ public class AvetmissInputFileApplicationService {
         enrolmentRowReadModel.rowNum = enrolment.getRowNum();
         enrolmentRowReadModel.studentId = enrolment.getStudentId();
         enrolmentRowReadModel.studentName = enrolment.studentName();
-        enrolmentRowReadModel.courseIdentifier = enrolment.courseIdentifier();
-        enrolmentRowReadModel.courseName = enrolment.courseName();
+        enrolmentRowReadModel.courseCode = enrolment.courseCode();
         enrolmentRowReadModel.unitCode = enrolment.getUnitCode();
         enrolmentRowReadModel.startDate = Dates.toISO(enrolment.startDate());
         enrolmentRowReadModel.endDate = Dates.toISO(enrolment.endDate());
