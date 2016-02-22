@@ -3,7 +3,6 @@ package avetmiss.domain;
 import avetmiss.util.CSVRowMapper;
 import avetmiss.util.StringUtil;
 import org.apache.commons.lang.Validate;
-import org.springframework.util.StringUtils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -11,7 +10,10 @@ import java.util.*;
 
 import static avetmiss.util.Csv.*;
 import static avetmiss.util.StringUtil.isBlank;
+import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
+import static org.springframework.util.StringUtils.hasLength;
 
 public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
@@ -47,11 +49,11 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
         ensureRequiredColumns(cols);
         ensureColumnAContainsStudentID(cols);
-        ensureColumnFContainsNominalHourStr(cols);
+        ensureColumnGContainsNominalHourStr(cols);
         ensureHoursAttendedColumnContainsEmptyOrInteger(cols);
 
-        ensureColumnHContainsValidDate(cols);
-        ensureColumnIContainsValidDate(cols);
+        ensureColumnJContainsValidDate(cols);
+        ensureValidEndDateProvided(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
 
         Enrolment enrolment = new Enrolment();
@@ -61,23 +63,27 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         enrolment.setStudentId(studentID);
 
         enrolment.setStudentName(cols[COLUMN_B]);
-        enrolment.setCourseName(cols[COLUMN_C]);
-        enrolment.setUnitCode(cols[COLUMN_D]);
-        // enrolment.setUnitname(cols[COLUMN_E]);
+        enrolment.setCourseIdentifier(cols[COLUMN_C]);
+        enrolment.setCourseName(cols[COLUMN_D]);
+        enrolment.setUnitCode(cols[COLUMN_E]);
+        String nominalHourStr = cols[COLUMN_G];
+        String supervisedHourStr = cols[COLUMN_H];
+        String hoursAttendedStr = cols[COLUMN_I];
 
-        String nominalHourStr = cols[COLUMN_F];
-        String hoursAttendedStr = cols[COLUMN_G];
+        String startDateStr = cols[COLUMN_J];
+        String endDateStr = cols[COLUMN_K];
+        String outcomeIdentifier = cols[COLUMN_L];
+        String tuitionFee = cols[COLUMN_M];
 
-        String startDateStr = cols[COLUMN_H];
-        String endDateStr = cols[COLUMN_I];
-        String outcomeIdentifier = cols[COLUMN_J];
-        String tuitionFee = cols[COLUMN_K];
+        if(hasLength(supervisedHourStr)) {
+            enrolment.setSupervisedHours(Integer.parseInt(supervisedHourStr));
+        }
 
-        if (StringUtils.hasLength(hoursAttendedStr)) {
+        if (hasLength(hoursAttendedStr)) {
             enrolment.setHoursAttended(Integer.parseInt(hoursAttendedStr));
         }
 
-        enrolment.setNominalHour(Integer.parseInt(nominalHourStr));
+                enrolment.setNominalHour(Integer.parseInt(nominalHourStr));
 
         enrolment.setStartDate(toDate(startDateStr));
         enrolment.setEndDate(toDate(endDateStr));
@@ -100,13 +106,14 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
     private Collection<String> requiredColumnNames() {
         return Collections.unmodifiableCollection(
-                Arrays.asList(
-                        "SID",
+                asList("SID",
                         "Student Name",
+                        "Course Identifier",
                         "Course Name",
                         "Unit Code",
                         "Unit Name",
                         "Nominal Hours",
+                        "Supervised Hours",
                         "Hours Attended",
                         "Start Date",
                         "End Date",
@@ -114,45 +121,44 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
     }
 
     private void ensureRequiredColumns(String[] cols) {
-        final int REQUIRED_COLUMNS = COLUMN_K + 1;
-        Validate.isTrue(cols.length == REQUIRED_COLUMNS, cols.length + " columns are provided, but " + REQUIRED_COLUMNS + " columns are required: " + requiredColumnNames());
+        final int requiredColumns = COLUMN_M + 1;
+        checkArgument(cols.length == requiredColumns, "%s columns are provided, but %s columns are required, expected columns: %s",
+                cols.length, requiredColumns, requiredColumnNames());
     }
 
     private void ensureColumnAContainsStudentID(String[] cols) {
         String sid = cols[COLUMN_A];
-        Validate.isTrue(StringUtil.isInteger(sid), "Must provide a valid Student ID in [column A]");
+        checkArgument(StringUtil.isInteger(sid), "Must provide a valid Student ID in [column A]");
     }
 
-    private void ensureColumnFContainsNominalHourStr(String[] cols) {
-        String nominalHourStr = cols[COLUMN_F];
-        Validate.isTrue(StringUtil.isInteger(nominalHourStr), "Must provide a valid 'nominalHour' in [column F]");
+    private void ensureColumnGContainsNominalHourStr(String[] cols) {
+        String nominalHourStr = cols[COLUMN_G];
+        checkArgument(StringUtil.isInteger(nominalHourStr), "Must provide a valid 'nominalHour' in [column G]");
     }
 
     private void ensureHoursAttendedColumnContainsEmptyOrInteger(String[] cols) {
-        String hoursAttendedStr = cols[COLUMN_G];
-        if(StringUtils.hasLength(hoursAttendedStr)) {
-            Validate.isTrue(StringUtil.isInteger(hoursAttendedStr), "Must provide a valid 'hoursAttended' in [column G]");
+        String hoursAttendedStr = cols[COLUMN_I];
+        if(hasLength(hoursAttendedStr)) {
+            Validate.isTrue(StringUtil.isInteger(hoursAttendedStr), "Must provide a valid 'hoursAttended' in [column I]");
         }
     }
 
-    private void ensureColumnHContainsValidDate(String[] cols) {
-        String startDateStr = cols[COLUMN_H];
+    private void ensureColumnJContainsValidDate(String[] cols) {
+        String startDateStr = cols[COLUMN_J];
         Date startDate = toDate(startDateStr);
-        Validate.notNull(startDate, "Must provide a valid date in [column H] in format: dd/mm/yyyy");
+        checkArgument(startDate != null, "Must provide a valid date in [column J] in format: dd/mm/yyyy");
     }
 
-    private void ensureColumnIContainsValidDate(String[] cols) {
-        String endDateStr = cols[COLUMN_I];
+    private void ensureValidEndDateProvided(String[] cols) {
+        String endDateStr = cols[COLUMN_K];
         Date endDate = toDate(endDateStr);
-        Validate.notNull(endDate, "Must provide a valid date in [column I] in format: dd/mm/yyyy");
+        checkArgument(endDate != null, "Must provide a valid date in [column K] in format: dd/mm/yyyy");
     }
 
     private void ensureStartDateIsNoLaterThanEndDate(String[] cols) {
-        Date startDate = toDate(cols[COLUMN_H]);
-        Date endDate = toDate(cols[COLUMN_I]);
+        Date startDate = toDate(cols[COLUMN_J]);
+        Date endDate = toDate(cols[COLUMN_K]);
 
-        Validate.isTrue(!startDate.after(endDate), "Start date cannot be later than end date");
+        checkArgument(!startDate.after(endDate), "Start date cannot be later than end date");
     }
-
-
 }

@@ -23,9 +23,12 @@ public class AvetmissInputFileReaderControllerIntegrationTest extends BaseContro
 
     @Test
     public void post() throws Exception {
+
+        String csvContent = goodInputCsvContent();
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
-        HttpEntity<String> requestEntity = new HttpEntity<String>(goodInputCsvContent(), headers);
+        HttpEntity<String> requestEntity = new HttpEntity<String>(csvContent, headers);
 
         AvetmissInputFileProcessResult result = template.postForEntity(base + "/readInput", requestEntity, AvetmissInputFileProcessResult.class).getBody();
         assertThat(result.clients.size(), is(2));
@@ -37,6 +40,7 @@ public class AvetmissInputFileReaderControllerIntegrationTest extends BaseContro
         assertThat(enrolmentRowReadModel.rowNum, is(2));
         assertThat(enrolmentRowReadModel.studentId, is(50038));
         assertThat(enrolmentRowReadModel.studentName, is("Syed MUSTAFA"));
+        assertThat(enrolmentRowReadModel.courseIdentifier, is("BSB60207"));
         assertThat(enrolmentRowReadModel.courseName, is("Advanced Diploma of Business (BSB60207)"));
         assertThat(enrolmentRowReadModel.startDate, is("2015-02-16"));
         assertThat(enrolmentRowReadModel.endDate, is("2015-05-20"));
@@ -47,6 +51,7 @@ public class AvetmissInputFileReaderControllerIntegrationTest extends BaseContro
         assertThat(enrolmentRowReadModel.subjectName, is("Manage organisational change"));
         assertThat(enrolmentRowReadModel.fieldOfEducationIdentifier, is("080307"));
         assertThat(enrolmentRowReadModel.nominalHour, is(60));
+        assertThat(enrolmentRowReadModel.supervisedHours, is(10));
     }
 
     private String goodInputCsvContent() throws IOException {

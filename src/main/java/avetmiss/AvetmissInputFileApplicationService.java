@@ -4,8 +4,6 @@ import avetmiss.controller.payload.inputFile.*;
 import avetmiss.domain.*;
 import avetmiss.util.Csv;
 import avetmiss.util.Dates;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -88,11 +86,13 @@ public class AvetmissInputFileApplicationService {
         enrolmentRowReadModel.rowNum = enrolment.getRowNum();
         enrolmentRowReadModel.studentId = enrolment.getStudentId();
         enrolmentRowReadModel.studentName = enrolment.studentName();
+        enrolmentRowReadModel.courseIdentifier = enrolment.courseIdentifier();
         enrolmentRowReadModel.courseName = enrolment.courseName();
         enrolmentRowReadModel.unitCode = enrolment.getUnitCode();
         enrolmentRowReadModel.startDate = Dates.toISO(enrolment.startDate());
         enrolmentRowReadModel.endDate = Dates.toISO(enrolment.endDate());
         enrolmentRowReadModel.nominalHour = enrolment.nominalHour();
+        enrolmentRowReadModel.supervisedHours = enrolment.supervisedHours();
         enrolmentRowReadModel.hoursAttended = enrolment.hoursAttended();
         enrolmentRowReadModel.outcomeIdentifier = enrolment.getOutcomeIdentifier().code();
         enrolmentRowReadModel.tuitionFee = enrolment.tuitionFee();

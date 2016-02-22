@@ -9,11 +9,13 @@ public class Enrolment {
     private int rowNum;
     private int studentId;
     private String studentName;
+    private String courseIdentifier;
     private String courseName;
     private String unitCode;
     private Date startDate;
     private Date endDate;
     private int nominalHour;
+    private Integer supervisedHours;
     private Integer hoursAttended;
     private OutcomeIdentifierNational outcomeIdentifier;
     private String tuitionFee;
@@ -62,12 +64,28 @@ public class Enrolment {
         this.nominalHour = nominalHour;
     }
 
+    public Integer supervisedHours() {
+        return supervisedHours;
+    }
+
+    public void setSupervisedHours(Integer supervisedHours) {
+        this.supervisedHours = supervisedHours;
+    }
+
     public int getRowNum() {
         return rowNum;
     }
 
     public void setRowNum(int rowNum) {
         this.rowNum = rowNum;
+    }
+
+    public String courseIdentifier() {
+        return courseIdentifier;
+    }
+
+    public void setCourseIdentifier(String courseIdentifier) {
+        this.courseIdentifier = courseIdentifier;
     }
 
     public String courseName() {

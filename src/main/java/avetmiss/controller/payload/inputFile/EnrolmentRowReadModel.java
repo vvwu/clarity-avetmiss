@@ -5,10 +5,12 @@ public class EnrolmentRowReadModel {
     public int rowNum;
     public int studentId;
     public String studentName;
+    public String courseIdentifier;
     public String courseName;
     public String startDate;
     public String endDate;
     public Integer hoursAttended;
+    public Integer supervisedHours;
     public int outcomeIdentifier;
     public String tuitionFee;
 

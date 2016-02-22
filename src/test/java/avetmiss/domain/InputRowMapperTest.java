@@ -17,10 +17,13 @@ public class InputRowMapperTest {
 
     private int studentId = 33642;
     private String studentName = "Nimesh Patel";
+    private String courseIdentifier = "SIT31107";
     private String courseName = "Certificate III in Hospitality (Patisserie) (SIT31107)";
     private String unitCode = "SITXCOM002A";
     private String unitName = "Work in a socially diverse environment";
-    private int norminalHours = 20;
+    private int nominalHours = 20;
+    private int supervisedHours = 4;
+
     private Integer hoursAttended = 10;
     private String startDate = "13/06/2013";
     private String endDate = "13/08/2013";
@@ -30,10 +33,12 @@ public class InputRowMapperTest {
     private String[] inputRow = {
             studentId + "",
             studentName,
+            courseIdentifier,
             courseName,
             unitCode,
             unitName,
-            norminalHours + "",
+            nominalHours + "",
+            supervisedHours + "",
             hoursAttended + "",
             startDate,
             endDate,
@@ -61,7 +66,7 @@ public class InputRowMapperTest {
         assertThat(enrolment.studentName(), is(studentName));
         assertThat(enrolment.courseName(), is(courseName));
         assertThat(enrolment.getUnitCode(), is(unitCode));
-        assertThat(enrolment.nominalHour(), is(norminalHours));
+        assertThat(enrolment.nominalHour(), is(nominalHours));
         assertThat(enrolment.hoursAttended(), is(hoursAttended));
         assertThat(enrolment.startDate(), is(Dates.toDate(startDate)));
         assertThat(enrolment.endDate(), is(Dates.toDate(endDate)));
@@ -71,99 +76,81 @@ public class InputRowMapperTest {
 
     @Test
     public void shouldLogErrorsNominalHoursIsUnparsable() {
-        String[] inputRow = {
-                studentId + "",
-                studentName,
-                courseName,
-                unitCode,
-                unitName,
+        String[] inputRow = getInputRow(
                 "unparsable-norminal-hours",
-                hoursAttended + "",
-                startDate,
-                endDate,
-                outcomeIdentifier,
-                tuitionFee};
+                this.hoursAttended + "",
+                this.startDate,
+                this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'nominalHour' in [column F]"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'nominalHour' in [column G]"), is(true));
     }
 
     @Test
     public void shouldLogErrorsHoursAttendedIsUnparsable() {
-        String[] inputRow = {
-                studentId + "",
-                studentName,
-                courseName,
-                unitCode,
-                unitName,
-                norminalHours + "",
-                "unparsable-hours-attended",
-                startDate,
-                endDate,
-                outcomeIdentifier,
-                tuitionFee};
+        String[] inputRow = getInputRow(
+                nominalHours + "",
+                "unparsable-norminal-hours",
+                this.startDate,
+                this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'hoursAttended' in [column G]"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'hoursAttended' in [column I]"), is(true));
     }
 
     @Test
     public void shouldLogErrorsIfStartDatesAreUnparsable() {
-        String[] inputRow = {
-                studentId + "",
-                studentName,
-                courseName,
-                unitCode,
-                unitName,
-                norminalHours + "",
+        String[] inputRow = getInputRow(
+                nominalHours + "",
                 hoursAttended + "",
-                "unparsable-from",
-                endDate,
-                outcomeIdentifier,
-                tuitionFee};
+                "unparsable-start-date",
+                this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column H] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column J] in format: dd/mm/yyyy"), is(true));
     }
 
     @Test
     public void shouldLogErrorsIfEndDatesAreUnparsable() {
-        String[] inputRow = {
-                studentId + "",
-                studentName,
-                courseName,
-                unitCode,
-                unitName,
-                norminalHours + "",
+        String[] inputRow = getInputRow(
+                nominalHours + "",
                 hoursAttended + "",
-                startDate,
-                "unparsable-from",
-                outcomeIdentifier,
-                tuitionFee};
+                this.startDate,
+                "unparsable-end-date");
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column I] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column K] in format: dd/mm/yyyy"), is(true));
     }
 
 
     @Test
     public void shouldLogErrorsIfStartDateIsAfterEndDate() {
-        String[] inputRow = {
-                studentId + "",
-                studentName,
-                courseName,
-                unitCode,
-                unitName,
-                norminalHours + "",
+        String[] inputRow = getInputRow(
+                nominalHours + "",
                 hoursAttended + "",
-                endDate,
-                startDate,
-                outcomeIdentifier,
-                tuitionFee};
+                this.endDate,
+                this.startDate);
 
         Enrolment enrolment = this.inputRowMapper.mapRow(inputRow, 1);
         assertThat(inputRowMapper.errors().contains("rowNum=2: Start date cannot be later than end date"), is(true));
-
     }
 
+    private String[] getInputRow(String aNominalHours, String aHoursAttended, String aStartDate, String anEndDate) {
+        String[] inputRow = {
+                studentId + "",
+                studentName,
+                courseIdentifier,
+                courseName,
+                unitCode,
+                unitName,
+                aNominalHours + "",
+                supervisedHours + "",
+                aHoursAttended + "",
+                aStartDate,
+                anEndDate,
+                outcomeIdentifier,
+                tuitionFee};
+
+        return inputRow;
+    }
 }
