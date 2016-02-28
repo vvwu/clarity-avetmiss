@@ -1,17 +1,17 @@
 package avetmiss.util;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.common.base.Preconditions;
 import com.google.common.io.Closeables;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.util.StringUtils;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class ClassPathTextResource<T> {
     private final Resource resource;
@@ -26,7 +26,7 @@ public class ClassPathTextResource<T> {
     public List<T> read(TextLineMapper<T> mapper) {
         BufferedReader reader;
         try {
-            reader = new BufferedReader(new FileReader(resource.getFile()));
+            reader = new BufferedReader(new InputStreamReader(resource.getInputStream()));
             List<T> list = new ArrayList<T>();
             String line;
             int lineNumber = 0;

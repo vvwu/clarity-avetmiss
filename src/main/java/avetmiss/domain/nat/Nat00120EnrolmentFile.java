@@ -150,7 +150,7 @@ public class Nat00120EnrolmentFile {
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
                 request.anzsicCode,
-                request.enrolmentDate,
+                AvetmissUtil.toDate(Dates.toDateISO(request.enrolmentDate)),
                 request.enrolmentIdentifier,
                 request.clientFeesOther,
                 request.deliveryProviderABN};
