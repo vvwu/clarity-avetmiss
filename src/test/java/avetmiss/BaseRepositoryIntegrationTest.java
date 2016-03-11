@@ -15,25 +15,15 @@ import org.springframework.web.client.RestTemplate;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
-@WebAppConfiguration
-@IntegrationTest({"server.port=0"})
 @ActiveProfiles("test")
-public abstract class BaseControllerIntegrationTest {
-    @Value("${local.server.port}")
-    private int port;
-
-    protected String base;
-    protected RestTemplate template;
-
+public abstract class BaseRepositoryIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
+
 
     @Before
     public void setUp() throws Exception {
         createTableAndData();
-
-        this.base = "http://localhost:" + port + "/avetmiss-service";
-        template = new TestRestTemplate();
     }
 
     private void createTableAndData() {

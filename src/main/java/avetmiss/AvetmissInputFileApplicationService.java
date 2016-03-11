@@ -109,9 +109,9 @@ public class AvetmissInputFileApplicationService {
 
         enrolment.setUnit(
                 new EnrolmentSubject(
-                        unit.getCode(),
-                        unit.getDescription(),
-                        unit.getFieldOfEducationIdentifier(),
+                        unit.code(),
+                        unit.name(),
+                        unit.fieldOfEducationIdentifier(),
                         enrolment.nominalHour()));
     }
 }

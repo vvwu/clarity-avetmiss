@@ -6,14 +6,13 @@ import avetmiss.infrastructure.unitFile.NtisUnitTextLineExtractor;
 import avetmiss.util.ClassPathTextResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
-@Repository
+// @Repository
 public class FileBasedUnitRepository implements UnitRepository {
 
     private Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -29,7 +28,7 @@ public class FileBasedUnitRepository implements UnitRepository {
 
         this.unitByCode = newLinkedHashMap();
         for(Unit unit: units) {
-            this.unitByCode.put(unit.getCode(), unit);
+            this.unitByCode.put(unit.code(), unit);
         }
 
         logger.info("{} units initialized", unitByCode.size());
@@ -38,5 +37,14 @@ public class FileBasedUnitRepository implements UnitRepository {
     @Override
     public Unit findByCode(String unitCode) {
         return this.unitByCode.get(unitCode);
+    }
+
+    @Override
+    public void save(Unit unit) {
+    }
+
+    @Override
+    public int count() {
+        return unitByCode.size();
     }
 }

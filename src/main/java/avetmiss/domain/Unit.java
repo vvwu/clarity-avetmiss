@@ -1,25 +1,41 @@
 package avetmiss.domain;
 
 public class Unit {
+    private int id;
     private String code;
-    private String description;
+    private String name;
     private String fieldOfEducationIdentifier;
 
-    public Unit(String code, String description, String fieldOfEducationIdentifier) {
+    public Unit(String code, String name, String fieldOfEducationIdentifier) {
         this.code = code;
-        this.description = description;
+        this.name = name;
         this.fieldOfEducationIdentifier = fieldOfEducationIdentifier;
     }
 
-    public String getCode() {
+    public int id() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String code() {
         return code;
     }
 
-    public String getDescription() {
-        return description;
+    public String name() {
+        return name;
     }
 
-    public String getFieldOfEducationIdentifier() {
+    public String fieldOfEducationIdentifier() {
         return fieldOfEducationIdentifier;
+    }
+
+    @Override
+    public String toString() {
+        return "code='" + code + '\'' +
+                ", name='" + name + '\'' +
+                ", fieldOfEducationIdentifier='" + fieldOfEducationIdentifier + '\'';
     }
 }

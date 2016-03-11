@@ -1,0 +1,101 @@
+code	name	field of ed
+004/01	Occupational health and safety requirements associated with electrical work are followed	061301
+004/03	Faults are located and rectified in equipment which is connected to a single phase 250 volt supply	031313
+004/05	Flexible cord and plug is attached to equipment which is connected to a single phase 250 volt supply	031313
+004/06	Flexible cable and plug is attached to equipment which is connected to a supply up to 650 volts	031313
+01001	Prepare equipment and appliances for emergency response	
+01003	Check installed fire systems	
+01004	Prevent injury and minimise damage	
+01005	Respond to fire	
+01013	Drive vehicles under operational conditions	
+01014	Utilise pumps	
+01016	Employ personal protection	
+01018	Suppress fires	
+01020	Respond to hazardous materials incidents	
+01027	Reduce wildfire hazards	
+01031	Monitor fire/incident operations	
+01033	Monitor and carry out fire suppression	
+01035	Respond to and monitor hazardous materials incidents	
+01042	Lead and motivate firefighters	
+01043	Monitor work team	
+01045	Monitor wildfire prevention activities	
+01050	Carry out fire investigations	
+01065	Command/control a major incident	
+01078	Manage and coordinate emergencies	
+01079	Manage fire prevention and fire safety	
+023/01	Evaluate a business opportunity	080301
+023/02	Complete a business plan	080301
+023/03	Address legal and administrative requirements	090901
+023/04	Address customer requirements	110101
+023/05	Manage business operations	080301
+023/06	Manage self and staff	080303
+023/07	Manage finances	080101
+023/08	Review business	080399
+12	Work Effectively with Others to Maintain Production (HS 12)	070199
+127/20	Implement effective communication techniques	120505
+127/24	Develop and implement work unit plans	080399
+127/29	Develop, implement and promote effective communication	120505
+127/31	Coordinate a work group	080399
+127/32	Coordinate resource allocation and usage	
+127/33	Coordinate the implementation of change	
+127/36	Manage the delivery of quality client service	
+127/37	Represent and promote the organisation	
+13	Receive Materials and Fabrics, Store and Distribute Components and Despatch Products	070199
+132F/01	Issue Permits	
+132F/05	Monitor areas under council jurisdiction	
+132F/06	Administer relevant legislation	
+132F/07	Monitor compliance procedures for currency	
+132F/11	Develop public education for compliance	
+132O/10	Protect heritage and cultural assets	
+132T/02	Undertake the tendering process	
+132T/04	Administer contracts	
+132U/01	Implement and monitor the organisation's occupational health and safety (OHS) policies, procedures a	
+132U/03	Manage finances within a budget	
+132U/06	Devise and conduct community consultation	
+132U/10	Develop, implement and review operational plans	
+132U/13	Develop, implement and review policies and procedures	
+14	Prepare Complex Materials, Fabrics and Components for Final Assembly	070199
+158/14	Manage pre and post flight actions (CPL)	
+158/15	Operate radio (CPL)	
+158/16	Control aeroplane on the ground (CPL)	
+158/17	Take off aeroplane (CPL)	
+158/18	Control aeroplane in normal flight (CPL)	
+158/19	Land aeroplane (CPL)	
+158/20	Execute advanced manoeuvres and procedures (CPL)	
+158/21	Manage abnormal situations (CPL)	
+158/22	Manage fuel (CPL)	
+158/23	Control aeroplane solely by reference to full instrument panel (CPL)	
+158/24	Manage passengers (CPL)	
+158/25	Navigate aeroplane (CPL)	
+158/26	Control aeroplane solely by reference to limited instrument panel (CPL)	
+158/27	Recover from spin (CPL)	
+2	Section 2  ANALYSE AND DESIGN  Units of Competency	
+20	Implement effective communication techniques	120505
+20301	Provide information and advice regarding the products/services of the homoeopathic clinic	
+20302	Obtain initial information	
+20303	Take the case	
+20304	Assess the case	
+20305	select the homoeopathic treatment	
+20306	Select the complementary treatment and/or make referrals	
+20307	Discuss the treatment	
+20308	Dispense the medication from a prescription/order	
+20309	Manage the ordering and dispensing of the medication	
+20310	Review the treatment	
+20311	Obtain vital signs	
+20312	Conduct screening physical examination	
+20313	Make a screening assessment and refer for further examination	
+20314	Conduct extended physical examination and make a diagnosis	
+20315	Provide first aid	
+20316	Provide homoeopathic treatment with first aid	
+20317	Deliver specialised emergency care	
+20318	Provide basic counselling	
+20319	Use medical equipment	
+20320	Provide and deliver antenatal supportive care	
+20321	Provide and deliver postnatal supportive care	
+20322	Make paediatric assessment	
+20323	Deliver homoeopathic palliative care	
+20324	Make geriatric assessment	
+20325	Collect and test specimens	
+20326	Evaluate a business opportunity	
+20327	Complete a business plan	
+20328	Address legal and administrative requirements

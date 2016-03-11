@@ -59,9 +59,9 @@ public class Nat00060SubjectFile {
 
         return new String[]{
                 SubjectFlag.UNIT_OF_COMPETENCY_IDENTIFIER.flag(),
-                unit.getCode().toUpperCase(),
-                unit.getDescription().toUpperCase(),
-                unit.getFieldOfEducationIdentifier(),
+                unit.code().toUpperCase(),
+                unit.name().toUpperCase(),
+                unit.fieldOfEducationIdentifier(),
                 VetFlag.VOCATIONAL.flag,
                 nominalHours(request.nominalHours)};
     }

@@ -103,8 +103,8 @@ public class FileBasedUnitRepositoryTest {
     private void assertThatCompetencyExist(String unitIdentifier) {
         Unit competency = this.instance.findByCode(unitIdentifier);
         assertThat(competency, is(notNullValue()));
-        assertThat(competency.getDescription(), is(notNullValue()));
-        assertThat("missing FieldOfEducationIdentifier: " + competency.getCode(),
-                competency.getFieldOfEducationIdentifier(), is(notNullValue()));
+        assertThat(competency.name(), is(notNullValue()));
+        assertThat("missing FieldOfEducationIdentifier: " + competency.code(),
+                competency.fieldOfEducationIdentifier(), is(notNullValue()));
     }
 }

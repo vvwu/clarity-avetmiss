@@ -167,9 +167,9 @@ public class AvetmissApplicationService {
 
     private UnitReadModel toReadModel(Unit unit) {
         UnitReadModel readModel = new UnitReadModel();
-        readModel.code = unit.getCode();
-        readModel.description = unit.getDescription();
-        readModel.fieldOfEducationIdentifier = unit.getFieldOfEducationIdentifier();
+        readModel.code = unit.code();
+        readModel.description = unit.name();
+        readModel.fieldOfEducationIdentifier = unit.fieldOfEducationIdentifier();
 
         return readModel;
     }
