@@ -114,15 +114,23 @@ public class Dates {
      * Returns a string representation of the given date in ISO8601 standard
      */
     public static String toISO(java.util.Date date) {
+        if (date == null) {
+            return null;
+        }
+
         LocalDate localDate = LocalDate.fromDateFields(date);
         return ISODateTimeFormat.date().print(localDate);
     }
 
- 	public static Date toDateISO(String dateStr) {
-		DateTimeFormatter fmt = ISODateTimeFormat.date();
-		DateTime dt = fmt.parseDateTime(dateStr);
-		return dt.toDate();
-	}
+    public static Date toDateISO(String dateStr) {
+        if (dateStr == null) {
+            return null;
+        }
+
+        DateTimeFormatter fmt = ISODateTimeFormat.date();
+        DateTime dt = fmt.parseDateTime(dateStr);
+        return dt.toDate();
+    }
 
   	private static final SimpleDateFormat TIME_FORMATTER_24HH_MM = new SimpleDateFormat("HH:mm");
 	public static Date toTime(String time_HHmm) {

@@ -16,7 +16,7 @@ public class AvetmissUtil {
 	public static String getCommencingCourseIdentifier(Date courseStart) {
 		Calendar cal = new GregorianCalendar();
 		int currentYear = cal.get(Calendar.YEAR);
-		
+
 		cal.setTime(courseStart);
 		int startYear = cal.get(Calendar.YEAR);
 		return (startYear < currentYear) ? "4" : "3";
@@ -25,6 +25,10 @@ public class AvetmissUtil {
 	// convert date to string in "DDMMYYYY" format
 	private static SimpleDateFormat sf = new SimpleDateFormat("ddMMyyyy");
 	public static String toDate(Date date) {
+        if(date == null) {
+            return null;
+        }
+
 		return sf.format(date);
 	}
 

@@ -4,6 +4,7 @@ import avetmiss.controller.payload.inputFile.*;
 import avetmiss.domain.*;
 import avetmiss.util.Csv;
 import avetmiss.util.Dates;
+import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,15 +37,19 @@ public class AvetmissInputFileApplicationService {
                 = Csv.read(new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8)), inputRowMapper);
 
         errorList.addAll(inputRowMapper.errors());
+
+        List<EnrolmentRowReadModel> enrolmentRowReadModels = Lists.newArrayList();
         for(Enrolment enrolment: rows) {
             try {
                 loadUnitDetails(enrolment);
+
+                EnrolmentRowReadModel enrolmentRowReadModel = toEnrolmentRowReadModel(enrolment);
+                enrolmentRowReadModels.add(enrolmentRowReadModel);
             } catch (Exception ex) {
                 errorList.add("Enrolments rowNumber:" + enrolment.getRowNum() + ": " + ex.getMessage());
             }
         }
 
-        List<EnrolmentRowReadModel> enrolmentRowReadModels = toEnrolmentRowReadModels(rows);
         List<ClientReadModel> clientReadModels = toClientReadModels(enrolmentRowReadModels);
 
         return new AvetmissInputFileProcessResult(
@@ -68,14 +73,6 @@ public class AvetmissInputFileApplicationService {
         }
 
         return newArrayList(clientByStudentId.values());
-    }
-
-    private List<EnrolmentRowReadModel> toEnrolmentRowReadModels(List<Enrolment> enrolments) {
-        List<EnrolmentRowReadModel> enrolmentRowReadModels = newArrayList();
-        for (Enrolment enrolment : enrolments) {
-            enrolmentRowReadModels.add(toEnrolmentRowReadModel(enrolment));
-        }
-        return enrolmentRowReadModels;
     }
 
     private EnrolmentRowReadModel toEnrolmentRowReadModel(Enrolment enrolment) {
