@@ -24,4 +24,5 @@ public class EnrolmentFileRequest {
     public String enrolmentIdentifier;
     public String clientFeesOther;
     public String deliveryProviderABN;
+    public String fundingEligibilityKey;
 }

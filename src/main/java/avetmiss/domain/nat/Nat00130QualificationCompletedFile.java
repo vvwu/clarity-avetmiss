@@ -14,6 +14,8 @@ import java.util.List;
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
 import static com.google.common.collect.Lists.newArrayList;
+import static org.apache.commons.lang.StringUtils.leftPad;
+import static org.apache.commons.lang.StringUtils.repeat;
 
 /**
  * This file contains a record for each Program (Course) enrolment on the Enrolment (NAT00120) file reported during a
@@ -28,13 +30,15 @@ public class Nat00130QualificationCompletedFile {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private final static Header header = Header(43,
+    private final static Header header = Header(56,
             of("Training Organisation Identifier", 10),
             of("Program (Qualification/Course) Identifier", 10),
             of("Client (Student) Identifier", 10),
             of("Year Program Completed", 4),
             of("Qualification Issued Flag", 1),
-            of("Program (Course) Commencement Date", 8));
+            of("Program (Course) Commencement Date", 8),
+            of("Program Supervised Teaching Activity Completion Date", 8),
+            of("Program Unique Supervised Hours", 5));
 
     public String export(List<Nat00130QualificationCompletedFileRequest> requests) {
         List<String[]> rows = exportRaw(requests);
@@ -50,13 +54,21 @@ public class Nat00130QualificationCompletedFile {
             Date courseStartDate = Dates.toDateISO(request.courseStartDate);
             String yearCourseCompleted = yearCourseCompleted(request);
 
+            Date supervisedTeachingActivityCompletionDate =
+                    Dates.toDateISO(request.supervisedTeachingActivityCompletionDate);
+
+            String supervisedHours = (request.supervisedHours == null) ? repeat("0", 5) : leftPad(request.supervisedHours.toString(), 5, "0");
+
+
             String[] row = new String[]{
                     AvetmissUtil.formattedRtoIdentifier(request.rtoIdentifier),
                     request.courseIdentifier.toUpperCase(),
                     request.studentID,
                     yearCourseCompleted,
                     qualificationIssuedFlag,
-                    AvetmissUtil.toDate(courseStartDate)};
+                    AvetmissUtil.toDate(courseStartDate),
+                    AvetmissUtil.toDate(supervisedTeachingActivityCompletionDate),
+                    supervisedHours};
 
             rows.add(row);
         }

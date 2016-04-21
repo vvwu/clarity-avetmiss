@@ -25,7 +25,7 @@ public class Nat00120EnrolmentFile {
 
     public final static String DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET = "CITY";
 
-    private final static Header header = Header(228,
+    private final static Header header = Header(238,
             of("Training Organisation Delivery Location Identifier", 10),
             of("Client (Student) Identifier", 10),
             of("Subject (Module/Unit of Competency) Identifier", 12),
@@ -57,7 +57,8 @@ public class Nat00120EnrolmentFile {
             of("Enrolment Date", 8),
             of("Enrolment Identifier", 50),
             of("Client Fees - Other", 5),
-            of("Delivery Provider ABN", 11));
+            of("Delivery Provider ABN", 11),
+            of("Funding Eligibility Key", 10));
 
     public String export(List<EnrolmentFileRequest> requests) {
         List<String[]> rows = newArrayList();
@@ -153,7 +154,8 @@ public class Nat00120EnrolmentFile {
                 AvetmissUtil.toDate(Dates.toDateISO(request.enrolmentDate)),
                 request.enrolmentIdentifier,
                 request.clientFeesOther,
-                request.deliveryProviderABN};
+                request.deliveryProviderABN,
+                request.fundingEligibilityKey};
     }
 
 

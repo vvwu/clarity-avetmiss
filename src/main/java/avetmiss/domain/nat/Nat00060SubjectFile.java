@@ -30,7 +30,7 @@ public class Nat00060SubjectFile {
         }
     }
 
-    private final static Header header = Header.Header(
+    private final static Header header = Header.Header(124,
             of("Subject (Module/Unit of Competency) Flag", 1),
             of("Subject Identifier (Module/Unit of Competency Identifier)", 12),
             of("Subject (Module/Unit of Competency) Name", 100),

@@ -14,7 +14,7 @@ import static com.google.common.collect.Lists.newArrayList;
 
 public class Nat00085ClientPostalDetailsFile {
 
-    private final static Header header = Header(
+    private final static Header header = Header(477,
             of("Client (Student) Identifier", 10),
             of("Client Title", 4),
             of("Client First Given Name", 40),
