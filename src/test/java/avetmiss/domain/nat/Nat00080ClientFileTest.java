@@ -17,7 +17,7 @@ public class Nat00080ClientFileTest {
         String export = instance.export(Arrays.asList(client));
         assertThat(export, is(
                 "30000     Lname, Fname                                                " +
-                "121996F100919813181@1201011203NYN1Windsor                                           " +
+                "121996F100919813181@1201011203NYN Windsor                                           " +
                 "Z7ZSVMLTRG03Building name                                     Unit                          2       " +
                 "       Evelyn st                                                                                 " +
                 "VSN123   S5\r\n"));

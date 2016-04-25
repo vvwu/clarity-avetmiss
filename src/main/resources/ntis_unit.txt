@@ -5959,8 +5959,10 @@ BSBSMB306A	Plan a home based business	080301
 BSBSMB307A	Set up information and communications technology for the micro business	080301
 BSBSMB308A	Improve energy efficiency in micro or small business operations	039901
 BSBSMB401A	Establish legal and risk management requirements of small business	080301
+BSBSMB402	Plan small business finances	080301
 BSBSMB402A	Plan small business finances	080301
 BSBSMB403A	Market the small business	080505
+BSBSMB404	Undertake small business planning	080301
 BSBSMB404A	Undertake small business planning	080301
 BSBSMB405A	Monitor and manage small business operations	080301
 BSBSMB405B	Monitor and manage small business operations	080301

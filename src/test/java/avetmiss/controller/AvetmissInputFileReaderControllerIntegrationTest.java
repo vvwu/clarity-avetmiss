@@ -3,9 +3,13 @@ package avetmiss.controller;
 import avetmiss.BaseControllerIntegrationTest;
 import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
 import avetmiss.controller.payload.inputFile.EnrolmentRowReadModel;
+import avetmiss.domain.Unit;
+import avetmiss.domain.UnitRepository;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
@@ -20,6 +24,18 @@ import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class AvetmissInputFileReaderControllerIntegrationTest extends BaseControllerIntegrationTest {
+    @Autowired
+    private UnitRepository unitRepository;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        unitRepository.save(new Unit("BSBINN601B", "Manage organisational change", "080307"));
+        unitRepository.save(new Unit("BSBADM405B", "Organise meetings", "080901"));
+        unitRepository.save(new Unit("BSBCMM401A", "Make a presentation", "100707"));
+    }
 
     @Test
     public void post() throws Exception {

@@ -2,9 +2,13 @@ package avetmiss.controller;
 
 import avetmiss.BaseControllerIntegrationTest;
 import avetmiss.controller.payload.nat.*;
+import avetmiss.domain.Unit;
+import avetmiss.domain.UnitRepository;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
+import org.junit.Before;
 import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
@@ -20,6 +24,18 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
 public class AvetmissNatFileGenerateControllerIntegrationTest extends BaseControllerIntegrationTest {
+
+    @Autowired
+    private UnitRepository unitRepository;
+
+    @Override
+    @Before
+    public void setUp() throws Exception {
+        super.setUp();
+
+        unitRepository.save(new Unit("SWESTO209A", "COMPREHENDING & COMPOSING STORY TEXTS", "120101"));
+        unitRepository.save(new Unit("SWEINF204A", "COMPREHENDING & GIVING SPOKEN INFORMATION", "120101"));
+    }
 
     @Test
     public void getNatFiles() throws Exception {
@@ -56,7 +72,7 @@ public class AvetmissNatFileGenerateControllerIntegrationTest extends BaseContro
                 "300041    524A\r\n"));
 
         assertThat(natFileReadModel.nat00130, is(
-                "0000020829SIT50307  300020    2015Y25102014\r\n"));
+                "0000020829SIT50307  300020    2015Y25102014        00000\r\n"));
 
         assertThat(natFileReadModel.nat00010, is(
                 "0000020829Org Pty Ltd                                                                                         91110 City Rd                                                                                         Melbourne                                         300003Bob                                                         123456              abcdefg             contact@company.com                                                             Clarity2008         vvwu0830@gmail.com                                                              \r\n"));

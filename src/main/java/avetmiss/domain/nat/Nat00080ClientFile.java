@@ -13,6 +13,7 @@ import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.util.StringUtil.isBlank;
+import static avetmiss.util.StringUtil.isEqualToAny;
 import static avetmiss.util.StringUtil.nullSafeTrimString;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
@@ -115,7 +116,7 @@ public class Nat00080ClientFile {
                 client.disabilityFlag,
                 priorEducationalAchievementFlag,
                 client.atSchoolFlag,  // At School Flag ('@' means not specified)
-                client.proficiencyInSpokenEnglishIdentifier,
+                proficiencyInSpokenEnglishIdentifier(client),
                 client.suburb,
                 usi,
                 client.stateIdentifier,
@@ -128,6 +129,22 @@ public class Nat00080ClientFile {
                 client.vsn,
                 ClientIndustryOfEmployment.clientIndustryOfEmployment(labourForceStatusIdentifier),
                 ClientOccupationIdentifier.clientOccupationIdentifier(labourForceStatusIdentifier)};
+    }
+
+    public String proficiencyInSpokenEnglishIdentifier(ClientFileRequest client) {
+        String mainLanguageSpokenAtHomeIdentifier = client.mainLanguageSpokenAtHomeIdentifier;
+
+        // Leave this field blank if the Language (Main Language Other Than English Spoken at Home) Identifier field is one of the following:
+        // 1201 - ENGLISH
+        // 9700 - SIGN LANGUAGE
+        // 9701 - AUSLAN
+        // 9702 - MAKATON
+        // 9799 - SIGN LANGUAGE NOT ELSEWHERE CLASSIFIED
+        // or @@@@
+        if(isEqualToAny(mainLanguageSpokenAtHomeIdentifier, new String[]{"1201", "9700", "9701", "9702", "9799", "@@@@"}))
+            return null;
+
+        return client.proficiencyInSpokenEnglishIdentifier;
     }
 
     private String requiredUsi(String studentID, String usi) {

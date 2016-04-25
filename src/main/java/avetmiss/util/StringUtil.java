@@ -215,4 +215,19 @@ public class StringUtil {
     public static boolean isInteger(String str) {
         return toInteger(str) != null;
     }
+
+    public static boolean isEqualToAny(String str1, String[] strs) {
+        if(strs == null || strs.length == 0)
+            return false;
+
+        for (String str : strs) {
+            if(isEqual(str1, str))
+                return true;
+        }
+        return false;
+    }
+
+    public static boolean isEqual(String str1, String str2) {
+        return str1 == str2 || (str1 != null && str1.equals(str2));
+    }
 }

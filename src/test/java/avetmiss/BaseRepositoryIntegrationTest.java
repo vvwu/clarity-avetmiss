@@ -20,7 +20,6 @@ public abstract class BaseRepositoryIntegrationTest {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
-
     @Before
     public void setUp() throws Exception {
         createTableAndData();
