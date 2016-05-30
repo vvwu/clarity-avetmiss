@@ -1,5 +1,7 @@
 package avetmiss.controller;
 
+import java.io.IOException;
+
 import avetmiss.AvetmissNatGenerationApplicationService;
 import avetmiss.controller.payload.nat.NatFileReadModel;
 import avetmiss.controller.payload.nat.NatFilesRequest;
@@ -13,9 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.IOException;
-import java.util.List;
-
 @RestController
 public class AvetmissNatFileGenerateController {
 
@@ -23,11 +22,15 @@ public class AvetmissNatFileGenerateController {
     private AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService;
 
     @RequestMapping(value = "nat.zip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    ResponseEntity<byte[]> getNats(@RequestBody NatFilesRequest natFilesRequest) throws IOException {
-        byte[] bytes = avetmissNatGenerationApplicationService.getNatFileZip(natFilesRequest);
+    ResponseEntity getNats(@RequestBody NatFilesRequest natFilesRequest) throws IOException {
+        try {
+            byte[] bytes = avetmissNatGenerationApplicationService.getNatFileZip(natFilesRequest);
 
-        return new ResponseEntity<byte[]>(bytes,
-                injectFileNameIntoHeaders("nat.zip"), HttpStatus.OK);
+            return new ResponseEntity<byte[]>(bytes,
+                    injectFileNameIntoHeaders("nat.zip"), HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(value = "natFiles", method = RequestMethod.POST,
