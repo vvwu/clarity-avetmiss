@@ -100,7 +100,6 @@ public class Nat00080ClientFile {
         String labourForceStatusIdentifier = client.labourForceStatusIdentifier;
         String usi = requiredUsi(studentID, client.usi);
 
-
         return new String[]{
                 studentID,
                 nameForEncryption(client.lastName, client.firstName),

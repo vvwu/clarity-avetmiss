@@ -48,21 +48,21 @@ public class Nat00030CourseFile {
         return rows;
     }
 
-    private String[] courseInfo(Nat00030CourseFileRequest reqiest) {
-        String courseIdentifier = reqiest.courseIdentifier;
+    private String[] courseInfo(Nat00030CourseFileRequest request) {
+        String courseIdentifier = request.courseIdentifier;
 
         // Yes/Y - the intention of the training program is vocational.
         // No/N - the intention of the training program is not vocational.
-        String nominalHours = leftPad(reqiest.nominalHour + "", 4, '0');
+        String nominalHours = leftPad(request.nominalHour + "", 4, '0');
 
         return new String[] {
                 courseIdentifier.toUpperCase(),
-                reqiest.courseName.toUpperCase(),
+                request.courseName.toUpperCase(),
                 nominalHours,
-                reqiest.programRecognitionIdentifier,
-                reqiest.levelOfEducationIdentifier,
-                reqiest.fieldOfEducationIdentifier,
-                reqiest.occupationTypeIdentifier,
+                request.programRecognitionIdentifier,
+                request.levelOfEducationIdentifier,
+                request.fieldOfEducationIdentifier,
+                request.occupationTypeIdentifier,
                 vetFlag()};
     }
 
