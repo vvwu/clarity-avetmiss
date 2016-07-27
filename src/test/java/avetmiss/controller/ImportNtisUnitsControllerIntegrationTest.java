@@ -28,11 +28,11 @@ public class ImportNtisUnitsControllerIntegrationTest extends BaseControllerInte
         headers.setContentType(MediaType.TEXT_PLAIN);
         HttpEntity<String> requestEntity = new HttpEntity<String>(text, headers);
 
-        String result = template.postForEntity(base + "/importUnits", requestEntity, String.class).getBody();
+        String result = template.postForEntity(base + "/units/importUnits", requestEntity, String.class).getBody();
 
         assertThat(result, is("added: 100, ignored: 0, total count before import: 0, total count after import: 100"));
 
-        String result2 = template.postForEntity(base + "/importUnits", requestEntity, String.class).getBody();
+        String result2 = template.postForEntity(base + "/units/importUnits", requestEntity, String.class).getBody();
         assertThat(result2, is("added: 0, ignored: 100, total count before import: 100, total count after import: 100"));
     }
 
@@ -44,11 +44,10 @@ public class ImportNtisUnitsControllerIntegrationTest extends BaseControllerInte
         headers.setContentType(MediaType.TEXT_PLAIN);
         HttpEntity<String> requestEntity = new HttpEntity<String>(text, headers);
 
-        ResponseEntity<String> response = template.postForEntity(base + "/importUnits", requestEntity, String.class);
+        ResponseEntity<String> response = template.postForEntity(base + "/units/importUnits", requestEntity, String.class);
         assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
         assertThat(response.getBody().startsWith("java.lang.IllegalArgumentException: Can not read line: SWEEXC009A, lineNum: 1"), is(true));
     }
-
 
     private String getNtisUnitTextWith100Units() throws IOException {
         Resource resource = new ClassPathResource("ntis_unit_100.txt");

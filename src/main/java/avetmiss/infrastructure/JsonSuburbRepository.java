@@ -5,7 +5,6 @@ import avetmiss.domain.SuburbRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
-import com.google.common.collect.Maps;
 import com.google.common.io.CharStreams;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.core.io.ClassPathResource;
