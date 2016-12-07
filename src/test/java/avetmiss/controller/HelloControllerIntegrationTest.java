@@ -14,4 +14,10 @@ public class HelloControllerIntegrationTest extends BaseControllerIntegrationTes
         ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
         assertThat(response.getBody(), equalTo("Hello World!"));
     }
+
+    @Test
+    public void getHealth() throws Exception {
+        ResponseEntity<String> response = template.getForEntity(base + "/health", String.class);
+        assertThat(response.getBody(), equalTo("{\"status\":\"UP\"}"));
+    }
 }

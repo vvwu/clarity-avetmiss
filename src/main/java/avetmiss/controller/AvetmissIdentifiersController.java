@@ -3,57 +3,53 @@ package avetmiss.controller;
 import avetmiss.AvetmissApplicationService;
 import avetmiss.controller.payload.LabelValueReadModel;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
-
 @RestController
-@RequestMapping(value = "/identifiers")
-@EnableAutoConfiguration
+@RequestMapping("/identifiers")
 public class AvetmissIdentifiersController {
 
     @Autowired
     private AvetmissApplicationService avetmissApplicationService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/concessionType", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/concessionType")
     List<LabelValueReadModel> getConcessionTypeIdentifiers() {
         return avetmissApplicationService.getConcessionTypeIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/levelOfEducation", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/levelOfEducation")
     List<LabelValueReadModel> getLevelOfEducationIdentifiers() {
         return avetmissApplicationService.getLevelOfEducationIdentifier();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/disabilityType", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/disabilityType")
     List<LabelValueReadModel> getDisabilityTypeIdentifiers() {
         return avetmissApplicationService.getDisabilityTypeIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/language", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/language")
     List<LabelValueReadModel> getLanguageIdentifiers() {
         return avetmissApplicationService.getLanguageIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/anzsicCode", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/anzsicCode")
     List<LabelValueReadModel> getAnzsicCodes() {
         return avetmissApplicationService.getAnzsicCodes();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceStateIdentifiersGovernmentFunded", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/fundingSourceStateIdentifiersGovernmentFunded")
     List<LabelValueReadModel> getFundingSourceStateIdentifiersGovernmentFunded() {
         return avetmissApplicationService.getFundingSourceStateIdentifiersGovernmentFunded();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceStateIdentifier/{identifier}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/fundingSourceStateIdentifier/{identifier}")
     ResponseEntity<LabelValueReadModel> getFundingSourceStateIdentifier(@PathVariable(value = "identifier") String fundingSourceStateIdentifier) {
         LabelValueReadModel fundingSourceState =
                 avetmissApplicationService.getFundingSourceStateByIdentifier(fundingSourceStateIdentifier);
@@ -66,59 +62,57 @@ public class AvetmissIdentifiersController {
     }
 
 
-    @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceStateIdentifiersNonGovernmentFunded", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/fundingSourceStateIdentifiersNonGovernmentFunded")
     List<LabelValueReadModel> getFundingSourceStateIdentifiersNonGovernmentFunded() {
         return avetmissApplicationService.getFundingSourceStateIdentifiersNonGovernmentFunded();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/fundingSourceNational", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/fundingSourceNational")
     List<LabelValueReadModel> getFundingSourceNationalIdentifiers() {
         return avetmissApplicationService.getFundingSourceNationalIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/schoolLevelCompleted", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/schoolLevelCompleted")
     List<LabelValueReadModel> getSchoolLevelCompletedIdentifiers() {
         return avetmissApplicationService.getSchoolLevelCompletedIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/priorEducationalAchievement", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/priorEducationalAchievement")
     List<LabelValueReadModel> getPriorEducationalAchievementIdentifiers() {
         return avetmissApplicationService.getPriorEducationalAchievementIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/labourForceStatus", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/labourForceStatus")
     List<LabelValueReadModel> getLabourForceStatusIdentifiers() {
         return avetmissApplicationService.getLabourForceStatusIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/studyReason", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/studyReason")
     List<LabelValueReadModel> getStudyReasonIdentifiers() {
         return avetmissApplicationService.getStudyReasonIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/studyReason/{identifier}", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/studyReason/{identifier}")
     ResponseEntity<LabelValueReadModel> getStudyReasonByIdentifier(@PathVariable(value = "identifier") String studyingReasonIdentifier) {
         LabelValueReadModel studyReason =
                 avetmissApplicationService.getStudyReasonByIdentifier(studyingReasonIdentifier);
-
         if(studyReason == null) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
-
         return ResponseEntity.ok(studyReason);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/indigenousStatus", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/indigenousStatus")
     List<LabelValueReadModel> getIndigenousStatusIdentifiers() {
         return avetmissApplicationService.getIndigenousStatusIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/englishProficiency", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/englishProficiency")
     List<LabelValueReadModel> getEnglishProficiencyIdentifiers() {
         return avetmissApplicationService.getEnglishProficiencyIdentifiers();
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/state", produces = APPLICATION_JSON_VALUE)
+    @GetMapping("/state")
     List<LabelValueReadModel> getStateIdentifiers() {
         return avetmissApplicationService.getStateIdentifiers();
     }
