@@ -1,7 +1,12 @@
 target/
+build/
+out/
+classes/
+.gradle/
 .idea/
 .DS_Store
-rebel.xml
 *.iml
 *.log
+rebel.xml
+
 
