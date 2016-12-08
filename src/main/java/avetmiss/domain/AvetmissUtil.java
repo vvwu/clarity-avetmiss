@@ -5,6 +5,7 @@ import com.google.common.collect.Lists;
 
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.leftPad;
 
@@ -37,14 +38,11 @@ public class AvetmissUtil {
 		return sf1.format(enrolmentStartDate);
 	}
 
-    public static List<LabelValue> asLabelValue(Map<String, String> pairs) {
-        List<LabelValue> identifiers = Lists.newArrayList();
-        for(Map.Entry<String, String> entry: pairs.entrySet()) {
-            final String value = entry.getKey();
-            final String label = entry.getValue();
-            identifiers.add(LabelValue.create(value, label));
-        }
-        return identifiers;
+    public static List<LabelValue> asLabelValue(Map<String, String> valueToLabel) {
+        return valueToLabel.entrySet()
+				.stream()
+				.map(entry -> LabelValue.labelValue(entry.getValue(), entry.getKey()))
+				.collect(Collectors.toList());
     }
 
     public static String formattedRtoIdentifier(String TOID) {

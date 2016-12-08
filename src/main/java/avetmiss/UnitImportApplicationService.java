@@ -92,7 +92,7 @@ public class UnitImportApplicationService {
         BufferedReader reader;
         try {
             reader = new BufferedReader(new StringReader(ntisUnitsTxt));
-            List<Unit> list = new ArrayList<Unit>();
+            List<Unit> list = new ArrayList<>();
             String line;
             int lineNumber = 0;
             while ((line = reader.readLine()) != null) {

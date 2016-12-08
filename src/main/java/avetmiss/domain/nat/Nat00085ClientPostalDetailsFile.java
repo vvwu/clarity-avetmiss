@@ -4,6 +4,7 @@ package avetmiss.domain.nat;
 import avetmiss.controller.payload.nat.ClientFileRequest;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 
 import java.util.List;
 
@@ -34,23 +35,21 @@ public class Nat00085ClientPostalDetailsFile {
 
 
     public String export(List<ClientFileRequest> requests) {
-        List<String[]> rows = newArrayList();
-
+        List<Row> rows = newArrayList();
         for (ClientFileRequest client: requests) {
-            String[] row = exportOneRow(client);
-            rows.add(row);
+            rows.add(exportOneRow(client));
         }
 
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    private String[] exportOneRow(ClientFileRequest clientFileRequest) {
+    private Row exportOneRow(ClientFileRequest clientFileRequest) {
         String studentID = clientFileRequest.studentID;
 
         String addressPostalDeliveryBox = null;
         String telephoneNumberWork = null;
 
-        return new String[] {
+        return new Row(
                 clientFileRequest.studentID,
                 clientFileRequest.title,
                 clientFileRequest.firstName,
@@ -66,7 +65,7 @@ public class Nat00085ClientPostalDetailsFile {
                 clientFileRequest.contactPhoneNo,
                 telephoneNumberWork,
                 clientFileRequest.contactMobile,
-                clientFileRequest.contactEmailAddress};
+                clientFileRequest.contactEmailAddress);
     }
 
     public String postCode(String studentID, String aPostcode) {

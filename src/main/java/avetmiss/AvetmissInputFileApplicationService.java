@@ -76,26 +76,26 @@ public class AvetmissInputFileApplicationService {
     }
 
     private EnrolmentRowReadModel toEnrolmentRowReadModel(Enrolment enrolment) {
-        EnrolmentRowReadModel enrolmentRowReadModel = new EnrolmentRowReadModel();
+        EnrolmentRowReadModel readModel = new EnrolmentRowReadModel();
 
         EnrolmentSubject unit = enrolment.getUnit();
 
-        enrolmentRowReadModel.rowNum = enrolment.getRowNum();
-        enrolmentRowReadModel.studentId = enrolment.getStudentId();
-        enrolmentRowReadModel.studentName = enrolment.studentName();
-        enrolmentRowReadModel.courseCode = enrolment.courseCode();
-        enrolmentRowReadModel.unitCode = enrolment.getUnitCode();
-        enrolmentRowReadModel.startDate = Dates.toISO(enrolment.startDate());
-        enrolmentRowReadModel.endDate = Dates.toISO(enrolment.endDate());
-        enrolmentRowReadModel.nominalHour = enrolment.nominalHour();
-        enrolmentRowReadModel.supervisedHours = enrolment.supervisedHours();
-        enrolmentRowReadModel.hoursAttended = enrolment.hoursAttended();
-        enrolmentRowReadModel.outcomeIdentifier = enrolment.getOutcomeIdentifier().code();
-        enrolmentRowReadModel.tuitionFee = enrolment.tuitionFee();
-        enrolmentRowReadModel.subjectName = unit.subjectName();
-        enrolmentRowReadModel.fieldOfEducationIdentifier = unit.fieldOfEducationIdentifier();
+        readModel.rowNum = enrolment.getRowNum();
+        readModel.studentId = enrolment.getStudentId();
+        readModel.studentName = enrolment.studentName();
+        readModel.courseCode = enrolment.courseCode();
+        readModel.unitCode = enrolment.getUnitCode();
+        readModel.startDate = Dates.toISO(enrolment.startDate());
+        readModel.endDate = Dates.toISO(enrolment.endDate());
+        readModel.nominalHour = enrolment.nominalHour();
+        readModel.supervisedHours = enrolment.supervisedHours();
+        readModel.hoursAttended = enrolment.hoursAttended();
+        readModel.outcomeIdentifier = enrolment.getOutcomeIdentifier().code();
+        readModel.tuitionFee = enrolment.tuitionFee();
+        readModel.subjectName = unit.subjectName();
+        readModel.fieldOfEducationIdentifier = unit.fieldOfEducationIdentifier();
 
-        return enrolmentRowReadModel;
+        return readModel;
     }
 
     private void loadUnitDetails(Enrolment enrolment) {

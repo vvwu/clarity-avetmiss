@@ -3,12 +3,13 @@ package avetmiss.domain.nat;
 import avetmiss.controller.payload.nat.Nat00030CourseFileRequest;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
-import com.google.common.collect.Lists;
+import avetmiss.domain.Row;
 
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 /**
@@ -35,12 +36,12 @@ public class Nat00030CourseFile {
         // Each program (course) record listed in this file must appear in either the Enrolment (NAT00120) file or
         // the Program (Qualification) Completed (NAT00130) file
 
-        List<String[]> rows = exportCoursesRaw(requests);
+        List<Row> rows = exportCoursesRaw(requests);
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    List<String[]> exportCoursesRaw(List<Nat00030CourseFileRequest> requests) {
-        List<String[]> rows = Lists.newArrayList();
+    List<Row> exportCoursesRaw(List<Nat00030CourseFileRequest> requests) {
+        List<Row> rows = newArrayList();
 
         for (Nat00030CourseFileRequest request : requests) {
             rows.add(courseInfo(request));
@@ -48,14 +49,14 @@ public class Nat00030CourseFile {
         return rows;
     }
 
-    private String[] courseInfo(Nat00030CourseFileRequest request) {
+    private Row courseInfo(Nat00030CourseFileRequest request) {
         String courseIdentifier = request.courseIdentifier;
 
         // Yes/Y - the intention of the training program is vocational.
         // No/N - the intention of the training program is not vocational.
         String nominalHours = leftPad(request.nominalHour + "", 4, '0');
 
-        return new String[] {
+        return new Row(
                 courseIdentifier.toUpperCase(),
                 request.courseName.toUpperCase(),
                 nominalHours,
@@ -63,7 +64,7 @@ public class Nat00030CourseFile {
                 request.levelOfEducationIdentifier,
                 request.fieldOfEducationIdentifier,
                 request.occupationTypeIdentifier,
-                vetFlag()};
+                vetFlag());
     }
 
     private String vetFlag() {

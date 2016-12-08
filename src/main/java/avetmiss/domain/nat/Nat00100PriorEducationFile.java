@@ -4,6 +4,7 @@ import avetmiss.controller.payload.nat.Nat00100PriorEducationFileRequest;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Field;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 
 import java.util.List;
 
@@ -17,17 +18,17 @@ public class Nat00100PriorEducationFile {
             Field.of("Prior Education Achievement Recognition Identifier", 1));
 
     public String export(List<Nat00100PriorEducationFileRequest> requests) {
-        List<String[]> rows = exportRaw(requests);
+        List<Row> rows = exportRaw(requests);
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    public List<String[]> exportRaw(List<Nat00100PriorEducationFileRequest> nat00100PriorEducationFileRequests) {
-        List<String[]> rows = newArrayList();
+    public List<Row> exportRaw(List<Nat00100PriorEducationFileRequest> nat00100PriorEducationFileRequests) {
+        List<Row> rows = newArrayList();
         for (Nat00100PriorEducationFileRequest request: nat00100PriorEducationFileRequests) {
-            String[] row = {
+            Row row = new Row(
                     request.studentID,
                     request.priorEducationalAchievementIdentifier,
-                    request.priorEducationAchievementRecognitionIdentifier};
+                    request.priorEducationAchievementRecognitionIdentifier);
 
             rows.add(row);
         }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,8 @@ public class JsonSuburbRepository implements SuburbRepository{
 
     @Override
     public List<Suburb> getSuburbs(int postCode) {
-        return this.suburbs.get(postCode);
+        List<Suburb> suburbs = this.suburbs.get(postCode);
+        return (suburbs == null) ? Collections.emptyList() : suburbs;
     }
 
     private Map<Integer, List<Suburb>> initializeSuburbs(String suburbFilePath) {
@@ -62,10 +64,6 @@ public class JsonSuburbRepository implements SuburbRepository{
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }
-
-
-
-
         return suburbsMap;
     }
 

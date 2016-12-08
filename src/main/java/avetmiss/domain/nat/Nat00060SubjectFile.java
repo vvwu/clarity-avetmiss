@@ -4,10 +4,10 @@ import avetmiss.controller.payload.nat.Nat00060SubjectFileRequest;
 import avetmiss.domain.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static avetmiss.domain.Field.of;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 public class Nat00060SubjectFile {
@@ -39,31 +39,28 @@ public class Nat00060SubjectFile {
             of("Nominal Hours", 4));
 
     public String export(List<Nat00060SubjectFileRequest> requests) {
-
-        List<String[]> dataRows = newArrayList();
-
-        for(Nat00060SubjectFileRequest request: requests) {
-            String[] dataRow = exportRaw(request);
-            dataRows.add(dataRow);
-        }
+        List<Row> dataRows = requests
+                        .stream()
+                        .map(s -> exportRow(s))
+                        .collect(Collectors.toList());
 
         return ExportHelper.writeToString(header.sizes(), dataRows);
     }
 
-    public String[] exportRaw(Nat00060SubjectFileRequest request) {
+    public Row exportRow(Nat00060SubjectFileRequest request) {
         // All alphabetic characters in the Module/Unit of Competency Identifier field must be in upper case
         // The name must be in upper case.
 
         Unit unit = unitRepository.findByCode(request.subjectIdentifier);
         checkArgument(unit != null, "unit not found, identifier: {}", request.subjectIdentifier);
 
-        return new String[]{
+        return new Row(
                 SubjectFlag.UNIT_OF_COMPETENCY_IDENTIFIER.flag(),
                 unit.code().toUpperCase(),
                 unit.name().toUpperCase(),
                 unit.fieldOfEducationIdentifier(),
                 VetFlag.VOCATIONAL.flag,
-                nominalHours(request.nominalHours)};
+                nominalHours(request.nominalHours));
     }
 
     private String nominalHours(int nominalHours) {

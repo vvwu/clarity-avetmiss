@@ -4,6 +4,7 @@ import avetmiss.controller.payload.nat.Nat00130QualificationCompletedFileRequest
 import avetmiss.domain.AvetmissUtil;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,13 +42,13 @@ public class Nat00130QualificationCompletedFile {
             of("Program Unique Supervised Hours", 5));
 
     public String export(List<Nat00130QualificationCompletedFileRequest> requests) {
-        List<String[]> rows = exportRaw(requests);
+        List<Row> rows = exportRaw(requests);
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
 
-    List<String[]> exportRaw(List<Nat00130QualificationCompletedFileRequest> requests) {
-        List<String[]> rows = newArrayList();
+    List<Row> exportRaw(List<Nat00130QualificationCompletedFileRequest> requests) {
+        List<Row> rows = newArrayList();
 
         for (Nat00130QualificationCompletedFileRequest request : requests) {
             String qualificationIssuedFlag = request.isQualificationIssued ? "Y" : "N";
@@ -58,9 +59,7 @@ public class Nat00130QualificationCompletedFile {
                     Dates.toDateISO(request.supervisedTeachingActivityCompletionDate);
 
             String supervisedHours = (request.supervisedHours == null) ? repeat("0", 5) : leftPad(request.supervisedHours.toString(), 5, "0");
-
-
-            String[] row = new String[]{
+            Row row = new Row(
                     AvetmissUtil.formattedRtoIdentifier(request.rtoIdentifier),
                     request.courseIdentifier.toUpperCase(),
                     request.studentID,
@@ -68,7 +67,7 @@ public class Nat00130QualificationCompletedFile {
                     qualificationIssuedFlag,
                     AvetmissUtil.toDate(courseStartDate),
                     AvetmissUtil.toDate(supervisedTeachingActivityCompletionDate),
-                    supervisedHours};
+                    supervisedHours);
 
             rows.add(row);
         }

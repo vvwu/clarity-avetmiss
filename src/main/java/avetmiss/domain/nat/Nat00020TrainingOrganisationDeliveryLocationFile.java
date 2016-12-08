@@ -3,12 +3,13 @@ package avetmiss.domain.nat;
 import avetmiss.domain.AvetmissUtil;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
-import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
 
 public class Nat00020TrainingOrganisationDeliveryLocationFile {
     public final static String TOID_VIT = "20829";
@@ -42,11 +43,11 @@ public class Nat00020TrainingOrganisationDeliveryLocationFile {
             of("Address Street Name", 70));
 
     public String export(String rtoIdentifier) {
-        List<String[]> rows = exportRaw(rtoIdentifier);
+        List<Row> rows = exportRaw(rtoIdentifier);
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    public List<String[]> exportRaw(String rtoIdentifier) {
+    public List<Row> exportRaw(String rtoIdentifier) {
         boolean vit = TOID_VIT.equals(rtoIdentifier);
 
         String addressBuildingName = null;
@@ -55,7 +56,7 @@ public class Nat00020TrainingOrganisationDeliveryLocationFile {
         String addressStreetName = "Queen Street";
         String locationIdentifier = "CITY";
 
-        String[] city = {
+        Row city = new Row(
                 AvetmissUtil.formattedRtoIdentifier(rtoIdentifier),
                 locationIdentifier,
                 DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET,
@@ -66,11 +67,8 @@ public class Nat00020TrainingOrganisationDeliveryLocationFile {
                 addressBuildingName,
                 addressFlatOrUnitDetails,
                 addressStreetNumber,
-                addressStreetName};
+                addressStreetName);
 
-        List<String[]> rows = newArrayList();
-        rows.add(city);
-
-        return rows;
+        return asList(city);
     }
 }

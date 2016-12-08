@@ -17,7 +17,6 @@ public class AvetmissInputFileReaderController {
 
     @PostMapping
     AvetmissInputFileProcessResult processCsv(@RequestBody String csvContent) {
-        AvetmissInputFileProcessResult result = avetmissInputFileApplicationService.readAndValidate(csvContent);
-        return result;
+        return avetmissInputFileApplicationService.readAndValidate(csvContent);
     }
 }

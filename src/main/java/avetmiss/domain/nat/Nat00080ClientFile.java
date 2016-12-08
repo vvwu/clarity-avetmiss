@@ -4,6 +4,7 @@ import avetmiss.controller.payload.nat.ClientFileRequest;
 import avetmiss.domain.AvetmissUtil;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,9 +13,7 @@ import java.util.Date;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
-import static avetmiss.util.StringUtil.isBlank;
-import static avetmiss.util.StringUtil.isEqualToAny;
-import static avetmiss.util.StringUtil.nullSafeTrimString;
+import static avetmiss.util.StringUtil.*;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
@@ -53,11 +52,9 @@ public class Nat00080ClientFile {
 
 
     public String export(List<ClientFileRequest> requests) {
-        List<String[]> rows = newArrayList();
-
+        List<Row> rows = newArrayList();
         for (ClientFileRequest client: requests) {
-            String[] row = exportOneRow(client);
-            rows.add(row);
+            rows.add(exportOneRow(client));
         }
 
         return ExportHelper.writeToString(header.sizes(), rows);
@@ -91,7 +88,7 @@ public class Nat00080ClientFile {
         return postCode;
     }
 
-    private String[] exportOneRow(ClientFileRequest client) {
+    private Row exportOneRow(ClientFileRequest client) {
         String studentID = client.studentID;
 
         String priorEducationalAchievementFlag = client.priorEducationalAchievementFlag; // prior educational achievement('@' means not specified)
@@ -100,7 +97,7 @@ public class Nat00080ClientFile {
         String labourForceStatusIdentifier = client.labourForceStatusIdentifier;
         String usi = requiredUsi(studentID, client.usi);
 
-        return new String[]{
+        return new Row(
                 studentID,
                 nameForEncryption(client.lastName, client.firstName),
                 client.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
@@ -127,7 +124,7 @@ public class Nat00080ClientFile {
                 statisticalAreaLevel2IdentifierOf(),
                 client.vsn,
                 ClientIndustryOfEmployment.clientIndustryOfEmployment(labourForceStatusIdentifier),
-                ClientOccupationIdentifier.clientOccupationIdentifier(labourForceStatusIdentifier)};
+                ClientOccupationIdentifier.clientOccupationIdentifier(labourForceStatusIdentifier));
     }
 
     public String proficiencyInSpokenEnglishIdentifier(ClientFileRequest client) {

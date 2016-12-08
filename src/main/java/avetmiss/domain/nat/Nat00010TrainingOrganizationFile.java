@@ -3,12 +3,15 @@ package avetmiss.domain.nat;
 import avetmiss.controller.payload.nat.Nat00010TrainingOrganizationFileRequest;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
+import avetmiss.domain.Row;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static avetmiss.domain.AvetmissUtil.formattedRtoIdentifier;
 import static avetmiss.domain.Field.of;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Arrays.asList;
 
 /**
  * NAT00010 - Training Organisation file
@@ -75,10 +78,7 @@ public class Nat00010TrainingOrganizationFile {
                 softwareProduct,
                 softwareVendorEmailAddress};
 
-        List<String[]> rows = newArrayList();
-        rows.add(dataRow);
-
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header.sizes(), asList(new Row(dataRow)));
     }
 
 }

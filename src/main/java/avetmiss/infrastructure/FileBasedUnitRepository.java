@@ -9,8 +9,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 import java.util.Map;
-
-import static com.google.common.collect.Maps.newLinkedHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 // @Repository
 public class FileBasedUnitRepository implements UnitRepository {
@@ -26,10 +26,7 @@ public class FileBasedUnitRepository implements UnitRepository {
         /** The latest ntis_unit.txt and qualification (course) file can be downloaded from http://www.ncver.edu.au/publications/1452.html **/
         List<Unit> units = new ClassPathTextResource<Unit>("ntis_unit.txt").read(extractor);
 
-        this.unitByCode = newLinkedHashMap();
-        for(Unit unit: units) {
-            this.unitByCode.put(unit.code(), unit);
-        }
+        this.unitByCode = units.stream().collect(Collectors.toMap(Unit::code, Function.identity()));
 
         logger.info("{} units initialized", unitByCode.size());
     }

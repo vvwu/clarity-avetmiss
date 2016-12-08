@@ -2,10 +2,7 @@ package avetmiss.domain.nat;
 
 
 import avetmiss.controller.payload.nat.EnrolmentFileRequest;
-import avetmiss.domain.AvetmissUtil;
-import avetmiss.domain.ExportHelper;
-import avetmiss.domain.Header;
-import avetmiss.domain.OutcomeIdentifierNational;
+import avetmiss.domain.*;
 import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,16 +58,14 @@ public class Nat00120EnrolmentFile {
             of("Funding Eligibility Key", 10));
 
     public String export(List<EnrolmentFileRequest> requests) {
-        List<String[]> rows = newArrayList();
+        List<Row> rows = newArrayList();
         for (EnrolmentFileRequest request: requests) {
-            String[] row = exportOneRow(request);
-            rows.add(row);
+            rows.add(exportOneRow(request));
         }
-
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    private String[] exportOneRow(EnrolmentFileRequest request) {
+    private Row exportOneRow(EnrolmentFileRequest request) {
         // data
         String deliveryLocationIdentifier = DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET;
         String unitIdentifier = request.unitCode;
@@ -122,7 +117,7 @@ public class Nat00120EnrolmentFile {
         OutcomeIdentifierNational outcomeIdentifierNational = new OutcomeIdentifierNational(request.outcomeIdentifier);
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
 
-        return new String[] {
+        return new Row(
                 deliveryLocationIdentifier,
                 studentID,
                 unitIdentifier,
@@ -155,7 +150,7 @@ public class Nat00120EnrolmentFile {
                 request.enrolmentIdentifier,
                 request.clientFeesOther,
                 request.deliveryProviderABN,
-                request.fundingEligibilityKey};
+                request.fundingEligibilityKey);
     }
 
 

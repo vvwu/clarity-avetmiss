@@ -6,6 +6,12 @@ public class Unit {
     private String name;
     private String fieldOfEducationIdentifier;
 
+    // rowMapper
+    public Unit(int id, String code, String name, String fieldOfEducationIdentifier) {
+        this(code, name, fieldOfEducationIdentifier);
+        setId(id);
+    }
+
     public Unit(String code, String name, String fieldOfEducationIdentifier) {
         this.code = code;
         this.name = name;

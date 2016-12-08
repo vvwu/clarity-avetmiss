@@ -4,7 +4,7 @@ import java.util.List;
 
 public class ExportHelper {
 
-    public static String writeToString(int[] sizeRow,  List<String[]> rows) {
+    public static String writeToString(int[] sizeRow,  List<Row> rows) {
         NatFileWriter natFileWriter = new NatFileWriter();
         natFileWriter.append(rows, sizeRow);
         return natFileWriter.closeWithAssertion(lengthPerRowAssertion(sizeRow) * rows.size());

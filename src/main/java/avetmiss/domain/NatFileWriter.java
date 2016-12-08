@@ -47,13 +47,13 @@ public class NatFileWriter {
 		return this;
 	}
 	
-	public NatFileWriter append(List<String[]> rows, int[] lengthTable) {
-		for (String[] row : rows) {
-			Validate.isTrue(row.length == lengthTable.length);
+	public NatFileWriter append(List<Row> rows, int[] lengthTable) {
+		for (Row row : rows) {
+			Validate.isTrue(row.values().length == lengthTable.length);
 		}
 		
-		for (String[] row : rows) {
-			append(row, lengthTable);
+		for (Row row : rows) {
+			append(row.values(), lengthTable);
 		}
 		return this;
 	}

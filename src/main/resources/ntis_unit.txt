@@ -18806,7 +18806,6 @@ ICAI6187A	Implement change management processes	029999
 ICAI6187B	Implement change management processes	029999
 ICAICT101A	Operate a personal computer	080905
 ICAICT102A	Operate word-processing applications	080905
-ICAICT103A	Use, communicate and search securely on the internet	080905
 ICAICT104A	Use digital devices	080905
 ICAICT105A	Operate spreadsheet applications	080905
 ICAICT106A	Operate presentation packages	080905
@@ -52598,7 +52597,6 @@ VU21461	Access the internet and email to develop language	120103
 VU21462	Explore community options	120103
 VU21463	Explore transport options	120103
 VU21464	Examine current issues	120103
-BSBITU201A	Produce simple word processed documents	120103
 ICAICT103A	Use, communicate and search securely on the internet	120103
 SWELRN101A	Basic learning strategies	120103
 SWEPER102A	Giving personal information	120103

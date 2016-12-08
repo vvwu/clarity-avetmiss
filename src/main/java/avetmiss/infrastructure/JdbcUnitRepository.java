@@ -9,15 +9,11 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 @Repository
 public class JdbcUnitRepository implements UnitRepository {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
-    private RowMapper<Unit> unitRowMapper = new UnitRowMapper();
 
     @Override
     public Unit findByCode(String unitCode) {
@@ -66,21 +62,19 @@ public class JdbcUnitRepository implements UnitRepository {
                 "select * from unit where (code=?)";
 
         try {
-            return jdbcTemplate.queryForObject(sql, unitRowMapper, unitCode);
+            return jdbcTemplate.queryForObject(sql, unitRowMapper(), unitCode);
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
-    private class UnitRowMapper implements RowMapper<Unit> {
-        @Override
-        public Unit mapRow(ResultSet rs, int i) throws SQLException {
-            Unit unit = new Unit(
-                    rs.getString("code"),
-                    rs.getString("name"),
-                    rs.getString("field_of_education_identifier"));
-            unit.setId(rs.getInt("id"));
-            return unit;
-        }
+    private RowMapper<Unit> unitRowMapper() {
+        return (rs, rowNum) ->
+                new Unit(
+                        rs.getInt("id"),
+                        rs.getString("code"),
+                        rs.getString("name"),
+                        rs.getString("field_of_education_identifier"));
+
     }
 }

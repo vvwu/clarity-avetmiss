@@ -1,7 +1,6 @@
 package avetmiss.util;
 
 import avetmiss.util.ostermiller.CSVParser;
-import avetmiss.util.ostermiller.CSVPrinter;
 import com.google.common.io.Closeables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -92,11 +91,9 @@ public class Csv {
 	
 	public static List<String[]> read(InputStream is, int numOfRowsToSkip) {
 		Assert.isTrue(numOfRowsToSkip >= 0, "'numOfRowsToSkip' can not be negative");
-		List<String[]> rows = new ArrayList<String[]>();
-		BufferedReader reader = null;
-		try {
-			reader = new BufferedReader(new InputStreamReader(is));
+		List<String[]> rows = new ArrayList<>();
 
+		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
 			// Skip the header lines (usually table header)
 			while (numOfRowsToSkip-- > 0) {
 				reader.readLine();
@@ -104,14 +101,14 @@ public class Csv {
 
 			CSVParser parser = new CSVParser(reader);
 			String values[][] = parser.getAllValues();
-			
+
 			if (values == null) {
 				return rows;
 			}
 
 			for (String[] value : values) {
 				String[] row = value;
-				if(row != null) {
+				if (row != null) {
 					for (int j = 0; j < row.length; j++) {
 						row[j] = escapeSql(row[j]);
 					}
@@ -121,8 +118,6 @@ public class Csv {
 
 		} catch (Exception e1) {
 			e1.printStackTrace();
-		} finally {
-            Closeables.closeQuietly(reader);
 		}
 
 		return rows;
@@ -173,7 +168,7 @@ public class Csv {
 			e1.printStackTrace();
 		}
 		
-		return new ArrayList<T>();
+		return new ArrayList<>();
 	}
 	
 	/**
@@ -226,127 +221,4 @@ public class Csv {
         str = str.replaceAll("'", "''");
         return str;
     }
-
-	/**
-	 * Print out the given rows to a csv file in the form of lines of comma
-	 * separated values. If <code>rows</code> is empty, nothing will be written
-	 * out.
-	 * @param toFile
-	 *            files to write to
-	 * @param headers
-	 *            header if needed, leave it as <code>Null</code> if do not need
-	 *            a dedicated header
-	 * @param rows
-	 *            rows to print out, each element is a <code>Object[]</code>
-	 * @return Returns a handle to the csv File that is generated, returns
-	 *         <code>null</code> if the file is not generated.
-	 */
-    public static File print(File toFile, String[] headers, List<String[]> rows) {
-    	if(rows == null || rows.size() == 0) {
-			return null;
-		}
-    	
-    	CSVPrinter printer = null;
-		try {
-			if(!toFile.exists()) {
-				toFile.createNewFile();
-			}
-			
-			printer = new CSVPrinter(new BufferedWriter(new FileWriter(
-					toFile)));
-			
-			if(headers != null) {
-				printer.writeln(headers);
-			}
-			
-			for (int i = 0; i < rows.size(); i++) {
-				Object[] input = rows.get(i);
-				printer.writeln(toStringArray(input));
-			}
-			
-			return toFile;
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (printer != null) {
-				try {
-					printer.close();
-				} catch (Exception e2) {
-					// ignore.
-				}
-			}
-		}
-		
-		return toFile;
-    }
-    
-    public static void print(File toFile, List rows) {
-    	if(rows == null || rows.size() == 0) {
-			return;
-		}
-    	
-    	CSVPrinter printer = null;
-		try {
-			if(!toFile.exists()) {
-				toFile.createNewFile();
-			}
-			
-			printer = new CSVPrinter(new BufferedWriter(new FileWriter(toFile)));
-			for (int i = 0; i < rows.size(); i++) {
-				Object[] input = (Object[])rows.get(i);
-				printer.writeln(toStringArray(input));
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (printer != null) {
-				try {
-					printer.close();
-				} catch (Exception e2) {
-					// ignore.
-				}
-			}
-		}
-	}
-
-    private static String[] toStringArray(Object[] input) {
-    	if(input == null || input.length ==0) {
-			return new String[0];
-		}
-    	String[] strs = new String[input.length];
-		for (int i = 0; i < input.length; i++) {
-			strs[i] = input[i] == null ? "" : trimString(input[i].toString());
-		}
-		return strs;
-    }
-    
-	public static boolean isNULL(String value) {
-        return StringUtil.isBlank(value) || "null".equalsIgnoreCase(value);
-    }
-	
-	public static boolean isNotNULL(String value) {
-		return !isNULL(value);
-	}
-	
-	/**
-	 * Trim a string. Removes leading and trailing blanks. If the resulting
-	 * string is empty or a string "null", normalizes the string to an ""
-	 * string.
-	 * @param value
-	 *            the string to trim
-	 * @return the trimmed string, or null if the string is empty
-	 */
-
-	public static String trimString(String value) {
-		if (value == null) {
-			return "";
-		}
-		value = value.trim();
-		if (value.length() == 0 || isNULL(value)) {
-			return "";
-		}
-		
-		return value;
-	}
-	
 }
