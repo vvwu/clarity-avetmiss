@@ -17,7 +17,7 @@ public class ReadModelAssemblerTest {
     @Test
     public void toLabelValueReadModels() throws Exception {
         List<LabelValue> domains =
-                Arrays.asList(new LabelValue("L1", "V1"), new LabelValue("L2", "V2"));
+                Arrays.asList(LabelValue.labelValue("L1", "V1"), LabelValue.labelValue("L2", "V2"));
 
         List<LabelValueReadModel> readModels = ReadModelAssembler.toLabelValueReadModels(domains);
         assertThat(readModels.size(), is(2));

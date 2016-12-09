@@ -8,20 +8,6 @@ public class LabelValue implements Comparable<LabelValue>, Serializable {
     private String label;
     private String value;
 
-    public LabelValue() {
-        super();
-    }
-    public LabelValue(final String label, final String value) {
-        this.label = label;
-        this.value = value;
-    }
-    
-    public LabelValue(final String label, final String value, final String title) {
-    	this.label = label;
-        this.value = value;
-        this.title = title;
-    }
-
     public static LabelValue labelValue(final String label, final String value) {
     	return new LabelValue(label, value);
     }
@@ -29,6 +15,18 @@ public class LabelValue implements Comparable<LabelValue>, Serializable {
     public static LabelValue labelValue(final String label, final String value, final String title) {
     	return new LabelValue(label, value, title);
     }
+
+    private LabelValue(final String label, final String value) {
+        this.label = label;
+        this.value = value;
+    }
+
+    private LabelValue(final String label, final String value, final String title) {
+        this.label = label;
+        this.value = value;
+        this.title = title;
+    }
+
 
     public String getLabel() {
         return this.label;
