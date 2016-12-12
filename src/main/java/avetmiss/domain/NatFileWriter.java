@@ -22,21 +22,6 @@ public class NatFileWriter {
 		this.buffer = new StringBuilder();
 	}
 	
-    public NatFileWriter append(int value, int length) {
-		String valueStr = String.valueOf(value);
-		this.append(valueStr, length);
-		return this;
-	}
-
-    public NatFileWriter append(String value, int length) {
-		String str = trim(value);
-		Validate.isTrue(str.length() <= length, format("length of str '%s' must not be greater than %s", value, length));
-		String valueWithPadding = StringUtils.rightPad(str, length, SPACE);
-		
-		this.buffer.append(valueWithPadding);
-		return this;
-	}
-
     public NatFileWriter append(String[] rowCols, int[] lengthTable) {
 		Validate.isTrue(rowCols.length == lengthTable.length);
 		for (int i = 0; i < rowCols.length; i++) {
@@ -82,7 +67,17 @@ public class NatFileWriter {
         return str;
 	}
 
-    public String close(int lengthAssertionExcludingCarriageReturn) {
+	private NatFileWriter append(String value, int length) {
+		String str = trim(value);
+		Validate.isTrue(str.length() <= length, format("length of str '%s' must not be greater than %s", value, length));
+		String valueWithPadding = StringUtils.rightPad(str, length, SPACE);
+
+		this.buffer.append(valueWithPadding);
+		return this;
+	}
+
+
+	public String close(int lengthAssertionExcludingCarriageReturn) {
 		return closeWithAssertion(lengthAssertionExcludingCarriageReturn);
 	}
 }

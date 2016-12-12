@@ -5,6 +5,7 @@ import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Map;
 
@@ -77,12 +78,12 @@ public class OutcomeIdentifierNational {
     }
 
     // TODO: test case
-    public int selfCorrectedCode(String studentID, Date enrolmentEndDate) {
+    public int selfCorrectedCode(String studentID, LocalDate enrolmentEndDate) {
         if(is90ContinuingEnrolmentInTheCurrentCollectionYear()
-                && (Dates.year(enrolmentEndDate) > Dates.currentYear())) {
+                && (enrolmentEndDate.getYear() > Dates.currentYear())) {
 
-            logger.warn("Enrolment sid: {} outcomeIdentifier should be reported as 70, course end year: {} is in the future collection year",
-                    studentID, Dates.year(enrolmentEndDate));
+            logger.warn("Enrolment sid: {} outcomeIdentifier should be reported as 70, course end year: {} is in the future collection year", studentID, enrolmentEndDate.getYear());
+
             return OutcomeIdentifierNational.CONTINUING_ENROLMENT_IN_THE_FUTURE_COLLECTION_YEAR;
         }
 

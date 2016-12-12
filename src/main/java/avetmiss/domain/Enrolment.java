@@ -1,5 +1,6 @@
 package avetmiss.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -11,8 +12,8 @@ public class Enrolment {
     private String studentName;
     private String courseCode;
     private String unitCode;
-    private Date startDate;
-    private Date endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
     private int nominalHour;
     private Integer supervisedHours;
     private Integer hoursAttended;
@@ -39,19 +40,19 @@ public class Enrolment {
         this.unitCode = unitCode;
     }
 
-    public Date startDate() {
+    public LocalDate startDate() {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Date endDate() {
+    public LocalDate endDate() {
         return endDate;
     }
 
-    public void setEndDate(Date endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

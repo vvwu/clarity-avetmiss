@@ -1,11 +1,15 @@
 package avetmiss.domain;
 
-import avetmiss.util.Dates;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+
+import static avetmiss.util.StringUtil.isBlank;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
@@ -68,11 +72,24 @@ public class InputRowMapperTest {
         assertThat(enrolment.getUnitCode(), is(unitCode));
         assertThat(enrolment.nominalHour(), is(nominalHours));
         assertThat(enrolment.hoursAttended(), is(hoursAttended));
-        assertThat(enrolment.startDate(), is(Dates.toDate(startDate)));
-        assertThat(enrolment.endDate(), is(Dates.toDate(endDate)));
+        assertThat(enrolment.startDate(), is(toDate(startDate)));
+        assertThat(enrolment.endDate(), is(toDate(endDate)));
         assertThat(enrolment.getOutcomeIdentifier().code() + "", is(outcomeIdentifier));
         assertThat(enrolment.tuitionFee(), is(tuitionFee));
     }
+
+
+    private static LocalDate toDate(String dateStr) {
+        if (isBlank(dateStr)) {
+            return null;
+        }
+        try {
+            return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
+
 
     @Test
     public void shouldLogErrorsNominalHoursIsUnparsable() {

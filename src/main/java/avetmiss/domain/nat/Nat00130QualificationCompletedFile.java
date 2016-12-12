@@ -9,6 +9,7 @@ import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -52,11 +53,11 @@ public class Nat00130QualificationCompletedFile {
 
         for (Nat00130QualificationCompletedFileRequest request : requests) {
             String qualificationIssuedFlag = request.isQualificationIssued ? "Y" : "N";
-            Date courseStartDate = Dates.toDateISO(request.courseStartDate);
+            LocalDate courseStartDate = Dates.toLocalDateISO(request.courseStartDate);
             String yearCourseCompleted = yearCourseCompleted(request);
 
-            Date supervisedTeachingActivityCompletionDate =
-                    Dates.toDateISO(request.supervisedTeachingActivityCompletionDate);
+            LocalDate supervisedTeachingActivityCompletionDate =
+                    Dates.toLocalDateISO(request.supervisedTeachingActivityCompletionDate);
 
             String supervisedHours = (request.supervisedHours == null) ? repeat("0", 5) : leftPad(request.supervisedHours.toString(), 5, "0");
             Row row = new Row(

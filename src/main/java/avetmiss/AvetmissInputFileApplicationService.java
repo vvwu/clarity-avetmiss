@@ -38,13 +38,12 @@ public class AvetmissInputFileApplicationService {
 
         errorList.addAll(inputRowMapper.errors());
 
-        List<EnrolmentRowReadModel> enrolmentRowReadModels = Lists.newArrayList();
+        List<EnrolmentRowReadModel> enrolmentRowReadModels = newArrayList();
         for(Enrolment enrolment: rows) {
             try {
                 loadUnitDetails(enrolment);
 
-                EnrolmentRowReadModel enrolmentRowReadModel = toEnrolmentRowReadModel(enrolment);
-                enrolmentRowReadModels.add(enrolmentRowReadModel);
+                enrolmentRowReadModels.add(toEnrolmentRowReadModel(enrolment));
             } catch (Exception ex) {
                 errorList.add("Enrolments rowNumber:" + enrolment.getRowNum() + ": " + ex.getMessage());
             }

@@ -4,9 +4,12 @@ import avetmiss.util.CSVRowMapper;
 import avetmiss.util.StringUtil;
 import org.apache.commons.lang.Validate;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 
 import static avetmiss.util.Csv.*;
 import static avetmiss.util.StringUtil.isBlank;
@@ -84,21 +87,20 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
                 enrolment.setNominalHour(Integer.parseInt(nominalHourStr));
 
-        enrolment.setStartDate(toDate(startDateStr));
-        enrolment.setEndDate(toDate(endDateStr));
+        enrolment.setStartDate(toLocalDate(startDateStr));
+        enrolment.setEndDate(toLocalDate(endDateStr));
         enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(outcomeIdentifier));
         enrolment.setTuitionFee(tuitionFee);
         return enrolment;
     }
 
-    private static final SimpleDateFormat DEFAULT_DATE_FORMATTER = new SimpleDateFormat("dd/MM/yy");
-    private static Date toDate(String dateStr) {
+    private static LocalDate toLocalDate(String dateStr) {
         if (isBlank(dateStr)) {
             return null;
         }
         try {
-            return DEFAULT_DATE_FORMATTER.parse(dateStr);
-        } catch (ParseException e) {
+            return LocalDate.parse(dateStr, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+        } catch (DateTimeParseException e) {
             return null;
         }
     }
@@ -144,20 +146,20 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
     private void ensureColumnJContainsValidDate(String[] cols) {
         String startDateStr = cols[COLUMN_J];
-        Date startDate = toDate(startDateStr);
+        LocalDate startDate = toLocalDate(startDateStr);
         checkArgument(startDate != null, "Must provide a valid date in [column J] in format: dd/mm/yyyy");
     }
 
     private void ensureValidEndDateProvided(String[] cols) {
         String endDateStr = cols[COLUMN_K];
-        Date endDate = toDate(endDateStr);
+        LocalDate endDate = toLocalDate(endDateStr);
         checkArgument(endDate != null, "Must provide a valid date in [column K] in format: dd/mm/yyyy");
     }
 
     private void ensureStartDateIsNoLaterThanEndDate(String[] cols) {
-        Date startDate = toDate(cols[COLUMN_J]);
-        Date endDate = toDate(cols[COLUMN_K]);
+        LocalDate startDate = toLocalDate(cols[COLUMN_J]);
+        LocalDate endDate = toLocalDate(cols[COLUMN_K]);
 
-        checkArgument(!startDate.after(endDate), "Start date cannot be later than end date");
+        checkArgument(!startDate.isAfter(endDate), "Start date cannot be later than end date");
     }
 }

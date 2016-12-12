@@ -3,11 +3,13 @@ package avetmiss.domain;
 import avetmiss.util.LabelValue;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static org.hamcrest.core.Is.is;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertThat;
 
 public class AvetmissUtilTest {
@@ -22,5 +24,12 @@ public class AvetmissUtilTest {
         assertThat(labelValues.size(), is(2));
         assertThat(labelValues.get(0).getValue(), is("key1"));
         assertThat(labelValues.get(0).getLabel(), is("value1"));
+    }
+
+    @Test
+    public void toDate() throws Exception {
+        LocalDate date = LocalDate.of(2016, 12, 1);
+        assertEquals("01122016", AvetmissUtil.toDate(date));
+        assertEquals(null, AvetmissUtil.toDate(null));
     }
 }

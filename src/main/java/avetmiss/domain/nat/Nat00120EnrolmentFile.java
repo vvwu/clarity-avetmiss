@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -92,7 +93,7 @@ public class Nat00120EnrolmentFile {
         // Value	Description
         // 81	Non-assessable enrolment - Satisfactorily completed 82	Non-assessable enrolment - Withdrawn or not satisfactorily completed
 
-        Date courseStart = Dates.toDateISO(request.courseStartedDate);
+        LocalDate courseStart = Dates.toLocalDateISO(request.courseStartedDate);
 
         String scheduledHours = request.nominalHour + "";
         String commencingCourseIdentifier = AvetmissUtil.getCommencingCourseIdentifier(courseStart);
@@ -112,7 +113,7 @@ public class Nat00120EnrolmentFile {
         String fundingSourceNationalIdentifier =
                 fundingSourceNationalIdentifier(studentID, fundingSourceStateIdentifier);
 
-        Date enrolmentEndDate = Dates.toDateISO(request.endDate);
+        LocalDate enrolmentEndDate = Dates.toLocalDateISO(request.endDate);
         // Result not yet available (Code 90)
         OutcomeIdentifierNational outcomeIdentifierNational = new OutcomeIdentifierNational(request.outcomeIdentifier);
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
@@ -122,7 +123,7 @@ public class Nat00120EnrolmentFile {
                 studentID,
                 unitIdentifier,
                 courseIdentifier,
-                AvetmissUtil.toDate(Dates.toDateISO(request.startDate)),
+                AvetmissUtil.toDate(Dates.toLocalDateISO(request.startDate)),
                 AvetmissUtil.toDate(enrolmentEndDate),
                 deliveryModeIdentifier,
                 outcomeIdentifier + "",
@@ -146,7 +147,7 @@ public class Nat00120EnrolmentFile {
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
                 request.anzsicCode,
-                AvetmissUtil.toDate(Dates.toDateISO(request.enrolmentDate)),
+                AvetmissUtil.toDate(Dates.toLocalDateISO(request.enrolmentDate)),
                 request.enrolmentIdentifier,
                 request.clientFeesOther,
                 request.deliveryProviderABN,
@@ -189,7 +190,7 @@ public class Nat00120EnrolmentFile {
         return null;
     }
 
-    private String purchasingContractIdentifier(Date courseStart, String TOID) {
+    private String purchasingContractIdentifier(LocalDate courseStart, String TOID) {
         // The Purchasing Contract Identifier must be consistent with the
         // year the student commenced their course. That is, the Purchasing
         // Contract Identifier remains constant for a given student, course

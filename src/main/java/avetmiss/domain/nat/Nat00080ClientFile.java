@@ -9,6 +9,7 @@ import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -72,7 +73,7 @@ public class Nat00080ClientFile {
                 nullSafeTrimString(firstName));
     }
 
-    public String dateOfBirth(Date dob) {
+    public String dateOfBirth(LocalDate dob) {
         return dob == null ? "@@@@@@@@" : AvetmissUtil.toDate(dob);
     }
 
@@ -103,7 +104,7 @@ public class Nat00080ClientFile {
                 client.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
                 client.yearHighestSchoolLevelCompleted,
                 client.sex,
-                dateOfBirth(Dates.toDateISO(client.dateOfBirth)),
+                dateOfBirth(Dates.toLocalDateISO(client.dateOfBirth)),
                 postCode(studentID, client.postCode),
                 client.indigenousStatusIdentifier,
                 client.mainLanguageSpokenAtHomeIdentifier,
