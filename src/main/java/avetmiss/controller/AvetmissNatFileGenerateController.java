@@ -19,7 +19,7 @@ public class AvetmissNatFileGenerateController {
     @Autowired
     private AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService;
 
-    @PostMapping("nat.zip")
+    @PostMapping("/nat.zip")
     ResponseEntity getNats(@RequestBody NatFilesRequest natFilesRequest) throws IOException {
         try {
             byte[] bytes = avetmissNatGenerationApplicationService.getNatFileZip(natFilesRequest);
@@ -31,7 +31,7 @@ public class AvetmissNatFileGenerateController {
         }
     }
 
-    @PostMapping("natFiles")
+    @PostMapping("/natFiles")
     NatFileReadModel getNatFiles(@RequestBody NatFilesRequest natFilesRequest) {
         return avetmissNatGenerationApplicationService.getNatFiles(natFilesRequest);
     }
