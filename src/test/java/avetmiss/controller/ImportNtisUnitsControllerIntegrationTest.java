@@ -30,10 +30,10 @@ public class ImportNtisUnitsControllerIntegrationTest extends BaseControllerInte
 
         String result = template.postForEntity(base + "/units/importUnits", requestEntity, String.class).getBody();
 
-        assertThat(result, is("added: 100, ignored: 0, total count before import: 0, total count after import: 100"));
+        assertThat(result, is("added: 100, ignored: 0, error: 0, total count before import: 0, total count after import: 100"));
 
         String result2 = template.postForEntity(base + "/units/importUnits", requestEntity, String.class).getBody();
-        assertThat(result2, is("added: 0, ignored: 100, total count before import: 100, total count after import: 100"));
+        assertThat(result2, is("added: 0, ignored: 100, error: 0, total count before import: 100, total count after import: 100"));
     }
 
     @Test
