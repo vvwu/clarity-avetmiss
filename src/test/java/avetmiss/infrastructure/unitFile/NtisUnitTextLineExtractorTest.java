@@ -9,13 +9,13 @@ import static org.junit.Assert.*;
 
 public class NtisUnitTextLineExtractorTest {
 
-    private NtisUnitTextLineExtractor extractor;
+    private NtisUnitLineExtractor extractor;
 
-    private final String line = "023/03\tAddress legal and administrative requirements\t090901";
+    private final String line = "023/03\tAddress \"legal\" and administrative requirements\t090901";
 
     @Before
     public void setup() {
-        this.extractor = new NtisUnitTextLineExtractor();
+        this.extractor = new NtisUnitLineExtractor("\t");
     }
 
     @Test

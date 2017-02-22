@@ -170,6 +170,18 @@ public class Csv {
 		
 		return new ArrayList<>();
 	}
+
+	public static <T> List<T> read(String csvContent, CSVRowMapper<T> rowMapper) {
+		Assert.notNull(rowMapper, "RowMapper is required");
+		try {
+			InputStream is = new ByteArrayInputStream(csvContent.getBytes());
+			return read(is, rowMapper);
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+
+		return new ArrayList<>();
+	}
 	
 	/**
 	 * Remove the BOM header [0xEF, 0xBB, 0xBF] from the input stream if exist

@@ -6,9 +6,10 @@ import avetmiss.util.TextLineMapper;
 import static avetmiss.util.StringUtil.isBlank;
 import static avetmiss.util.StringUtil.trimString;
 
-public class NtisUnitTextLineExtractor implements TextLineMapper<Unit> {
-
-    public NtisUnitTextLineExtractor() {
+public class NtisUnitLineExtractor implements TextLineMapper<Unit> {
+    private String tokenSeparator;
+    public NtisUnitLineExtractor(String tokenSeparator) {
+        this.tokenSeparator = tokenSeparator;
     }
 
     @Override
@@ -25,9 +26,9 @@ public class NtisUnitTextLineExtractor implements TextLineMapper<Unit> {
     }
 
     protected Unit toCompetency(String line) {
-        String[] tokens = line.split("\t");
+        String[] tokens = line.split(tokenSeparator);
         String code = trimString(tokens[0]);
-        String name = trimString(tokens[1]);
+        String name = sanitizeTitle(trimString(tokens[1]));
 
         String fieldOfEducationIdentifier = null;
         if(tokens.length > 2) {
@@ -41,4 +42,11 @@ public class NtisUnitTextLineExtractor implements TextLineMapper<Unit> {
         return new Unit(code, name, fieldOfEducationIdentifier);
     }
 
+    public static String sanitizeTitle(String title) {
+        if(title == null || title.isEmpty()) {
+            return null;
+        }
+
+        return title.replaceAll("\"", "");
+    }
 }

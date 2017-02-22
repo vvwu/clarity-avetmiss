@@ -14,14 +14,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class ImportUnitController {
 
     @PostMapping("/units/importUnits")
-    ResponseEntity<String> importNtisUnitFile(@RequestBody String csvContent) {
+    ResponseEntity<String> importNtisUnitFile(@RequestBody String txtContent) {
         try {
-            String result = unitImportApplicationService.importNtisUnits(csvContent);
+            String result = unitImportApplicationService.importNtisUnitsFromTxt(txtContent);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ExceptionUtils.getFullStackTrace(e));
         }
     }
+
+    @PostMapping("/units/importUnits/csv")
+    ResponseEntity<String> importNtisUnitFileCsv(@RequestBody String csvContent) {
+        try {
+            String result = unitImportApplicationService.importNtisUnitsFromCsv(csvContent);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ExceptionUtils.getFullStackTrace(e));
+        }
+    }
+
 
     @Autowired
     private UnitImportApplicationService unitImportApplicationService;

@@ -2,7 +2,7 @@ package avetmiss.infrastructure;
 
 import avetmiss.domain.Unit;
 import avetmiss.domain.UnitRepository;
-import avetmiss.infrastructure.unitFile.NtisUnitTextLineExtractor;
+import avetmiss.infrastructure.unitFile.NtisUnitLineExtractor;
 import avetmiss.util.ClassPathTextResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +21,7 @@ public class FileBasedUnitRepository implements UnitRepository {
 
     public FileBasedUnitRepository() {
 
-        NtisUnitTextLineExtractor extractor = new NtisUnitTextLineExtractor();
+        NtisUnitLineExtractor extractor = new NtisUnitLineExtractor("\t");
 
         /** The latest ntis_unit.txt and qualification (course) file can be downloaded from http://www.ncver.edu.au/publications/1452.html **/
         List<Unit> units = new ClassPathTextResource<Unit>("ntis_unit.txt").read(extractor);

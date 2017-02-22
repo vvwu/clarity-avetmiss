@@ -4,8 +4,8 @@ import avetmiss.controller.payload.UnitCreateRequest;
 import avetmiss.domain.Unit;
 import avetmiss.domain.UnitRepository;
 import avetmiss.exception.UnitExistException;
-import avetmiss.infrastructure.unitFile.NtisUnitTextLineExtractor;
-import com.google.common.base.Preconditions;
+import avetmiss.infrastructure.unitFile.NtisUnitLineExtractor;
+import avetmiss.util.Csv;
 import com.google.common.io.Closeables;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -20,6 +20,7 @@ import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static avetmiss.util.StringUtil.trimString;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
 import static org.apache.commons.lang.StringUtils.trimToNull;
@@ -55,14 +56,41 @@ public class UnitImportApplicationService {
         logger.info("unit added: '{}'", unit);
     }
 
-    public String importNtisUnits(String ntisUnitsTxt) {
+    public String importNtisUnitsFromTxt(String ntisUnitsTxt) {
         logger.info("start importing ntisUnits");
 
+        List<Unit> units = readFromString(ntisUnitsTxt, "\t");
+
+        return doImportUnits(units);
+    }
+
+    // source: http://training.gov.au/Reporting/ReportInfo?reportName=UnitClassification
+    public String importNtisUnitsFromCsv(String ntisUnitsCsv) {
+        logger.info("start importing ntisUnits from csv");
+
+        List<Unit> units = Csv.read(ntisUnitsCsv, (tokens, rowNum) -> {
+            if(rowNum == 0) {
+                return null;
+            }
+
+            String code = trimString(tokens[0]);
+            String title = trimString(tokens[1]);
+            String fieldOfEducationIdentifier = null;
+            if(tokens.length > 2) {
+                fieldOfEducationIdentifier = trimString(tokens[2]);
+            }
+
+            return new Unit(code, title, fieldOfEducationIdentifier);
+        });
+
+        return doImportUnits(units);
+    }
+
+    private String doImportUnits(List<Unit> units) {
         int added = 0;
         int ignored = 0;
+        int error = 0;
         int totalCountBefore = unitRepository.count();
-
-        List<Unit> units = readFromString(ntisUnitsTxt);
 
         for(Unit unit: units) {
             Unit existingUnit = unitRepository.findByCode(unit.code());
@@ -71,23 +99,27 @@ public class UnitImportApplicationService {
                 ignored ++;
                 logger.info("unit ignored: '{}'", unit);
             } else {
-                unitRepository.save(unit);
-                added ++;
-
-                logger.info("unit added: '{}'", unit);
+                try {
+                    unitRepository.save(unit);
+                    added ++;
+                    logger.info("unit added: '{}'", unit);
+                } catch (Exception e) {
+                    error++;
+                    logger.error("fail to save unit: " + unit, e);
+                }
             }
         }
 
         int totalCountAfter = unitRepository.count();
-        String result = format("added: %s, ignored: %s, total count before import: %s, total count after import: %s",
-                added, ignored, totalCountBefore, totalCountAfter);
+        String result = format("added: %s, ignored: %s, error: %s, total count before import: %s, total count after import: %s",
+                added, ignored, error, totalCountBefore, totalCountAfter);
 
         logger.info("import completed, {}", result);
         return result;
     }
 
-    private List<Unit> readFromString(String ntisUnitsTxt) {
-        NtisUnitTextLineExtractor extractor = new NtisUnitTextLineExtractor();
+    private List<Unit> readFromString(String ntisUnitsTxt, String tokenSeparator) {
+        NtisUnitLineExtractor extractor = new NtisUnitLineExtractor(tokenSeparator);
 
         BufferedReader reader;
         try {
