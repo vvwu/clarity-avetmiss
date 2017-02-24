@@ -4,26 +4,27 @@ import avetmiss.controller.payload.nat.*;
 import avetmiss.domain.UnitRepository;
 import avetmiss.domain.nat.*;
 import avetmiss.util.NatFile;
-import com.google.common.collect.Lists;
+import avetmiss.util.ZipWriter;
+import com.google.common.io.Files;
+import org.apache.commons.io.IOUtils;
+import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.*;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.Collections;
+import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 @Service
 public class AvetmissNatGenerationApplicationService {
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
+    private static Logger logger = LoggerFactory.getLogger(AvetmissNatGenerationApplicationService.class);
 
     @Autowired private UnitRepository unitRepository;
 
@@ -114,7 +115,7 @@ public class AvetmissNatGenerationApplicationService {
     }
 
     private NatFile getNat00030CourseFileRequest(List<Nat00030CourseFileRequest> requests) {
-        NatFile natFile = new NatFile("NAT00020.txt");
+        NatFile natFile = new NatFile("NAT00030.txt");
         if(requests == null || requests.isEmpty()) {
             return natFile;
         }
@@ -202,34 +203,42 @@ public class AvetmissNatGenerationApplicationService {
         return natFile.withContent(content);
     }
 
-    private byte[] zipFiles(List<NatFile> stringZipEntries) throws IOException {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ZipOutputStream zos = new ZipOutputStream(baos);
+    public static void main(String[] args) throws IOException {
 
-        byte bytes[] = new byte[2048];
+        NatFile file1 = new NatFile("file1", "file1.txt");
+        NatFile file2 = new NatFile("file2", "file2.txt");
 
-        for (NatFile natFile : stringZipEntries) {
-            byte[] contentBytes = natFile.content().getBytes(StandardCharsets.UTF_8);
+        List<NatFile> natFiles = new ArrayList<>();
+        natFiles.add(file1);
+        natFiles.add(file2);
 
-            BufferedInputStream bis =
-                    new BufferedInputStream(new ByteArrayInputStream(contentBytes));
+        byte[] bytes = zipFiles(natFiles);
 
-            zos.putNextEntry(new ZipEntry(natFile.filename()));
+        Files.write(bytes, new File(format("nat-%s.zip", new LocalDateTime().toString("yyyyMMddHHmmss"))));
+    }
 
-            int bytesRead;
-            while ((bytesRead = bis.read(bytes)) != -1) {
-                zos.write(bytes, 0, bytesRead);
+    private static byte[] zipFiles(List<NatFile> stringZipEntries) throws IOException {
+        File tempDir = Files.createTempDir();
+        File natFilesDir = new File(tempDir, "natFiles");
+        natFilesDir.mkdir();
+
+        stringZipEntries.forEach(natFile -> {
+            try {
+                Files.write(natFile.content(), new File(natFilesDir, natFile.filename()), Charset.forName("UTF-8"));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
             }
-            zos.closeEntry();
-            bis.close();
-        }
+        });
 
-        zos.flush();
-        baos.flush();
-        zos.close();
-        baos.close();
+        ZipWriter zipWriter = new ZipWriter();
 
-        return baos.toByteArray();
+        File zipFile = new File(tempDir, "output.zip");
+        zipWriter.createZip(natFilesDir.getAbsolutePath(), zipFile.getAbsolutePath());
+
+        logger.info("temp nat file generated: {}", zipFile);
+
+
+        return Files.toByteArray(zipFile);
     }
 }
 

@@ -3,6 +3,9 @@ package avetmiss.controller;
 import avetmiss.AvetmissNatGenerationApplicationService;
 import avetmiss.controller.payload.nat.NatFileReadModel;
 import avetmiss.controller.payload.nat.NatFilesRequest;
+import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -11,7 +14,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
+
+import static java.lang.String.format;
 
 @RestController
 public class AvetmissNatFileGenerateController {
@@ -23,6 +30,13 @@ public class AvetmissNatFileGenerateController {
     ResponseEntity getNats(@RequestBody NatFilesRequest natFilesRequest) throws IOException {
         try {
             byte[] bytes = avetmissNatGenerationApplicationService.getNatFileZip(natFilesRequest);
+
+            try (FileWriter fileWriter
+                         = new FileWriter(new File(format("nat-%s.zip", new LocalDateTime().toString("yyyyMMddHHmmss"))))) {
+                IOUtils.write(bytes, fileWriter);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
 
             return new ResponseEntity<byte[]>(bytes,
                     injectFileNameIntoHeaders("nat.zip"), HttpStatus.OK);
