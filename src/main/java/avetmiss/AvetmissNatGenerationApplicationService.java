@@ -6,20 +6,18 @@ import avetmiss.domain.nat.*;
 import avetmiss.util.NatFile;
 import avetmiss.util.ZipWriter;
 import com.google.common.io.Files;
-import org.apache.commons.io.IOUtils;
-import org.joda.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.base.Strings.nullToEmpty;
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
 import static java.util.Arrays.asList;
 
 @Service
@@ -203,20 +201,6 @@ public class AvetmissNatGenerationApplicationService {
         return natFile.withContent(content);
     }
 
-    public static void main(String[] args) throws IOException {
-
-        NatFile file1 = new NatFile("file1", "file1.txt");
-        NatFile file2 = new NatFile("file2", "file2.txt");
-
-        List<NatFile> natFiles = new ArrayList<>();
-        natFiles.add(file1);
-        natFiles.add(file2);
-
-        byte[] bytes = zipFiles(natFiles);
-
-        Files.write(bytes, new File(format("nat-%s.zip", new LocalDateTime().toString("yyyyMMddHHmmss"))));
-    }
-
     private static byte[] zipFiles(List<NatFile> stringZipEntries) throws IOException {
         File tempDir = Files.createTempDir();
         File natFilesDir = new File(tempDir, "natFiles");
@@ -224,7 +208,12 @@ public class AvetmissNatGenerationApplicationService {
 
         stringZipEntries.forEach(natFile -> {
             try {
-                Files.write(natFile.content(), new File(natFilesDir, natFile.filename()), Charset.forName("UTF-8"));
+                String content = nullToEmpty(natFile.content());
+                File to = new File(natFilesDir, natFile.filename());
+
+                logger.info("writing file: {}, with content: {}", to, content);
+
+                Files.write(content, to, Charset.forName("UTF-8"));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -236,7 +225,6 @@ public class AvetmissNatGenerationApplicationService {
         zipWriter.createZip(natFilesDir.getAbsolutePath(), zipFile.getAbsolutePath());
 
         logger.info("temp nat file generated: {}", zipFile);
-
 
         return Files.toByteArray(zipFile);
     }

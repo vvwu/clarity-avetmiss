@@ -6,6 +6,8 @@ import avetmiss.controller.payload.nat.NatFilesRequest;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +24,7 @@ import static java.lang.String.format;
 
 @RestController
 public class AvetmissNatFileGenerateController {
+    private static Logger logger = LoggerFactory.getLogger(AvetmissNatFileGenerateController.class);
 
     @Autowired
     private AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService;
@@ -41,6 +44,7 @@ public class AvetmissNatFileGenerateController {
             return new ResponseEntity<byte[]>(bytes,
                     injectFileNameIntoHeaders("nat.zip"), HttpStatus.OK);
         } catch (Exception e) {
+            logger.error("fail to generate nat.zip", e);
             return new ResponseEntity<String>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
     }
