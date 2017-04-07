@@ -60,7 +60,7 @@ public class Nat00010TrainingOrganizationFile {
     public String export(Nat00010TrainingOrganizationFileRequest request) {
         String addressSecondLine = "";
         String softwareProduct = "Clarity2008";
-        String softwareVendorEmailAddress = "vvwu0830@gmail.com";
+        String softwareVendorEmailAddress = "rock.yu99@gmail.com";
 
         String[] dataRow = new String[] {
                 formattedRtoIdentifier(request.rtoIdentifier),
