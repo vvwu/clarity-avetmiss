@@ -1,5 +1,7 @@
 package avetmiss.domain;
 
+import avetmiss.export.Client;
+import avetmiss.export.Enrolment;
 import avetmiss.util.LabelValue;
 import com.google.common.collect.Lists;
 
@@ -50,4 +52,24 @@ public class AvetmissUtil {
         return formattedRtoIdentifier(String.valueOf(TOID));
     }
 
+
+	// convert date to string in "DDMMYYYY" format
+	private static SimpleDateFormat sf = new SimpleDateFormat("ddMMyyyy");
+	public static String toDate(Date date) {
+		return sf.format(date);
+	}
+
+	private static SimpleDateFormat sf1 = new SimpleDateFormat("yyyy");
+	public static String getPurchasingContractYear(Date enrolmentStartDate) {
+		return sf1.format(enrolmentStartDate);
+	}
+
+	public static Set<EnrolmentSubject> collectCompetencies(List<Client> clients) {
+		Set<EnrolmentSubject> competencies = new LinkedHashSet<>();
+		for(Client client: clients) {
+			List<EnrolmentSubject> subjects = client.enrolments().stream().map(Enrolment::getUnit).collect(Collectors.toList());
+			competencies.addAll(subjects);
+		}
+		return competencies;
+	}
 }

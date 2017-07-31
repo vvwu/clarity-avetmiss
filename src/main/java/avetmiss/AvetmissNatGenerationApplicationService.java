@@ -3,6 +3,7 @@ package avetmiss;
 import avetmiss.controller.payload.nat.*;
 import avetmiss.domain.UnitRepository;
 import avetmiss.domain.nat.*;
+import avetmiss.controller.payload.nat.Nat00090DisabilityFileRequest;
 import avetmiss.util.NatFile;
 import avetmiss.util.ZipWriter;
 import com.google.common.io.Files;
@@ -153,7 +154,7 @@ public class AvetmissNatGenerationApplicationService {
     }
 
 
-    private NatFile getNat00090DisabilityFile(List<Nat0009DisabilityFileRequest> requests) {
+    private NatFile getNat00090DisabilityFile(List<Nat00090DisabilityFileRequest> requests) {
         NatFile natFile = new NatFile("NAT00090.txt");
         if(requests == null || requests.isEmpty()) {
             return natFile;

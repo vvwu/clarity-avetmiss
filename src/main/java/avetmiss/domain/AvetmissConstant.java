@@ -766,4 +766,14 @@ public class AvetmissConstant {
                 .findFirst();
     }
 
+    public static boolean isFeeForServiceFundingSourceStateIdentifier(String fundingSourceStateIdentifier) {
+        List<LabelValue> values = AvetmissConstant.getFundingSourceStateIdentifiers_NonGovernmentFunded();
+
+        for(LabelValue nonGovernmentFundedIdentifier : values) {
+            if(nonGovernmentFundedIdentifier.getValue().equals(fundingSourceStateIdentifier))
+                return true;
+        }
+
+        return false;
+    }
 }

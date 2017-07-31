@@ -3,7 +3,7 @@ package avetmiss.controller.payload.nat;
 import java.util.List;
 
 public class NatFilesRequest {
-    public List<Nat0009DisabilityFileRequest> nat0009DisabilityFileRequests;
+    public List<Nat00090DisabilityFileRequest> nat0009DisabilityFileRequests;
     public List<Nat00100PriorEducationFileRequest> nat00100PriorEducationFileRequests;
     public List<Nat00130QualificationCompletedFileRequest> nat00130QualificationCompletedFileRequests;
     public Nat00010TrainingOrganizationFileRequest nat00010TrainingOrganizationFileRequest;

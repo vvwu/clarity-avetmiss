@@ -30,6 +30,5 @@ public class AvetmissUtilTest {
     public void toDate() throws Exception {
         LocalDate date = LocalDate.of(2016, 12, 1);
         assertEquals("01122016", AvetmissUtil.toDate(date));
-        assertEquals(null, AvetmissUtil.toDate(null));
     }
 }

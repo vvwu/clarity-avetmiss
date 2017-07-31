@@ -14,14 +14,19 @@ import java.util.List;
 import static avetmiss.util.Csv.*;
 import static avetmiss.util.StringUtil.isBlank;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkNotNull;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.hasLength;
 
 public class InputRowMapper implements CSVRowMapper<Enrolment> {
 
+    private UnitRepository unitRepository;
+
+
     private List<String> errors;
-    public InputRowMapper() {
+    public InputRowMapper(UnitRepository unitRepository) {
+        this.unitRepository = unitRepository;
         this.errors = newArrayList();
     }
 
@@ -40,7 +45,10 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         rowNum = rowNum + 1;
 
         try {
-            return doMap(cols, rowNum);
+            Enrolment enrolment = doMap(cols, rowNum);
+            loadUnitDetails(enrolment);
+
+            return enrolment;
         } catch (Exception e) {
             errors.add("rowNum=" + rowNum + ": " + e.getMessage());
             return null;
@@ -91,7 +99,22 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         enrolment.setEndDate(toLocalDate(endDateStr));
         enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(outcomeIdentifier));
         enrolment.setTuitionFee(tuitionFee);
+
         return enrolment;
+    }
+
+    private void loadUnitDetails(Enrolment enrolment) {
+        String unitCode = enrolment.getUnitCode();
+        Unit unit = this.unitRepository.findByCode(unitCode);
+
+        checkNotNull(unit, "rowNum=%s: unitCode '%s' not found in NTIS unit list", enrolment.getRowNum(), unitCode);
+
+        enrolment.setUnit(
+                new EnrolmentSubject(
+                        unit.code(),
+                        unit.name(),
+                        unit.fieldOfEducationIdentifier(),
+                        enrolment.nominalHour()));
     }
 
     private static LocalDate toLocalDate(String dateStr) {

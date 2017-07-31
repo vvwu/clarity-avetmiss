@@ -21,7 +21,7 @@ public class Nat00010TrainingOrganizationFileTest {
         Nat00010TrainingOrganizationFileRequest request = organizationConstant();
 
         String export = instance.export(request);
-        assertThat(export, is("0000020829Victorian Institute of Technology Pty Ltd                                                           91Level 10, 123 Queen Street                                                                          Melbourne                                         300003Surapaneni,Nagarjun,Mr,CEO                                  0396707848          0396707848          info@vit.edu.au                                                                 Clarity2008         vvwu0830@gmail.com                                                              \r\n"));
+        assertThat(export, is("0000020829Victorian Institute of Technology Pty Ltd                                                           91Level 10, 123 Queen Street                                                                          Melbourne                                         300003Surapaneni,Nagarjun,Mr,CEO                                  0396707848          0396707848          info@vit.edu.au                                                                 Clarity2008         rock.yu99@gmail.com                                                             \r\n"));
     }
 
     public static int TOID = 20829;

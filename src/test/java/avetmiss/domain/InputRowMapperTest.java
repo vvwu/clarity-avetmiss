@@ -53,7 +53,7 @@ public class InputRowMapperTest {
 
     @Before
     public void setup() {
-        this.inputRowMapper = new InputRowMapper();
+        this.inputRowMapper = new InputRowMapper(unitRepository);
     }
 
     @Test

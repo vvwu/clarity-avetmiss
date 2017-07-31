@@ -5,6 +5,7 @@ import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+// TODO: consolidate with the other Enrolment
 public class Enrolment {
 
     private int rowNum;
@@ -22,7 +23,6 @@ public class Enrolment {
 
     // associations
     private EnrolmentSubject unit;
-    // private NatStudentCourse studentCourse;
 
     public String studentName() {
         return studentName;

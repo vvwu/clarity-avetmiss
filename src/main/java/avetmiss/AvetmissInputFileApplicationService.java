@@ -4,7 +4,6 @@ import avetmiss.controller.payload.inputFile.*;
 import avetmiss.domain.*;
 import avetmiss.util.Csv;
 import avetmiss.util.Dates;
-import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class AvetmissInputFileApplicationService {
 
         infoList.add("Validate input file: %s, please wait......");
 
-        InputRowMapper inputRowMapper = new InputRowMapper();
+        InputRowMapper inputRowMapper = new InputRowMapper(unitRepository);
 
         List<Enrolment> rows
                 = Csv.read(new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8)), inputRowMapper);
@@ -41,8 +40,6 @@ public class AvetmissInputFileApplicationService {
         List<EnrolmentRowReadModel> enrolmentRowReadModels = newArrayList();
         for(Enrolment enrolment: rows) {
             try {
-                loadUnitDetails(enrolment);
-
                 enrolmentRowReadModels.add(toEnrolmentRowReadModel(enrolment));
             } catch (Exception ex) {
                 errorList.add("Enrolments rowNumber:" + enrolment.getRowNum() + ": " + ex.getMessage());
@@ -97,17 +94,4 @@ public class AvetmissInputFileApplicationService {
         return readModel;
     }
 
-    private void loadUnitDetails(Enrolment enrolment) {
-        String unitCode = enrolment.getUnitCode();
-        Unit unit = this.unitRepository.findByCode(unitCode);
-
-        checkNotNull(unit, "rowNum=%s: unitCode '%s' not found in NTIS unit list", enrolment.getRowNum(), unitCode);
-
-        enrolment.setUnit(
-                new EnrolmentSubject(
-                        unit.code(),
-                        unit.name(),
-                        unit.fieldOfEducationIdentifier(),
-                        enrolment.nominalHour()));
-    }
 }

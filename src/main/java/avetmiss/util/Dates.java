@@ -1,7 +1,9 @@
 package avetmiss.util;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 public class Dates {
 
@@ -28,4 +30,24 @@ public class Dates {
 
 		return LocalDate.parse(dateStr, DateTimeFormatter.ISO_LOCAL_DATE);
 	}
+
+    public static java.util.Date toDate(java.time.LocalDate date) {
+        return (date == null) ? null : new java.util.Date(getTime(date));
+    }
+
+    public static java.util.Date toDate(java.time.LocalDateTime date) {
+        return (date == null) ? null : new java.util.Date(getTime(date));
+    }
+
+    public static java.time.LocalDate toLocalDate(Date date) {
+        return (date == null) ? null : java.time.Instant.ofEpochMilli(date.getTime()).atZone(ZoneId.systemDefault()).toLocalDate();
+    }
+
+    public static long getTime(java.time.LocalDate date) {
+        return date.atStartOfDay(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
+
+    public static long getTime(java.time.LocalDateTime date) {
+        return date.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli();
+    }
 }

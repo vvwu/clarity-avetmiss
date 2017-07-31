@@ -75,11 +75,11 @@ public class AvetmissNatFileGenerateControllerIntegrationTest extends BaseContro
                 "0000020829SIT50307  300020    2015Y25102014        00000\r\n"));
 
         assertThat(natFileReadModel.nat00010, is(
-                "0000020829Org Pty Ltd                                                                                         91110 City Rd                                                                                         Melbourne                                         300003Bob                                                         123456              abcdefg             contact@company.com                                                             Clarity2008         vvwu0830@gmail.com                                                              \r\n"));
+                "0000020829Org Pty Ltd                                                                                         91110 City Rd                                                                                         Melbourne                                         300003Bob                                                         123456              abcdefg             contact@company.com                                                             Clarity2008         rock.yu99@gmail.com                                                             \r\n"));
     }
 
-    private Nat0009DisabilityFileRequest nat0009DisabilityFileRequest(String studentID, List<String> disabilityTypeIdentifiers) {
-        Nat0009DisabilityFileRequest nat0009DisabilityFileRequest = new Nat0009DisabilityFileRequest();
+    private Nat00090DisabilityFileRequest nat0009DisabilityFileRequest(String studentID, List<String> disabilityTypeIdentifiers) {
+        Nat00090DisabilityFileRequest nat0009DisabilityFileRequest = new Nat00090DisabilityFileRequest();
         nat0009DisabilityFileRequest.studentID = studentID;
         nat0009DisabilityFileRequest.disabilityTypeIdentifiers = disabilityTypeIdentifiers;
         return nat0009DisabilityFileRequest;
