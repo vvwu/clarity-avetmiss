@@ -1,6 +1,7 @@
 package avetmiss;
 
 import avetmiss.client.ClarityShareServiceClient;
+import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
 import avetmiss.controller.payload.inputFile.TaskListenerReadModel;
 import avetmiss.controller.payload.nat.NatFilesRequest;
@@ -8,47 +9,74 @@ import avetmiss.domain.EnrolmentSubject;
 import avetmiss.export.Client;
 import avetmiss.export.InputReader2;
 import avetmiss.export.NatFileConfig;
-import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.export.natfile.V20140301NATFileConfig;
 import avetmiss.util.hudson.StreamTaskListener;
 import avetmiss.util.hudson.TaskListener;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.file.Files;
+import java.nio.file.Path;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Set;
 
 import static avetmiss.domain.AvetmissUtil.collectCompetencies;
 import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Strings.nullToEmpty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 
+@Service
 public class AvetmissExportService {
+    private static Logger logger = LoggerFactory.getLogger(AvetmissExportService.class);
 
     private InputReader2 inputReader;
-    private ClarityShareServiceClient clarityShareServiceClient;
     private AvetmissInputFileApplicationService avetmissInputFileApplicationService;
     private AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService;
 
+    @Autowired
     public AvetmissExportService(
-            InputReader2 inputReader,
-            ClarityShareServiceClient clarityShareServiceClient, AvetmissInputFileApplicationService avetmissInputFileApplicationService,
+            AvetmissInputFileApplicationService avetmissInputFileApplicationService,
             AvetmissNatGenerationApplicationService avetmissNatGenerationApplicationService) {
-        this.inputReader = inputReader;
-        this.clarityShareServiceClient = clarityShareServiceClient;
+        this.inputReader = new InputReader2();
         this.avetmissInputFileApplicationService = avetmissInputFileApplicationService;
         this.avetmissNatGenerationApplicationService = avetmissNatGenerationApplicationService;
     }
 
-    public String process(File requiredInputFile, File outputZipFile) {
+    @Async
+    public void generateNatFile(ClarityShareServiceClient clarityShareServiceClient, File requiredInputFile, File natOutputDir) {
+        String result;
+        try {
+            String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
+
+            result = process(clarityShareServiceClient, requiredInputFile, new File(natOutputDir, "nat-" + timestamp + ".zip"));
+        } catch (Exception e) {
+            result = ExceptionUtils.getFullStackTrace(e);
+        }
+
+        Path resultFile = new File(natOutputDir, "result.txt").toPath();
+
+        try {
+            Files.write(resultFile, nullToEmpty(result).getBytes());
+        } catch (IOException e) {
+            logger.error("fail to write result file: " + resultFile, e);
+        }
+    }
+
+    private String process(ClarityShareServiceClient clarityShareServiceClient, File requiredInputFile, File outputZipFile) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         StreamTaskListener listener = new StreamTaskListener(baos);
@@ -64,7 +92,7 @@ public class AvetmissExportService {
 
             this.logToTaskListener(listener, result.taskListener);
 
-            List<Client> clients = inputReader.readAndValidate(result.clients, listener);
+            List<Client> clients = inputReader.readAndValidate(clarityShareServiceClient, result.clients, listener);
 
             startExport(
                     organizationConstant,
@@ -123,14 +151,6 @@ public class AvetmissExportService {
         Files.write(outputZipFile.toPath(), natZip);
 
         listener.info("Reporting completed.");
-    }
-
-    private void ensureOutputDirIsClean(File outputDir) {
-        try {
-            FileUtils.cleanDirectory(outputDir);
-        } catch (Exception e) {
-            // ignore
-        }
     }
 
     private void assertThatTrainingOrganisationIdentifierIsConfigured(OrganizationConstantReadModel organizationConstant) {

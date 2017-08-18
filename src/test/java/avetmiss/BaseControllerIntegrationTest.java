@@ -16,7 +16,7 @@ import org.springframework.web.client.RestTemplate;
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
-@IntegrationTest({"server.port=0"})
+@IntegrationTest({"server.port=0", "nat.output.dir=natOutput"})
 @ActiveProfiles("test")
 public abstract class BaseControllerIntegrationTest {
     @Value("${local.server.port}")

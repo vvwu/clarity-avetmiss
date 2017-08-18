@@ -13,6 +13,8 @@ import static avetmiss.util.StringUtil.isBlank;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
 public class InputRowMapperTest {
@@ -50,9 +52,11 @@ public class InputRowMapperTest {
             tuitionFee};
 
     private InputRowMapper inputRowMapper;
+    private UnitRepository unitRepository;
 
     @Before
     public void setup() {
+        this.unitRepository = mock(UnitRepository.class);
         this.inputRowMapper = new InputRowMapper(unitRepository);
     }
 
@@ -64,7 +68,10 @@ public class InputRowMapperTest {
 
     @Test
     public void shouldMapAEnrolmentFromTheInputRow() {
+        when(unitRepository.findByCode(unitCode)).thenReturn(new Unit(unitCode, unitName, "02"));
+
         Enrolment enrolment = this.inputRowMapper.mapRow(inputRow, 1);
+
 
         assertThat(enrolment.getStudentId(), is(studentId));
         assertThat(enrolment.studentName(), is(studentName));

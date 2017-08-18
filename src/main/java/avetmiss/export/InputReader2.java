@@ -20,20 +20,13 @@ import static org.springframework.util.StringUtils.hasLength;
 
 public class InputReader2 {
 
-    private final ClarityShareServiceClient clarityShareServiceClient;
-
-    public InputReader2(ClarityShareServiceClient clarityShareServiceClient) {
-        this.clarityShareServiceClient = clarityShareServiceClient;
-    }
-
-    public List<Client> readAndValidate(List<ClientReadModel> clientReadModels, TaskListener out) {
-
+    public List<Client> readAndValidate(ClarityShareServiceClient clarityShareServiceClient, List<ClientReadModel> clientReadModels, TaskListener out) {
         final List<String> errors = new ArrayList<>();
         List<Client> clients = new ArrayList<>();
         for (ClientReadModel clientReadModel : clientReadModels) {
 
             try {
-                Client client = readOneClient(clientReadModel, errors);
+                Client client = readOneClient(clarityShareServiceClient, clientReadModel, errors);
                 clients.add(client);
 
             } catch (Exception e) {
@@ -52,19 +45,17 @@ public class InputReader2 {
         return clients;
     }
 
-    Client readOneClient(
-            ClientReadModel clientReadModel,
-            List<String> errors) {
+    Client readOneClient(ClarityShareServiceClient clarityShareServiceClient, ClientReadModel clientReadModel, List<String> errors) {
 
         final int studentId = clientReadModel.studentId;
 
-        StudentReadModel student = this.existingStudent(studentId);
+        StudentReadModel student = this.existingStudent(clarityShareServiceClient, studentId);
         this.assertStudentDetailIsComplete(student);
 
         // validate Clarity student course
         List<StudentCourseReadModel> studentCourses = student.courses;
 
-        ClientBuilder clientBuilder = new ClientBuilder(student, selectedVetCoursesToNatStudentCourse(studentId, studentCourses));
+        ClientBuilder clientBuilder = new ClientBuilder(student, selectedVetCoursesToNatStudentCourse(clarityShareServiceClient, studentId, studentCourses));
 
         if(isEmpty(studentCourses)) {
             errors.add(format("Student %s doesn't enrol in any course", student.toString()));
@@ -77,7 +68,7 @@ public class InputReader2 {
             try {
                 String studentName = student.firstName + " " + student.lastName;
 
-                CourseReadModel courseReadModel = requiredCourse(enrolmentRowReadModel.courseCode);
+                CourseReadModel courseReadModel = requiredCourse(clarityShareServiceClient, enrolmentRowReadModel.courseCode);
 
                 Enrolment enrolment =
                         enrolmentAssembler.toEnrolment(
@@ -98,14 +89,14 @@ public class InputReader2 {
         return clientBuilder.build();
     }
 
-    private CourseReadModel requiredCourse(String courseCode) {
+    private CourseReadModel requiredCourse(ClarityShareServiceClient clarityShareServiceClient, String courseCode) {
         CourseReadModel course = clarityShareServiceClient.findCourseByCourseCode(courseCode);
         checkArgument(course != null, "course not found, courseCode: '%s'", courseCode);
 
         return course;
     }
 
-    private List<NatVetStudentCourse> selectedVetCoursesToNatStudentCourse(int studentID, List<StudentCourseReadModel> studentCourses) {
+    private List<NatVetStudentCourse> selectedVetCoursesToNatStudentCourse(ClarityShareServiceClient clarityShareServiceClient, int studentID, List<StudentCourseReadModel> studentCourses) {
         List<NatVetStudentCourse> natStudentCourses = new ArrayList<>();
 
         for (StudentCourseReadModel sc : studentCourses) {
@@ -122,7 +113,7 @@ public class InputReader2 {
         return natStudentCourses;
     }
 
-    private StudentReadModel existingStudent(int studentId) {
+    private StudentReadModel existingStudent(ClarityShareServiceClient clarityShareServiceClient, int studentId) {
         StudentReadModel student = clarityShareServiceClient.findStudent(studentId);
 
         checkArgument(student != null,

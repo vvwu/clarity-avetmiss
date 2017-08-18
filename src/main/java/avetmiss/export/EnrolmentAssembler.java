@@ -70,7 +70,7 @@ public class EnrolmentAssembler {
 
         Optional<StudentCourseReadModel> match = findFirstStudentCourseWhereDateIsWithinTheCourseDuration(enrolmentActivityStartDate, matches);
         if (match.isPresent()) {
-            log.debug("student {} has {} course records in '{}',  return the first match where the unit startDate is within",
+            log.info("student {} has {} course records in '{}',  return the first match where the unit startDate is within",
                     studentId, matches.size(), courseIdToFind);
 
             return match.get();
