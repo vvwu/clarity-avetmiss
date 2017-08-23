@@ -61,10 +61,10 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         ensureRequiredColumns(cols);
         ensureColumnAContainsStudentID(cols);
         ensureColumnGContainsNominalHourStr(cols);
-        ensureHoursAttendedColumnContainsEmptyOrInteger(cols);
+        ensureColumnJHoursAttendedContainsEmptyOrInteger(cols);
 
-        ensureColumnJContainsValidDate(cols);
-        ensureValidEndDateProvided(cols);
+        ensureColumnKContainsValidDate(cols);
+        ensureValidEndDateProvidedInColumnL(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
 
         Enrolment enrolment = new Enrolment();
@@ -78,22 +78,23 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         enrolment.setUnitCode(cols[COLUMN_E]);
         String nominalHourStr = cols[COLUMN_G];
         String supervisedHourStr = cols[COLUMN_H];
-        String hoursAttendedStr = cols[COLUMN_I];
+        String totalSupervisedHourStr = cols[COLUMN_I];
+        String hoursAttendedStr = cols[COLUMN_J];
 
-        String startDateStr = cols[COLUMN_J];
-        String endDateStr = cols[COLUMN_K];
-        String outcomeIdentifier = cols[COLUMN_L];
-        String tuitionFee = cols[COLUMN_M];
+        String startDateStr = cols[COLUMN_K];
+        String endDateStr = cols[COLUMN_L];
+        String outcomeIdentifier = cols[COLUMN_M];
+        String tuitionFee = cols[COLUMN_N];
 
-        if(hasLength(supervisedHourStr)) {
-            enrolment.setSupervisedHours(Integer.parseInt(supervisedHourStr));
+        if(hasLength(totalSupervisedHourStr)) {
+            enrolment.setTotalSupervisedHours(Integer.parseInt(totalSupervisedHourStr));
         }
 
         if (hasLength(hoursAttendedStr)) {
             enrolment.setHoursAttended(Integer.parseInt(hoursAttendedStr));
         }
 
-                enrolment.setNominalHour(Integer.parseInt(nominalHourStr));
+        enrolment.setNominalHour(Integer.parseInt(nominalHourStr));
 
         enrolment.setStartDate(toLocalDate(startDateStr));
         enrolment.setEndDate(toLocalDate(endDateStr));
@@ -145,7 +146,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
     }
 
     private void ensureRequiredColumns(String[] cols) {
-        final int requiredColumns = COLUMN_M + 1;
+        final int requiredColumns = COLUMN_N + 1;
         checkArgument(cols.length == requiredColumns, "%s columns are provided, but %s columns are required, expected columns: %s",
                 cols.length, requiredColumns, requiredColumnNames());
     }
@@ -160,28 +161,28 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         checkArgument(StringUtil.isInteger(nominalHourStr), "Must provide a valid 'nominalHour' in [column G]");
     }
 
-    private void ensureHoursAttendedColumnContainsEmptyOrInteger(String[] cols) {
-        String hoursAttendedStr = cols[COLUMN_I];
+    private void ensureColumnJHoursAttendedContainsEmptyOrInteger(String[] cols) {
+        String hoursAttendedStr = cols[COLUMN_J];
         if(hasLength(hoursAttendedStr)) {
             Validate.isTrue(StringUtil.isInteger(hoursAttendedStr), "Must provide a valid 'hoursAttended' in [column I]");
         }
     }
 
-    private void ensureColumnJContainsValidDate(String[] cols) {
-        String startDateStr = cols[COLUMN_J];
+    private void ensureColumnKContainsValidDate(String[] cols) {
+        String startDateStr = cols[COLUMN_K];
         LocalDate startDate = toLocalDate(startDateStr);
-        checkArgument(startDate != null, "Must provide a valid date in [column J] in format: dd/mm/yyyy");
+        checkArgument(startDate != null, "Must provide a valid date in [column K] in format: dd/mm/yyyy");
     }
 
-    private void ensureValidEndDateProvided(String[] cols) {
-        String endDateStr = cols[COLUMN_K];
+    private void ensureValidEndDateProvidedInColumnL(String[] cols) {
+        String endDateStr = cols[COLUMN_L];
         LocalDate endDate = toLocalDate(endDateStr);
-        checkArgument(endDate != null, "Must provide a valid date in [column K] in format: dd/mm/yyyy");
+        checkArgument(endDate != null, "Must provide a valid date in [column L] in format: dd/mm/yyyy");
     }
 
     private void ensureStartDateIsNoLaterThanEndDate(String[] cols) {
-        LocalDate startDate = toLocalDate(cols[COLUMN_J]);
-        LocalDate endDate = toLocalDate(cols[COLUMN_K]);
+        LocalDate startDate = toLocalDate(cols[COLUMN_K]);
+        LocalDate endDate = toLocalDate(cols[COLUMN_L]);
 
         checkArgument(!startDate.isAfter(endDate), "Start date cannot be later than end date");
     }

@@ -84,7 +84,7 @@ public class AvetmissInputFileApplicationService {
         readModel.startDate = Dates.toISO(enrolment.startDate());
         readModel.endDate = Dates.toISO(enrolment.endDate());
         readModel.nominalHour = enrolment.nominalHour();
-        readModel.supervisedHours = enrolment.supervisedHours();
+        readModel.totalSupervisedHours = enrolment.totalSupervisedHours();
         readModel.hoursAttended = enrolment.hoursAttended();
         readModel.outcomeIdentifier = enrolment.getOutcomeIdentifier().code();
         readModel.tuitionFee = enrolment.tuitionFee();

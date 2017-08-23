@@ -19,7 +19,6 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
 
 public class Enrolment {
-    private Logger log = LoggerFactory.getLogger(this.getClass());
 
     private int rowNum;
     private int studentId;
@@ -32,6 +31,7 @@ public class Enrolment {
     private int nominalHour;
     private String hoursAttended;
     private Integer supervisedHours;
+    private Integer totalSupervisedHours;
     private OutcomeIdentifierNational outcomeIdentifier;
     private String tuitionFee;
 
@@ -203,12 +203,12 @@ public class Enrolment {
         this.hoursAttended = hoursAttended;
     }
 
-    public Integer supervisedHours() {
-        return supervisedHours;
+    public Integer getTotalSupervisedHours() {
+        return totalSupervisedHours;
     }
 
-    public void setSupervisedHours(Integer supervisedHours) {
-        this.supervisedHours = supervisedHours;
+    public void setTotalSupervisedHours(Integer totalSupervisedHours) {
+        this.totalSupervisedHours = totalSupervisedHours;
     }
 
     public void setRequiredStudentCourse(StudentCourseReadModel sc, CourseReadModel course) {

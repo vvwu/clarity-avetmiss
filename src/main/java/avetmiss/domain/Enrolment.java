@@ -16,7 +16,7 @@ public class Enrolment {
     private LocalDate startDate;
     private LocalDate endDate;
     private int nominalHour;
-    private Integer supervisedHours;
+    private Integer totalSupervisedHours;
     private Integer hoursAttended;
     private OutcomeIdentifierNational outcomeIdentifier;
     private String tuitionFee;
@@ -64,12 +64,12 @@ public class Enrolment {
         this.nominalHour = nominalHour;
     }
 
-    public Integer supervisedHours() {
-        return supervisedHours;
+    public Integer totalSupervisedHours() {
+        return totalSupervisedHours;
     }
 
-    public void setSupervisedHours(Integer supervisedHours) {
-        this.supervisedHours = supervisedHours;
+    public void setTotalSupervisedHours(Integer totalSupervisedHours) {
+        this.totalSupervisedHours = totalSupervisedHours;
     }
 
     public int getRowNum() {
@@ -129,4 +129,6 @@ public class Enrolment {
     public void setHoursAttended(Integer hoursAttended) {
         this.hoursAttended = hoursAttended;
     }
+
+
 }

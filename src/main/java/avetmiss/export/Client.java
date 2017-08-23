@@ -177,20 +177,12 @@ public class Client {
     }
 
     public Integer totalSupervisedHours(String courseCode) {
-        Integer aggregatedSupervisedHours = null;
-
         for (Enrolment enrolment : this.enrolments) {
             if (StringUtils.equals(courseCode, enrolment.courseCode())) {
-                Integer aSupervisedHour = enrolment.supervisedHours();
-
-                if (aSupervisedHour != null) {
-                    aggregatedSupervisedHours =
-                            (aggregatedSupervisedHours == null) ? aSupervisedHour : (aggregatedSupervisedHours + aSupervisedHour);
-                }
+                return enrolment.getTotalSupervisedHours();
             }
         }
-
-        return aggregatedSupervisedHours;
+        return null;
     }
 
     public String countryIdentifier() {

@@ -35,7 +35,7 @@ public class EnrolmentAssembler {
         enrolment.setStartDate(DateUtil.toDateISO(enrolmentRowReadModel.startDate));
         enrolment.setEndDate(DateUtil.toDateISO(enrolmentRowReadModel.endDate));
         enrolment.setNominalHour(enrolmentRowReadModel.nominalHour);
-        enrolment.setSupervisedHours(enrolmentRowReadModel.supervisedHours);
+        enrolment.setTotalSupervisedHours(enrolmentRowReadModel.totalSupervisedHours);
         enrolment.setHoursAttended((enrolmentRowReadModel.hoursAttended == null) ? null : enrolmentRowReadModel.hoursAttended.toString());
         enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(enrolmentRowReadModel.outcomeIdentifier));
         enrolment.setTuitionFee(enrolmentRowReadModel.tuitionFee);

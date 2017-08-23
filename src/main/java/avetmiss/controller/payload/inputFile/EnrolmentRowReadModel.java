@@ -9,7 +9,7 @@ public class EnrolmentRowReadModel {
     public String startDate;
     public String endDate;
     public Integer hoursAttended;
-    public Integer supervisedHours;
+    public Integer totalSupervisedHours;
     public int outcomeIdentifier;
     public String tuitionFee;
 
@@ -20,4 +20,5 @@ public class EnrolmentRowReadModel {
     public String subjectName;
     public String fieldOfEducationIdentifier;
     public int nominalHour;
+
 }

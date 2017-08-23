@@ -29,6 +29,7 @@ public class InputRowMapperTest {
     private String unitName = "Work in a socially diverse environment";
     private int nominalHours = 20;
     private int supervisedHours = 4;
+    private int totalSupervisedHours = 40;
 
     private Integer hoursAttended = 10;
     private String startDate = "13/06/2013";
@@ -45,6 +46,7 @@ public class InputRowMapperTest {
             unitName,
             nominalHours + "",
             supervisedHours + "",
+            totalSupervisedHours + "",
             hoursAttended + "",
             startDate,
             endDate,
@@ -79,6 +81,7 @@ public class InputRowMapperTest {
         assertThat(enrolment.getUnitCode(), is(unitCode));
         assertThat(enrolment.nominalHour(), is(nominalHours));
         assertThat(enrolment.hoursAttended(), is(hoursAttended));
+        assertThat(enrolment.totalSupervisedHours(), is(totalSupervisedHours));
         assertThat(enrolment.startDate(), is(toDate(startDate)));
         assertThat(enrolment.endDate(), is(toDate(endDate)));
         assertThat(enrolment.getOutcomeIdentifier().code() + "", is(outcomeIdentifier));
@@ -131,7 +134,7 @@ public class InputRowMapperTest {
                 this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column J] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column K] in format: dd/mm/yyyy"), is(true));
     }
 
     @Test
@@ -143,7 +146,7 @@ public class InputRowMapperTest {
                 "unparsable-end-date");
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column K] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column L] in format: dd/mm/yyyy"), is(true));
     }
 
 
@@ -169,6 +172,7 @@ public class InputRowMapperTest {
                 unitName,
                 aNominalHours + "",
                 supervisedHours + "",
+                totalSupervisedHours + "",
                 aHoursAttended + "",
                 aStartDate,
                 anEndDate,
