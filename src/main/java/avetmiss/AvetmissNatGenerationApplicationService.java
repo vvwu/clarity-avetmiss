@@ -53,40 +53,6 @@ public class AvetmissNatGenerationApplicationService {
         return zipFiles(natFiles);
     }
 
-    public NatFileReadModel getNatFiles(NatFilesRequest natFilesRequest) {
-        NatFileReadModel natFileReadModel = new NatFileReadModel();
-
-        NatFile nat00010 = getNat00010TrainingOrganizationFile(natFilesRequest.nat00010TrainingOrganizationFileRequest);
-        natFileReadModel.nat00010 = nat00010.content();
-
-        NatFile nat00020 = getNat00020TrainingOrganisationDeliveryLocationFile(natFilesRequest.nat00020TrainingOrganisationDeliveryLocationFileRequest);
-        natFileReadModel.nat00020 = nat00020.content();
-
-        NatFile nat00030 = getNat00030CourseFileRequest(natFilesRequest.nat00030CourseFileRequests);
-        natFileReadModel.nat00030 = nat00030.content();
-
-        NatFile nat00060 = getNat00060SubjectFile(natFilesRequest.nat00060SubjectFileRequests);
-        natFileReadModel.nat00060 = nat00060.content();
-
-        List<NatFile> nat80And85 = getsClientFiles(natFilesRequest.clientFileRequest);
-        natFileReadModel.nat00080 = nat80And85.get(0).content();
-        natFileReadModel.nat00085 = nat80And85.get(1).content();
-
-        NatFile nat00090 = getNat00090DisabilityFile(natFilesRequest.nat0009DisabilityFileRequests);
-        natFileReadModel.nat00090 = nat00090.content();
-
-        NatFile nat00100 = getNat00100PriorEducationFile(natFilesRequest.nat00100PriorEducationFileRequests);
-        natFileReadModel.nat00100 = nat00100.content();
-
-        NatFile nat00120 = getNat00120EnrolmentFile(natFilesRequest.enrolmentFileRequests);
-        natFileReadModel.nat00120 = nat00120.content();
-
-        NatFile nat00130 = getNat00130QualificationCompletedFile(natFilesRequest.nat00130QualificationCompletedFileRequests);
-        natFileReadModel.nat00130 = nat00130.content();
-
-        return natFileReadModel;
-    }
-
     private NatFile getNat00010TrainingOrganizationFile(
             Nat00010TrainingOrganizationFileRequest nat00010TrainingOrganizationFileRequest) {
         NatFile natFile = new NatFile("NAT00010.txt");

@@ -12,6 +12,7 @@ import avetmiss.export.NatFileConfig;
 import avetmiss.export.natfile.V20140301NATFileConfig;
 import avetmiss.util.hudson.StreamTaskListener;
 import avetmiss.util.hudson.TaskListener;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang.exception.ExceptionUtils;
@@ -62,7 +63,11 @@ public class AvetmissExportService {
         try {
             String timestamp = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMdd_HHmmss"));
 
-            result = process(clarityShareServiceClient, requiredInputFile, new File(natOutputDir, "nat-" + timestamp + ".zip"));
+            FileUtils.forceMkdir(natOutputDir);
+
+            File outputZipFile = new File(natOutputDir, "nat-" + timestamp + ".zip");
+
+            result = process(clarityShareServiceClient, requiredInputFile, outputZipFile);
         } catch (Exception e) {
             result = ExceptionUtils.getFullStackTrace(e);
         }
@@ -77,6 +82,8 @@ public class AvetmissExportService {
     }
 
     private String process(ClarityShareServiceClient clarityShareServiceClient, File requiredInputFile, File outputZipFile) {
+        logger.info("Process to generate outputZipFile: {}", outputZipFile);
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         StreamTaskListener listener = new StreamTaskListener(baos);
