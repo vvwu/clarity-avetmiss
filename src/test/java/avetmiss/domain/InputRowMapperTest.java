@@ -64,7 +64,7 @@ public class InputRowMapperTest {
 
     @Test
     public void shouldIgnoreTheFirstRowFromTheInputFileWhichIsTheHeader() {
-        Enrolment enrolment = this.inputRowMapper.mapRow(mockHeader, 0);
+        EnrolmentInput enrolment = this.inputRowMapper.mapRow(mockHeader, 0);
         assertThat(enrolment, is(nullValue()));
     }
 
@@ -72,7 +72,7 @@ public class InputRowMapperTest {
     public void shouldMapAEnrolmentFromTheInputRow() {
         when(unitRepository.findByCode(unitCode)).thenReturn(new Unit(unitCode, unitName, "02"));
 
-        Enrolment enrolment = this.inputRowMapper.mapRow(inputRow, 1);
+        EnrolmentInput enrolment = this.inputRowMapper.mapRow(inputRow, 1);
 
 
         assertThat(enrolment.getStudentId(), is(studentId));
@@ -158,7 +158,7 @@ public class InputRowMapperTest {
                 this.endDate,
                 this.startDate);
 
-        Enrolment enrolment = this.inputRowMapper.mapRow(inputRow, 1);
+        EnrolmentInput enrolment = this.inputRowMapper.mapRow(inputRow, 1);
         assertThat(inputRowMapper.errors().contains("rowNum=2: Start date cannot be later than end date"), is(true));
     }
 

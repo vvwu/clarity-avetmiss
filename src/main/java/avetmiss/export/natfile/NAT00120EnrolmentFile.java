@@ -4,6 +4,7 @@ import avetmiss.controller.payload.nat.EnrolmentFileRequest;
 import avetmiss.export.Client;
 import avetmiss.export.Enrolment;
 import avetmiss.util.DateUtil;
+import avetmiss.util.Dates;
 import avetmiss.util.hudson.TaskListener;
 import org.apache.commons.lang.StringUtils;
 
@@ -71,8 +72,8 @@ public class NAT00120EnrolmentFile {
         request.studyReasonIdentifier = client.enrolmentInfo().studyReasonIdentifier;
         request.fundingSourceStateIdentifier = enrolment.fundingSourceStateIdentifier();
 
-        request.startDate = DateUtil.toISO(enrolment.startDate());
-        request.endDate = DateUtil.toISO(enrolment.endDate());
+        request.startDate = Dates.toISO(enrolment.startDate());
+        request.endDate = Dates.toISO(enrolment.endDate());
         request.courseStartedDate = DateUtil.toISO(enrolment.courseStartedDate());
         request.nominalHour = enrolment.nominalHour();
         request.tuitionFee = enrolment.tuitionFee();

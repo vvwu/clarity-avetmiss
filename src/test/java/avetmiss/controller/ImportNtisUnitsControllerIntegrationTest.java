@@ -1,8 +1,6 @@
 package avetmiss.controller;
 
 import avetmiss.BaseControllerIntegrationTest;
-import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
-import avetmiss.controller.payload.inputFile.EnrolmentRowReadModel;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
 import org.junit.Test;
@@ -14,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
 
 public class ImportNtisUnitsControllerIntegrationTest extends BaseControllerIntegrationTest {

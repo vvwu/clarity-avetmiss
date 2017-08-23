@@ -2,14 +2,14 @@ package avetmiss.export;
 
 import avetmiss.client.payload.CourseReadModel;
 import avetmiss.client.payload.StudentCourseReadModel;
-import avetmiss.controller.payload.inputFile.EnrolmentRowReadModel;
-import avetmiss.domain.EnrolmentSubject;
-import avetmiss.domain.OutcomeIdentifierNational;
+import avetmiss.domain.EnrolmentInput;
 import avetmiss.export.exception.EnrolmentCourseNameNotFoundInStudentException;
 import avetmiss.util.DateUtil;
+import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
@@ -21,32 +21,13 @@ import static java.lang.String.format;
 public class EnrolmentAssembler {
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public Enrolment toEnrolment(
-            int studentID, String studentName, EnrolmentRowReadModel enrolmentRowReadModel, CourseReadModel courseReadModel, List<StudentCourseReadModel> studentCourses) {
+    public avetmiss.export.Enrolment toEnrolment(
+            int studentID, String studentName, EnrolmentInput enrolmentInput, CourseReadModel courseReadModel, List<StudentCourseReadModel> studentCourses) {
 
         Enrolment enrolment = new Enrolment();
 
-        enrolment.setRowNum(enrolmentRowReadModel.rowNum);
-        enrolment.setStudentId(studentID);
-        enrolment.setStudentName(studentName);
-        enrolment.setCourseCode(enrolmentRowReadModel.courseCode);
+        enrolment.setEnrolmentInput(enrolmentInput);
         enrolment.setCourseId(courseReadModel.courseID);
-        enrolment.setUnitCode(enrolmentRowReadModel.unitCode);
-        enrolment.setStartDate(DateUtil.toDateISO(enrolmentRowReadModel.startDate));
-        enrolment.setEndDate(DateUtil.toDateISO(enrolmentRowReadModel.endDate));
-        enrolment.setNominalHour(enrolmentRowReadModel.nominalHour);
-        enrolment.setTotalSupervisedHours(enrolmentRowReadModel.totalSupervisedHours);
-        enrolment.setHoursAttended((enrolmentRowReadModel.hoursAttended == null) ? null : enrolmentRowReadModel.hoursAttended.toString());
-        enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(enrolmentRowReadModel.outcomeIdentifier));
-        enrolment.setTuitionFee(enrolmentRowReadModel.tuitionFee);
-
-        enrolment.setUnit(
-                new EnrolmentSubject(
-                        enrolmentRowReadModel.unitCode,
-                        enrolmentRowReadModel.subjectName,
-                        enrolmentRowReadModel.fieldOfEducationIdentifier,
-                        enrolmentRowReadModel.nominalHour));
-
 
         StudentCourseReadModel linkedStudentCourse =
                 findLinkedStudentCourse(studentID, studentName, courseReadModel.courseID, enrolment.startDate(), studentCourses);
@@ -58,7 +39,7 @@ public class EnrolmentAssembler {
 
     // TODO: test
     // TODO: Raj find the first commenced student course and use the start Date end
-    private StudentCourseReadModel findLinkedStudentCourse(int studentId, String studentName, int courseIdToFind, Date enrolmentActivityStartDate, List<StudentCourseReadModel> studentCourses) {
+    private StudentCourseReadModel findLinkedStudentCourse(int studentId, String studentName, int courseIdToFind, LocalDate enrolmentActivityStartDate, List<StudentCourseReadModel> studentCourses) {
         List<StudentCourseReadModel> matches = findStudentCoursesByCourseId(courseIdToFind, studentCourses);
         if(matches.size() == 0) {
             throw new EnrolmentCourseNameNotFoundInStudentException(studentId, studentName, courseIdToFind);
@@ -82,11 +63,11 @@ public class EnrolmentAssembler {
     }
 
     private Optional<StudentCourseReadModel> findFirstStudentCourseWhereDateIsWithinTheCourseDuration(
-            Date checkDate, List<StudentCourseReadModel> candidates) {
+            LocalDate checkDate, List<StudentCourseReadModel> candidates) {
 
         Optional<StudentCourseReadModel> first
                 = candidates.stream()
-                .filter(sc -> DateUtil.isDateInRange(sc.startDate, sc.endDate, checkDate))
+                .filter(sc -> DateUtil.isDateInRange(sc.startDate, sc.endDate, Dates.toDate(checkDate)))
                 .findFirst();
 
         return first;

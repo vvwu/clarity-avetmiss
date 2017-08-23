@@ -3,7 +3,6 @@ package avetmiss;
 import avetmiss.controller.payload.inputFile.*;
 import avetmiss.domain.*;
 import avetmiss.util.Csv;
-import avetmiss.util.Dates;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -32,32 +31,23 @@ public class AvetmissInputFileApplicationService {
 
         InputRowMapper inputRowMapper = new InputRowMapper(unitRepository);
 
-        List<Enrolment> rows
+        List<EnrolmentInput> rows
                 = Csv.read(new ByteArrayInputStream(csvContent.getBytes(StandardCharsets.UTF_8)), inputRowMapper);
 
         errorList.addAll(inputRowMapper.errors());
 
-        List<EnrolmentRowReadModel> enrolmentRowReadModels = newArrayList();
-        for(Enrolment enrolment: rows) {
-            try {
-                enrolmentRowReadModels.add(toEnrolmentRowReadModel(enrolment));
-            } catch (Exception ex) {
-                errorList.add("Enrolments rowNumber:" + enrolment.getRowNum() + ": " + ex.getMessage());
-            }
-        }
-
-        List<ClientReadModel> clientReadModels = toClientReadModels(enrolmentRowReadModels);
+        List<ClientReadModel> clientReadModels = toClientReadModels(rows);
 
         return new AvetmissInputFileProcessResult(
                 clientReadModels,
                 new TaskListenerReadModel(infoList, warnList, errorList));
     }
 
-    private List<ClientReadModel> toClientReadModels(List<EnrolmentRowReadModel> enrolmentRowReadModels) {
+    private List<ClientReadModel> toClientReadModels(List<EnrolmentInput> enrolmentRowReadModels) {
         Map<Integer, ClientReadModel> clientByStudentId = newLinkedHashMap();
 
-        for(EnrolmentRowReadModel enrolmentRowReadModel: enrolmentRowReadModels) {
-            int studentId = enrolmentRowReadModel.studentId;
+        for(EnrolmentInput enrolmentRowReadModel: enrolmentRowReadModels) {
+            int studentId = enrolmentRowReadModel.getStudentId();
             ClientReadModel clientReadModel = clientByStudentId.get(studentId);
 
             if(clientReadModel == null) {
@@ -70,28 +60,4 @@ public class AvetmissInputFileApplicationService {
 
         return newArrayList(clientByStudentId.values());
     }
-
-    private EnrolmentRowReadModel toEnrolmentRowReadModel(Enrolment enrolment) {
-        EnrolmentRowReadModel readModel = new EnrolmentRowReadModel();
-
-        EnrolmentSubject unit = enrolment.getUnit();
-
-        readModel.rowNum = enrolment.getRowNum();
-        readModel.studentId = enrolment.getStudentId();
-        readModel.studentName = enrolment.studentName();
-        readModel.courseCode = enrolment.courseCode();
-        readModel.unitCode = enrolment.getUnitCode();
-        readModel.startDate = Dates.toISO(enrolment.startDate());
-        readModel.endDate = Dates.toISO(enrolment.endDate());
-        readModel.nominalHour = enrolment.nominalHour();
-        readModel.totalSupervisedHours = enrolment.totalSupervisedHours();
-        readModel.hoursAttended = enrolment.hoursAttended();
-        readModel.outcomeIdentifier = enrolment.getOutcomeIdentifier().code();
-        readModel.tuitionFee = enrolment.tuitionFee();
-        readModel.subjectName = unit.subjectName();
-        readModel.fieldOfEducationIdentifier = unit.fieldOfEducationIdentifier();
-
-        return readModel;
-    }
-
 }

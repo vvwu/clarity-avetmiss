@@ -3,13 +3,17 @@ package avetmiss.export;
 import avetmiss.client.payload.CourseReadModel;
 import avetmiss.client.payload.StudentCourseReadModel;
 import avetmiss.domain.AvetmissConstant;
+import avetmiss.domain.EnrolmentInput;
 import avetmiss.domain.EnrolmentSubject;
 import avetmiss.domain.OutcomeIdentifierNational;
 import avetmiss.export.natfile.vat00120.ClientFeesOther;
+import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,80 +23,39 @@ import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
 
 public class Enrolment {
-
-    private int rowNum;
-    private int studentId;
-    private String studentName;
-    private String courseCode;
     private int courseId;
-    private String unitCode;
-    private Date startDate;
-    private Date endDate;
-    private int nominalHour;
-    private String hoursAttended;
-    private Integer supervisedHours;
-    private Integer totalSupervisedHours;
-    private OutcomeIdentifierNational outcomeIdentifier;
-    private String tuitionFee;
-
-    // associations
-    private EnrolmentSubject unit;
+    private EnrolmentInput enrolmentInput;
     private NatVetStudentCourse studentCourse;
 
-    public String studentName() {
-        return studentName;
+    public EnrolmentInput enrolmentInput() {
+        return enrolmentInput;
     }
 
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
+    public void setEnrolmentInput(EnrolmentInput enrolmentInput) {
+        this.enrolmentInput = enrolmentInput;
     }
 
     public String getUnitCode() {
-        return unitCode;
+        return enrolmentInput.getUnitCode();
     }
 
-    public void setUnitCode(String unitCode) {
-        this.unitCode = unitCode;
+    public LocalDate startDate() {
+        return enrolmentInput.startDate();
     }
 
-    public Date startDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    public Date endDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Date endDate) {
-        this.endDate = endDate;
+    public LocalDate endDate() {
+        return enrolmentInput.endDate();
     }
 
     public int nominalHour() {
-        return nominalHour;
+        return enrolmentInput.nominalHour();
     }
-
-    public void setNominalHour(int nominalHour) {
-        this.nominalHour = nominalHour;
-    }
-
     public int getRowNum() {
-        return rowNum;
-    }
-
-    public void setRowNum(int rowNum) {
-        this.rowNum = rowNum;
+        return enrolmentInput.getRowNum();
     }
 
     public String courseCode() {
-        return courseCode;
-    }
-
-    public void setCourseCode(String courseCode) {
-        this.courseCode = courseCode;
+        return enrolmentInput.courseCode();
     }
 
     public int courseId() {
@@ -104,12 +67,7 @@ public class Enrolment {
     }
 
     public EnrolmentSubject getUnit() {
-        return unit;
-    }
-
-    public void setUnit(EnrolmentSubject unit) {
-        checkArgument(unit != null, "unit is required");
-        this.unit = unit;
+        return enrolmentInput.getUnit();
     }
 
     public NatCourse courseEnrolled() {
@@ -171,45 +129,26 @@ public class Enrolment {
     }
 
     public int getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(int studentId) {
-        this.studentId = studentId;
+        return enrolmentInput.getStudentId();
     }
 
     public OutcomeIdentifierNational getOutcomeIdentifier() {
-        return outcomeIdentifier;
-    }
-
-    public void setOutcomeIdentifier(OutcomeIdentifierNational outcomeIdentifier) {
-        checkArgument(outcomeIdentifier != null, "OutcomeIdentifierNational is required");
-        this.outcomeIdentifier = outcomeIdentifier;
+        return enrolmentInput.getOutcomeIdentifier();
     }
 
     public String tuitionFee() {
-        return tuitionFee;
-    }
-
-    public void setTuitionFee(String tuitionFee) {
-        this.tuitionFee = tuitionFee;
+        return enrolmentInput.tuitionFee();
     }
 
     public String hoursAttended() {
-        return hoursAttended;
-    }
-
-    public void setHoursAttended(String hoursAttended) {
-        this.hoursAttended = hoursAttended;
+        Integer hoursAttended = enrolmentInput.hoursAttended();
+        return (hoursAttended == null) ? null : hoursAttended.toString();
     }
 
     public Integer getTotalSupervisedHours() {
-        return totalSupervisedHours;
+        return enrolmentInput.totalSupervisedHours();
     }
 
-    public void setTotalSupervisedHours(Integer totalSupervisedHours) {
-        this.totalSupervisedHours = totalSupervisedHours;
-    }
 
     public void setRequiredStudentCourse(StudentCourseReadModel sc, CourseReadModel course) {
         boolean isHigherEducation = "H".equalsIgnoreCase(course.vetFlag);
@@ -217,7 +156,7 @@ public class Enrolment {
 
         String clientFeesOther = ClientFeesOther.clientFeesOther(sc);
 
-        this.setStudentCourse(new NatVetStudentCourse(this.studentId, clientFeesOther, sc, course));
+        this.setStudentCourse(new NatVetStudentCourse(this.getStudentId(), clientFeesOther, sc, course));
     }
 
     public Date enrolmentDateObject() {
@@ -232,7 +171,7 @@ public class Enrolment {
     protected String simpleEnrolmentIdentifier() {
         String enrolmentIdentifier =
                 format("s%s-c%s-u%s",
-                        this.studentId,
+                        this.getStudentId(),
                         natStudentCourse().uniqueIdentifier(),
                         getUnitCode());
 
@@ -240,14 +179,12 @@ public class Enrolment {
     }
 
     public String enrolmentIdentifierWithStartDate() {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd");
-
         String enrolmentIdentifier =
                 format("s%s-c%s-u%s-d%s",
-                        this.studentId,
+                        this.getStudentId(),
                         natStudentCourse().uniqueIdentifier(),
                         getUnitCode(),
-                        formatter.format(startDate));
+                        startDate().format(DateTimeFormatter.ofPattern("yyyyMMdd")));
 
         return enrolmentIdentifier;
     }

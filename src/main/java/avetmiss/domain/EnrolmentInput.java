@@ -5,8 +5,7 @@ import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
-// TODO: consolidate with the other Enrolment
-public class Enrolment {
+public class EnrolmentInput {
 
     private int rowNum;
     private int studentId;
@@ -16,8 +15,8 @@ public class Enrolment {
     private LocalDate startDate;
     private LocalDate endDate;
     private int nominalHour;
-    private Integer totalSupervisedHours;
     private Integer hoursAttended;
+    private Integer totalSupervisedHours;
     private OutcomeIdentifierNational outcomeIdentifier;
     private String tuitionFee;
 

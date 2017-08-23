@@ -1,5 +1,6 @@
 package avetmiss.export;
 
+import avetmiss.domain.EnrolmentInput;
 import avetmiss.util.Dates;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,9 +26,13 @@ public class EnrolmentTest {
         this.natStudentCourse = mock(NatVetStudentCourse.class);
 
         this.enrolment = new Enrolment();
-        this.enrolment.setStudentId(studentID);
+
+        EnrolmentInput enrolmentInput = new EnrolmentInput();
+        enrolmentInput.setStudentId(studentID);
+        enrolmentInput.setUnitCode(unitCode);
+
+        this.enrolment.setEnrolmentInput(enrolmentInput);
         this.enrolment.setNatStudentCourse(natStudentCourse);
-        this.enrolment.setUnitCode(unitCode);
     }
 
     @Test

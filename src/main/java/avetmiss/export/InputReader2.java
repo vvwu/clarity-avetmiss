@@ -5,7 +5,7 @@ import avetmiss.client.payload.CourseReadModel;
 import avetmiss.client.payload.StudentCourseReadModel;
 import avetmiss.client.payload.StudentReadModel;
 import avetmiss.controller.payload.inputFile.ClientReadModel;
-import avetmiss.controller.payload.inputFile.EnrolmentRowReadModel;
+import avetmiss.domain.EnrolmentInput;
 import avetmiss.export.natfile.vat00120.ClientFeesOther;
 import avetmiss.util.hudson.TaskListener;
 
@@ -64,11 +64,11 @@ public class InputReader2 {
         }
 
         EnrolmentAssembler enrolmentAssembler = new EnrolmentAssembler();
-        for(EnrolmentRowReadModel enrolmentRowReadModel: clientReadModel.enrolments) {
+        for(EnrolmentInput enrolmentRowReadModel: clientReadModel.enrolments) {
             try {
                 String studentName = student.firstName + " " + student.lastName;
 
-                CourseReadModel courseReadModel = requiredCourse(clarityShareServiceClient, enrolmentRowReadModel.courseCode);
+                CourseReadModel courseReadModel = requiredCourse(clarityShareServiceClient, enrolmentRowReadModel.courseCode());
 
                 Enrolment enrolment =
                         enrolmentAssembler.toEnrolment(
@@ -82,7 +82,7 @@ public class InputReader2 {
 
                 clientBuilder.withEnrolment(enrolment);
             } catch (Exception e) {
-                errors.add("Enrolment " + enrolmentRowReadModel.rowNum + ": " + e.getMessage());
+                errors.add("Enrolment " + enrolmentRowReadModel.getRowNum() + ": " + e.getMessage());
             }
         }
 

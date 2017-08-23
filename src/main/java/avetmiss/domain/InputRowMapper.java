@@ -19,7 +19,7 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.hasLength;
 
-public class InputRowMapper implements CSVRowMapper<Enrolment> {
+public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
 
     private UnitRepository unitRepository;
 
@@ -35,7 +35,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
     }
 
     @Override
-    public Enrolment mapRow(String[] cols, int rowNum) {
+    public EnrolmentInput mapRow(String[] cols, int rowNum) {
         if (rowNum == 0) {
             // ignore the first header line
             return null;
@@ -45,7 +45,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         rowNum = rowNum + 1;
 
         try {
-            Enrolment enrolment = doMap(cols, rowNum);
+            EnrolmentInput enrolment = doMap(cols, rowNum);
             loadUnitDetails(enrolment);
 
             return enrolment;
@@ -55,7 +55,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         }
     }
 
-    private Enrolment doMap(String[] cols, int rowNum) {
+    private EnrolmentInput doMap(String[] cols, int rowNum) {
         //String hoursClaimedStr = cols[9];
 
         ensureRequiredColumns(cols);
@@ -67,7 +67,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         ensureValidEndDateProvidedInColumnL(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
 
-        Enrolment enrolment = new Enrolment();
+        EnrolmentInput enrolment = new EnrolmentInput();
         enrolment.setRowNum(rowNum);
 
         int studentID = Integer.parseInt(cols[COLUMN_A]);
@@ -104,7 +104,7 @@ public class InputRowMapper implements CSVRowMapper<Enrolment> {
         return enrolment;
     }
 
-    private void loadUnitDetails(Enrolment enrolment) {
+    private void loadUnitDetails(EnrolmentInput enrolment) {
         String unitCode = enrolment.getUnitCode();
         Unit unit = this.unitRepository.findByCode(unitCode);
 
