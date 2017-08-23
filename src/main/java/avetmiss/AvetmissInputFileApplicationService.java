@@ -1,19 +1,22 @@
 package avetmiss;
 
-import avetmiss.controller.payload.inputFile.*;
-import avetmiss.domain.*;
+import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
+import avetmiss.controller.payload.inputFile.ClientReadModel;
+import avetmiss.controller.payload.inputFile.TaskListenerReadModel;
+import avetmiss.domain.EnrolmentInput;
+import avetmiss.domain.InputRowMapper;
+import avetmiss.domain.UnitRepository;
 import avetmiss.util.Csv;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayInputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @Service
 public class AvetmissInputFileApplicationService {
@@ -23,9 +26,9 @@ public class AvetmissInputFileApplicationService {
 
     public AvetmissInputFileProcessResult readAndValidate(String csvContent) {
 
-        List<String> infoList = newArrayList();
-        List<String> warnList = newArrayList();
-        List<String> errorList = newArrayList();
+        List<String> infoList = new ArrayList<>();
+        List<String> warnList = new ArrayList<>();
+        List<String> errorList = new ArrayList<>();
 
         infoList.add("Validate input file: %s, please wait......");
 
@@ -44,7 +47,7 @@ public class AvetmissInputFileApplicationService {
     }
 
     private List<ClientReadModel> toClientReadModels(List<EnrolmentInput> enrolmentRowReadModels) {
-        Map<Integer, ClientReadModel> clientByStudentId = newLinkedHashMap();
+        Map<Integer, ClientReadModel> clientByStudentId = new LinkedHashMap();
 
         for(EnrolmentInput enrolmentRowReadModel: enrolmentRowReadModels) {
             int studentId = enrolmentRowReadModel.getStudentId();
@@ -58,6 +61,6 @@ public class AvetmissInputFileApplicationService {
             clientReadModel.enrolments.add(enrolmentRowReadModel);
         }
 
-        return newArrayList(clientByStudentId.values());
+        return new ArrayList(clientByStudentId.values());
     }
 }

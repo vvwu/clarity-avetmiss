@@ -1,12 +1,12 @@
 package avetmiss.domain.nat;
 
-import com.google.common.collect.Sets;
-
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 public class ClientOccupationIdentifier {
 
-    private final static Set<String> LABOUR_FORCE_STATUS_EXCEPTIONS = Sets.newHashSet("06", "07", "08", "@@");
+    private final static Set<String> LABOUR_FORCE_STATUS_EXCEPTIONS = new HashSet(Arrays.asList("06", "07", "08", "@@"));
     private final static int CLERICAL_AND_ADMINISTRATIVE_WORKERS = 5;
     private final static int CLIENT_OCCUPATION_IDENTIFIER_DEFAULT = CLERICAL_AND_ADMINISTRATIVE_WORKERS;
 

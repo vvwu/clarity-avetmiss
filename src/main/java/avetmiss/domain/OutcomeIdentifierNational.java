@@ -1,21 +1,19 @@
 package avetmiss.domain;
 
 import avetmiss.util.Dates;
-import com.google.common.collect.Maps;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.apache.commons.lang.StringUtils.getCommonPrefix;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 public class OutcomeIdentifierNational {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
-    private final static Map<Integer, String> identifiers = Maps.newLinkedHashMap();
+    private final static Map<Integer, String> identifiers = new LinkedHashMap();
     static {
         identifiers.put(20, "Competency achieved/pass");
         identifiers.put(30, "Competency not achieved/fail");

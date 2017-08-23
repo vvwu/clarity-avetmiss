@@ -9,13 +9,12 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 public class Nat00120EnrolmentFile {
@@ -59,7 +58,7 @@ public class Nat00120EnrolmentFile {
             of("Funding Eligibility Key", 10));
 
     public String export(List<EnrolmentFileRequest> requests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList<>();
         for (EnrolmentFileRequest request: requests) {
             rows.add(exportOneRow(request));
         }

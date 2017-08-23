@@ -6,9 +6,8 @@ import avetmiss.domain.Field;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class Nat00100PriorEducationFile {
 
@@ -23,7 +22,7 @@ public class Nat00100PriorEducationFile {
     }
 
     public List<Row> exportRaw(List<Nat00100PriorEducationFileRequest> nat00100PriorEducationFileRequests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList();
         for (Nat00100PriorEducationFileRequest request: nat00100PriorEducationFileRequests) {
             Row row = new Row(
                     request.studentID,

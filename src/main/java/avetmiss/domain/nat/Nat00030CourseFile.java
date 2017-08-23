@@ -5,11 +5,11 @@ import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 /**
@@ -41,7 +41,7 @@ public class Nat00030CourseFile {
     }
 
     List<Row> exportCoursesRaw(List<Nat00030CourseFileRequest> requests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList();
 
         for (Nat00030CourseFileRequest request : requests) {
             rows.add(courseInfo(request));

@@ -10,12 +10,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
-import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang.StringUtils.leftPad;
 import static org.apache.commons.lang.StringUtils.repeat;
 
@@ -49,7 +48,7 @@ public class Nat00130QualificationCompletedFile {
 
 
     List<Row> exportRaw(List<Nat00130QualificationCompletedFileRequest> requests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList();
 
         for (Nat00130QualificationCompletedFileRequest request : requests) {
             String qualificationIssuedFlag = request.isQualificationIssued ? "Y" : "N";

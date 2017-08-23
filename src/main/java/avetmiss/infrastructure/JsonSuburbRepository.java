@@ -6,18 +6,12 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.base.Charsets;
 import com.google.common.io.CharStreams;
-import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static com.google.common.collect.Maps.newLinkedHashMap;
+import java.util.*;
 
 @Repository
 public class JsonSuburbRepository implements SuburbRepository{
@@ -39,7 +33,7 @@ public class JsonSuburbRepository implements SuburbRepository{
     }
 
     private Map<Integer, List<Suburb>> initializeSuburbs(String suburbFilePath) {
-        Map<Integer, List<Suburb>> suburbsMap = newLinkedHashMap();
+        Map<Integer, List<Suburb>> suburbsMap = new LinkedHashMap();
 
         String json = asJson(suburbFilePath);
         try {
@@ -54,7 +48,7 @@ public class JsonSuburbRepository implements SuburbRepository{
                 List<Suburb> existingSuburbs = suburbsMap.get(suburb.getPostCode());
 
                 if(existingSuburbs == null) {
-                    existingSuburbs = newArrayList();
+                    existingSuburbs = new ArrayList();
                     suburbsMap.put(suburb.getPostCode(), existingSuburbs);
                 }
 
@@ -65,15 +59,6 @@ public class JsonSuburbRepository implements SuburbRepository{
             throw new IllegalStateException(e);
         }
         return suburbsMap;
-    }
-
-    private Suburb jsonToSuburb(String suburbJson, BasicJsonParser basicJsonParser) {
-        Map<String, Object> suburbJsonMap = basicJsonParser.parseMap(suburbJson);
-
-        String suburbName = (String) suburbJsonMap.get("name");
-        int postcode = ((Long) suburbJsonMap.get("postcode")).intValue();
-
-        return new Suburb(suburbName, postcode);
     }
 
     private String asJson(String suburbFilePath) {

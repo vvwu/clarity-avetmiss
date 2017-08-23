@@ -1,8 +1,7 @@
 package avetmiss.controller.payload.inputFile;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class TaskListenerReadModel {
     public List<String> infoList;
@@ -10,9 +9,9 @@ public class TaskListenerReadModel {
     public List<String> errorList;
 
     public TaskListenerReadModel() {
-        this.infoList = newArrayList();
-        this.warnList = newArrayList();
-        this.errorList = newArrayList();
+        this.infoList = new ArrayList<>();
+        this.warnList = new ArrayList<>();
+        this.errorList = new ArrayList<>();
     }
 
     public TaskListenerReadModel(List<String> infoList, List<String> warnList, List<String> errorList) {

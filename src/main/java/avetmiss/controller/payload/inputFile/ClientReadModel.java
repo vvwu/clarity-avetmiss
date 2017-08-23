@@ -1,8 +1,8 @@
 package avetmiss.controller.payload.inputFile;
 
 import avetmiss.domain.EnrolmentInput;
-import com.google.common.collect.Lists;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ClientReadModel {
@@ -12,6 +12,6 @@ public class ClientReadModel {
     public ClientReadModel() {}
     public ClientReadModel(int studentId) {
         this.studentId = studentId;
-        this.enrolments = Lists.newArrayList();
+        this.enrolments = new ArrayList<>();
     }
 }

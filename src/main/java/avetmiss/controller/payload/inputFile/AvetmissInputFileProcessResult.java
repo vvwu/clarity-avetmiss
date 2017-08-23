@@ -1,15 +1,14 @@
 package avetmiss.controller.payload.inputFile;
 
+import java.util.ArrayList;
 import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
 
 public class AvetmissInputFileProcessResult {
     public List<ClientReadModel> clients;
     public TaskListenerReadModel taskListener;
 
     public AvetmissInputFileProcessResult() {
-        this.clients = newArrayList();
+        this.clients = new ArrayList<>();
         this.taskListener = new TaskListenerReadModel();
     }
 

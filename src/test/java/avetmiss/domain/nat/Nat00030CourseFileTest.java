@@ -1,13 +1,13 @@
 package avetmiss.domain.nat;
 
-import java.util.List;
-
 import avetmiss.controller.payload.nat.Nat00030CourseFileRequest;
 import org.junit.Test;
 
-import static com.google.common.collect.Lists.newArrayList;
-import static org.hamcrest.Matchers.*;
-import static org.junit.Assert.*;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
 
 public class Nat00030CourseFileTest {
 
@@ -15,7 +15,7 @@ public class Nat00030CourseFileTest {
 
     @Test
     public void testExport() throws Exception {
-        List<Nat00030CourseFileRequest> requests = newArrayList(createDiplomaOfHospitality());
+        List<Nat00030CourseFileRequest> requests = Arrays.asList(createDiplomaOfHospitality());
         String export = instance.export(requests);
         assertThat(export, is("SIT50307  DIPLOMA OF HOSPITALITY (SIT50307)                                                                   1780115141101351112Y\r\n"));
     }

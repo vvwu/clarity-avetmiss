@@ -5,12 +5,8 @@ import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
 
-import java.util.Arrays;
-import java.util.List;
-
 import static avetmiss.domain.AvetmissUtil.formattedRtoIdentifier;
 import static avetmiss.domain.Field.of;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 
 /**

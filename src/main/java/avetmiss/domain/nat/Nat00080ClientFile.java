@@ -10,13 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.util.StringUtil.*;
 import static com.google.common.base.Preconditions.checkArgument;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.lang.String.format;
 
 public class Nat00080ClientFile {
@@ -53,7 +52,7 @@ public class Nat00080ClientFile {
 
 
     public String export(List<ClientFileRequest> requests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList();
         for (ClientFileRequest client: requests) {
             rows.add(exportOneRow(client));
         }

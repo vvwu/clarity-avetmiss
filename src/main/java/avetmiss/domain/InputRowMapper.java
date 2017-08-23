@@ -7,6 +7,7 @@ import org.apache.commons.lang.Validate;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -15,7 +16,6 @@ import static avetmiss.util.Csv.*;
 import static avetmiss.util.StringUtil.isBlank;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.hasLength;
 
@@ -27,11 +27,11 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
     private List<String> errors;
     public InputRowMapper(UnitRepository unitRepository) {
         this.unitRepository = unitRepository;
-        this.errors = newArrayList();
+        this.errors = new ArrayList<>();
     }
 
     public List<String> errors() {
-        return newArrayList(this.errors);
+        return new ArrayList<>(this.errors);
     }
 
     @Override

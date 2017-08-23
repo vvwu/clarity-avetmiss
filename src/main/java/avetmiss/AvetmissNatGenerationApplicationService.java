@@ -15,10 +15,10 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.google.common.base.Strings.nullToEmpty;
-import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
 
 @Service
@@ -38,7 +38,7 @@ public class AvetmissNatGenerationApplicationService {
         NatFile nat00120 = getNat00120EnrolmentFile(natFilesRequest.enrolmentFileRequests);
         NatFile nat00130 = getNat00130QualificationCompletedFile(natFilesRequest.nat00130QualificationCompletedFileRequests);
 
-        List<NatFile> natFiles = newArrayList();
+        List<NatFile> natFiles = new ArrayList<>();
 
         natFiles.add(nat00010);
         natFiles.add(nat00020);

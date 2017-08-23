@@ -1,5 +1,6 @@
 package avetmiss.domain.nat;
 
+import java.util.Arrays;
 import java.util.List;
 
 import avetmiss.controller.payload.nat.Nat00060SubjectFileRequest;
@@ -7,7 +8,6 @@ import avetmiss.domain.Unit;
 import avetmiss.domain.UnitRepository;
 import org.junit.Test;
 
-import static com.google.common.collect.Lists.newArrayList;
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
@@ -25,7 +25,7 @@ public class Nat00060SubjectFileTest {
         when(unitRepository.findByCode("BSBCMN407A")).thenReturn(unit);
 
 
-        List<Nat00060SubjectFileRequest> units = newArrayList(enrolmentSubject());
+        List<Nat00060SubjectFileRequest> units = Arrays.asList(enrolmentSubject());
         String export = instance.export(units);
 
         assertThat(export, is("CBSBCMN407A  COORDINATE BUSINESS RESOURCES                                                                       080301Y0100\r\n"));

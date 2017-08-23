@@ -1,13 +1,13 @@
 package avetmiss.domain.nat;
 
+import java.util.HashMap;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.newHashMap;
 import static java.lang.String.format;
 
 public class FundingSourceStateIdentifier {
 
-    private final static Map<String, String> stateToNationalCode = newHashMap();
+    private final static Map<String, String> stateToNationalCode = new HashMap();
     static {
         stateToNationalCode.put("F", "30");
         stateToNationalCode.put("L", "11");

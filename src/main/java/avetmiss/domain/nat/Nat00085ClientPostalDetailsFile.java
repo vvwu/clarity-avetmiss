@@ -6,12 +6,12 @@ import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
 import static avetmiss.util.StringUtil.isBlank;
-import static com.google.common.collect.Lists.newArrayList;
 
 public class Nat00085ClientPostalDetailsFile {
 
@@ -35,7 +35,7 @@ public class Nat00085ClientPostalDetailsFile {
 
 
     public String export(List<ClientFileRequest> requests) {
-        List<Row> rows = newArrayList();
+        List<Row> rows = new ArrayList();
         for (ClientFileRequest client: requests) {
             rows.add(exportOneRow(client));
         }

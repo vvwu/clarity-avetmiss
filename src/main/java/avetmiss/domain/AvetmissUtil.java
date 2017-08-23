@@ -3,7 +3,6 @@ package avetmiss.domain;
 import avetmiss.export.Client;
 import avetmiss.export.Enrolment;
 import avetmiss.util.LabelValue;
-import com.google.common.collect.Lists;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
