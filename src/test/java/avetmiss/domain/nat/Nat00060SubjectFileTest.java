@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import avetmiss.controller.payload.nat.Nat00060SubjectFileRequest;
+import avetmiss.domain.EnrolmentSubject;
 import avetmiss.domain.Unit;
 import avetmiss.domain.UnitRepository;
 import org.junit.Test;
@@ -25,17 +26,14 @@ public class Nat00060SubjectFileTest {
         when(unitRepository.findByCode("BSBCMN407A")).thenReturn(unit);
 
 
-        List<Nat00060SubjectFileRequest> units = Arrays.asList(enrolmentSubject());
+        List<EnrolmentSubject> units = Arrays.asList(enrolmentSubject());
         String export = instance.export(units);
 
         assertThat(export, is("CBSBCMN407A  COORDINATE BUSINESS RESOURCES                                                                       080301Y0100\r\n"));
     }
 
-    public Nat00060SubjectFileRequest enrolmentSubject() {
-        Nat00060SubjectFileRequest request = new Nat00060SubjectFileRequest();
-        request.subjectIdentifier = "BSBCMN407A";
-        request.nominalHours = 100;
-        return request;
+    public EnrolmentSubject enrolmentSubject() {
+        return new EnrolmentSubject("BSBCMN407A", "1201", 100);
     }
 
 }

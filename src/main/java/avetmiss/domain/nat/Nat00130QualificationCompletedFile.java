@@ -29,8 +29,6 @@ import static org.apache.commons.lang.StringUtils.repeat;
  */
 public class Nat00130QualificationCompletedFile {
 
-    private Logger log = LoggerFactory.getLogger(this.getClass());
-
     private final static Header header = Header(56,
             of("Training Organisation Identifier", 10),
             of("Program (Qualification/Course) Identifier", 10),

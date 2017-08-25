@@ -32,19 +32,5 @@ public class Nat0009DisabilityFile {
                 .collect(Collectors.toList());
 
         return rows;
-
-
-//        List<String[]> rows = newArrayList();
-//        for (Nat0009DisabilityFileRequest request : nat0009DisabilityFileRequests) {
-//            List<String> identifiers = request.disabilityTypeIdentifiers;
-//
-//            if(identifiers != null && !identifiers.isEmpty()) {
-//                String sid = request.studentID;
-//                for (String e : identifiers) {
-//                    rows.add(new String[]{sid, e});
-//                }
-//            }
-//        }
-//        return rows;
     }
 }

@@ -113,7 +113,6 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         enrolment.setUnit(
                 new EnrolmentSubject(
                         unit.code(),
-                        unit.name(),
                         unit.fieldOfEducationIdentifier(),
                         enrolment.nominalHour()));
     }

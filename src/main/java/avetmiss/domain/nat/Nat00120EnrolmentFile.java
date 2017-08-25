@@ -153,7 +153,6 @@ public class Nat00120EnrolmentFile {
                 request.fundingEligibilityKey);
     }
 
-
     private String fundingSourceNationalIdentifier(String sid, String fundingSourceStateIdentifier) {
         try {
             return FundingSourceStateIdentifier.fundingSourceNationalIdentifierFrom

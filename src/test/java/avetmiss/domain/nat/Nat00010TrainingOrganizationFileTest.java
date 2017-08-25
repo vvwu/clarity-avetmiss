@@ -1,5 +1,6 @@
 package avetmiss.domain.nat;
 
+import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.controller.payload.nat.Nat00010TrainingOrganizationFileRequest;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,26 +19,25 @@ public class Nat00010TrainingOrganizationFileTest {
 
     @Test
     public void testExport() throws Exception {
-        Nat00010TrainingOrganizationFileRequest request = organizationConstant();
+        OrganizationConstantReadModel request = organizationConstant();
 
         String export = instance.export(request);
-        assertThat(export, is("0000020829Victorian Institute of Technology Pty Ltd                                                           91Level 10, 123 Queen Street                                                                          Melbourne                                         300003Surapaneni,Nagarjun,Mr,CEO                                  0396707848          0396707848          info@vit.edu.au                                                                 Clarity2008         rock.yu99@gmail.com                                                             \r\n"));
+        assertThat(export, is("0000020829Victorian Institute of Technology Pty Ltd                                                           91Level 10, 123 Queen Street                                                                          Melbourne                                         300002Surapaneni,Nagarjun,Mr,CEO                                  0396707848          0396707848          info@vit.edu.au                                                                 Clarity2008         rock.yu99@gmail.com                                                             \r\n"));
     }
 
     public static int TOID = 20829;
 
-    private Nat00010TrainingOrganizationFileRequest organizationConstant() {
-        Nat00010TrainingOrganizationFileRequest constant = new Nat00010TrainingOrganizationFileRequest();
+    private OrganizationConstantReadModel organizationConstant() {
+        OrganizationConstantReadModel constant = new OrganizationConstantReadModel();
 
-        constant.rtoIdentifier = TOID + "";
-        constant.organizationFullName = "Victorian Institute of Technology Pty Ltd";
-        constant.addressFirstLine = "Level 10, 123 Queen Street";
+        constant.toid = TOID;
+        constant.fullName = "Victorian Institute of Technology Pty Ltd";
+        constant.address = "Level 10, 123 Queen Street";
         constant.suburb = "Melbourne";
         constant.postcode = "3000";
-        constant.stateIdentifier = "03";
         constant.contactName = "Surapaneni,Nagarjun,Mr,CEO";
-        constant.telephone = "0396707848";
-        constant.facsimile = "0396707848";
+        constant.contactPhone = "0396707848";
+        constant.contactFax = "0396707848";
         constant.contactEmail = "info@vit.edu.au";
 
         return constant;

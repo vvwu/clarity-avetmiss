@@ -4,10 +4,12 @@ import avetmiss.export.Client;
 import avetmiss.export.Enrolment;
 import avetmiss.util.LabelValue;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.LinkedHashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.leftPad;
@@ -50,18 +52,6 @@ public class AvetmissUtil {
     public static String formattedRtoIdentifier(int TOID) {
         return formattedRtoIdentifier(String.valueOf(TOID));
     }
-
-
-	// convert date to string in "DDMMYYYY" format
-	private static SimpleDateFormat sf = new SimpleDateFormat("ddMMyyyy");
-	public static String toDate(Date date) {
-		return sf.format(date);
-	}
-
-	private static SimpleDateFormat sf1 = new SimpleDateFormat("yyyy");
-	public static String getPurchasingContractYear(Date enrolmentStartDate) {
-		return sf1.format(enrolmentStartDate);
-	}
 
 	public static Set<EnrolmentSubject> collectCompetencies(List<Client> clients) {
 		Set<EnrolmentSubject> competencies = new LinkedHashSet<>();

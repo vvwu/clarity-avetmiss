@@ -1,8 +1,14 @@
 package avetmiss.domain.nat;
 
+import java.time.LocalDate;
 import java.util.Arrays;
+import java.util.Collections;
 
+import avetmiss.client.payload.EnrolmentInfoReadModel;
+import avetmiss.client.payload.StudentReadModel;
 import avetmiss.controller.payload.nat.ClientFileRequest;
+import avetmiss.export.Client;
+import avetmiss.util.Dates;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -14,53 +20,46 @@ public class Nat00085ClientPostalDetailsFileTest {
 
     @Test
     public void testExportRaw() throws Exception {
-        ClientFileRequest client = createClient();
+        Client client = createClient();
         String export = instance.export(Arrays.asList(client));
-        assertThat(export, is("30000     Mr  Fname                                   Lname                           " +
-                "        Building name                                     Unit                          2           " +
-                "   Evelyn st                                                                                   " +
-                "Windsor                                           3181030395234323                              " +
-                "04342532340         user@company.com                                                                " +
-                "\r\n"));
+        assertThat(export, is("30000     Mr  Fname                                   Lname                                                                                                                   NOT SPECIFIED  NOT SPECIFIED                                                                               Windsor                                           3181030395234323                              04342532340         user@company.com                                                                \r\n"));
     }
 
-    private ClientFileRequest createClient() {
-        ClientFileRequest client = new ClientFileRequest();
-        client.studentID = "30000";
-        client.usi = "Z7ZSVMLTRG";
-        client.vsn = "VSN123";
+    private Client createClient() {
+        StudentReadModel student = new StudentReadModel();
 
-        client.firstName = "Fname";
-        client.lastName = "Lname";
+        student.studentID = 30000;
+        student.usi = "Z7ZSVMLTRG";
+        student.vsn = "VSN123";
 
-        client.highestSchoolLevelCompletedIdentifier = "12";
-        client.yearHighestSchoolLevelCompleted = "1996";
-        client.sex = "F";
-        client.dateOfBirth = "1981-09-10";
-        client.postCode = "3181";
-        client.indigenousStatusIdentifier = "@";
-        client.mainLanguageSpokenAtHomeIdentifier = "1201";
-        client.labourForceStatusIdentifier = "01";
-        client.countryIdentifier = "1203";
-        client.disabilityFlag = "N";
-        client.atSchoolFlag = "N";
-        client.priorEducationalAchievementFlag = "Y";
-        client.proficiencyInSpokenEnglishIdentifier = "1";
-        client.suburb = "Windsor";
-        client.stateIdentifier = "03";
+        student.firstName = "Fname";
+        student.lastName = "Lname";
 
-        client.addressBuildingName = "Building name";
-        client.addressFlatOrUnitDetails = "Unit";
-        client.addressStreetNumber = "2";
-        client.addressStreetName = "Evelyn st";
+        student.enrolmentInfo = new EnrolmentInfoReadModel();
+
+        student.enrolmentInfo.highestSchoolLevelCompletedIdentifier = "12";
+        student.enrolmentInfo.yearHighestSchoolLevelCompleted = "1996";
+        student.sex = "F";
+        student.dob = Dates.toDate(LocalDate.of(1981, 9, 10));
+        student.postCode = "3181";
+        student.enrolmentInfo.indigenousStatusIdentifier = "@";
+        student.enrolmentInfo.mainLanguageSpokenAtHomeIdentifier = "1201";
+        student.enrolmentInfo.labourForceStatusIdentifier = "01";
+        student.enrolmentInfo.countryIdentifier = "1203";
+        student.enrolmentInfo.disabilityFlag = "N";
+        student.enrolmentInfo.atSchoolFlag = "N";
+        student.enrolmentInfo.priorEducationalAchievementFlag = "Y";
+        student.enrolmentInfo.proficiencyInSpokenEnglishIdentifier = "1";
+        student.enrolmentInfo.stateIdentifier = "03";
+
+        student.suburb = "Windsor";
 
         // NAT00085ClientPostalDetailsFile only
-        client.title = "Mr";
-        client.contactPhoneNo = "0395234323";
-        client.contactMobile = "04342532340";
-        client.contactEmailAddress = "user@company.com";
+        student.title = "Mr";
+        student.phone = "0395234323";
+        student.mobile = "04342532340";
+        student.email = "user@company.com";
 
-
-        return client;
+        return new Client(student, Collections.emptyList(), Collections.emptyList());
     }
 }

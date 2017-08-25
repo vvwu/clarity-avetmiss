@@ -12,6 +12,7 @@ import avetmiss.export.NatFileConfig;
 import avetmiss.export.natfile.V20140301NATFileConfig;
 import avetmiss.util.hudson.StreamTaskListener;
 import avetmiss.util.hudson.TaskListener;
+import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -146,11 +147,11 @@ public class AvetmissExportService {
 
         natFilesRequest.enrolmentFileRequests = natFileConfig.nat00120EnrolmentFile().enrolmentFileRequests(clients, TOID, listener);
         natFilesRequest.nat00030CourseFileRequests = natFileConfig.nat00030CourseFile().nat00030CourseFileRequests(clients, listener);
-        natFilesRequest.nat00060SubjectFileRequests = natFileConfig.nat00060SubjectFile().nat00060SubjectFileRequests(competencies);
-        natFilesRequest.clientFileRequest = natFileConfig.nat00080ClientFile().clientFileRequest(clients);
+        natFilesRequest.nat00060SubjectFileRequests = Lists.newArrayList(competencies);
+        natFilesRequest.clientFileRequest = clients;
         natFilesRequest.nat00100PriorEducationFileRequests = natFileConfig.nat00100PriorEducationFile().priorEducationFileRequests(clients, listener);
-        natFilesRequest.nat00010TrainingOrganizationFileRequest = natFileConfig.nat00010TrainingOrganizationFile().trainingOrganizationFileRequest(organizationConstant);
-        natFilesRequest.nat00020TrainingOrganisationDeliveryLocationFileRequest = natFileConfig.nat00020TrainingOrganisationDeliveryLocationFile().deliveryLocationFileRequest(TOID);
+        natFilesRequest.nat00010TrainingOrganizationFileRequest = organizationConstant;
+        natFilesRequest.rtoIdentifier = TOID;
         natFilesRequest.nat0009DisabilityFileRequests = natFileConfig.nat000900DisabilityFile().nat0009DisabilityFileRequests(clients);
         natFilesRequest.nat00130QualificationCompletedFileRequests = natFileConfig.nat00130QualificationCompletedFile().qualificationCompletedFile(clients, TOID);
 

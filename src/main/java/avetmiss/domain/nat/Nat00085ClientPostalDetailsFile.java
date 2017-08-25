@@ -1,17 +1,18 @@
 package avetmiss.domain.nat;
 
 
-import avetmiss.controller.payload.nat.ClientFileRequest;
+import avetmiss.client.payload.EnrolmentInfoReadModel;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
+import avetmiss.domain.StudentPostCode;
+import avetmiss.export.Client;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
-import static avetmiss.util.StringUtil.isBlank;
 
 public class Nat00085ClientPostalDetailsFile {
 
@@ -34,49 +35,38 @@ public class Nat00085ClientPostalDetailsFile {
             of("E-mail Address", 80));
 
 
-    public String export(List<ClientFileRequest> requests) {
+    public String export(List<Client> requests) {
         List<Row> rows = new ArrayList();
-        for (ClientFileRequest client: requests) {
+        for (Client client: requests) {
             rows.add(exportOneRow(client));
         }
 
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    private Row exportOneRow(ClientFileRequest clientFileRequest) {
-        String studentID = clientFileRequest.studentID;
+    private Row exportOneRow(Client client) {
+        String studentID = client.studentId();
 
         String addressPostalDeliveryBox = null;
         String telephoneNumberWork = null;
+        EnrolmentInfoReadModel enrolmentInfo = client.enrolmentInfo();
 
         return new Row(
-                clientFileRequest.studentID,
-                clientFileRequest.title,
-                clientFileRequest.firstName,
-                clientFileRequest.lastName,
-                clientFileRequest.addressBuildingName,
-                clientFileRequest.addressFlatOrUnitDetails,
-                clientFileRequest.addressStreetNumber,
-                clientFileRequest.addressStreetName,
+                studentID,
+                client.title(),
+                client.firstName(),
+                client.lastName(),
+                client.address().addressBuildingName(),
+                client.address().addressFlatOrUnitDetails(),
+                client.address().addressStreetNumber(),
+                client.address().addressStreetName(),
                 addressPostalDeliveryBox,
-                clientFileRequest.suburb,  // Address Location - Suburb, Locality or Town
-                postCode(studentID, clientFileRequest.postCode),
-                clientFileRequest.stateIdentifier,
-                clientFileRequest.contactPhoneNo,
+                client.suburb(),  // Address Location - Suburb, Locality or Town
+                StudentPostCode.postCode(studentID, client.getPostCode()),
+                enrolmentInfo.stateIdentifier,
+                client.contactPhoneNo(),
                 telephoneNumberWork,
-                clientFileRequest.contactMobile,
-                clientFileRequest.contactEmailAddress);
-    }
-
-    public String postCode(String studentID, String aPostcode) {
-        String postCode = aPostcode;
-        if(isBlank(postCode)) {
-            return "@@@@";
-        } else if(Integer.valueOf(postCode) > 9999 || Integer.valueOf(postCode) < 1 || postCode.length() != 4) {
-            System.err.println(String.format("[Export Client]: student '%s' data error: '%s' is not a valid value for 'PostCode', " +
-                    "valid range is [0001, 9999]", studentID, postCode));
-            return "0000"; // post code unknown
-        }
-        return postCode;
+                client.contactMobile(),
+                client.contactEmailAddress());
     }
 }

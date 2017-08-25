@@ -11,33 +11,13 @@ public class V20140301NATFileConfig implements NatFileConfig {
     }
 
     @Override
-    public NAT00020TrainingOrganisationDeliveryLocationFile nat00020TrainingOrganisationDeliveryLocationFile() {
-        return new NAT00020TrainingOrganisationDeliveryLocationFile();
-    }
-
-    @Override
-    public NAT00010TrainingOrganizationFile nat00010TrainingOrganizationFile() {
-        return new NAT00010TrainingOrganizationFile();
-    }
-
-    @Override
     public NAT00030CourseFile nat00030CourseFile() {
         return new NAT00030CourseFile();
     }
 
     @Override
-    public NAT00060SubjectFile nat00060SubjectFile() {
-        return new NAT00060SubjectFile();
-    }
-
-    @Override
     public NAT00120EnrolmentFile nat00120EnrolmentFile() {
         return new NAT00120EnrolmentFile(deliveryProviderABN);
-    }
-
-    @Override
-    public NAT00080ClientFile nat00080ClientFile() {
-        return new NAT00080ClientFile();
     }
 
     @Override

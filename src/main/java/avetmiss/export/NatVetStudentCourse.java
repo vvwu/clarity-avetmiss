@@ -111,6 +111,10 @@ public class NatVetStudentCourse {
         return courseIdentifier;
     }
 
+    public CourseIdentifierAndCourseStartKey courseIdentifierAndCourseStartKey() {
+        return new CourseIdentifierAndCourseStartKey(courseIdentifier, courseStartDate);
+    }
+
     public String getAssociatedCourseIdentifier() {
         return associatedCourseIdentifier;
     }

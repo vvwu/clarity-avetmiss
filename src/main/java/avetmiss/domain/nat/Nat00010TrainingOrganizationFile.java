@@ -1,10 +1,11 @@
 package avetmiss.domain.nat;
 
-import avetmiss.controller.payload.nat.Nat00010TrainingOrganizationFileRequest;
+import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
 
+import static avetmiss.domain.AvetmissConstant.STATE_IDENTIFIERS_VIC;
 import static avetmiss.domain.AvetmissUtil.formattedRtoIdentifier;
 import static avetmiss.domain.Field.of;
 import static java.util.Arrays.asList;
@@ -27,7 +28,7 @@ public class Nat00010TrainingOrganizationFile {
         PRIVATE_RTO(91);
 
         private int code;
-        private TrainingOrganisationTypeIdentifier(int code) {
+        TrainingOrganisationTypeIdentifier(int code) {
             this.code = code;
         }
 
@@ -53,24 +54,24 @@ public class Nat00010TrainingOrganizationFile {
             of("Software Vendor E-mail Address", 80));
 
 
-    public String export(Nat00010TrainingOrganizationFileRequest request) {
+    public String export(OrganizationConstantReadModel organizationConstant) {
         String addressSecondLine = "";
         String softwareProduct = "Clarity2008";
         String softwareVendorEmailAddress = "rock.yu99@gmail.com";
 
         String[] dataRow = new String[] {
-                formattedRtoIdentifier(request.rtoIdentifier),
-                request.organizationFullName,
+                formattedRtoIdentifier(organizationConstant.toid + ""),
+                organizationConstant.fullName,
                 TrainingOrganisationTypeIdentifier.PRIVATE_RTO.code() + "",  // 91 = Education/training business or centre: Privately Operated Registered Training Organisation
-                request.addressFirstLine,
+                organizationConstant.address,
                 addressSecondLine,
-                request.suburb,
-                request.postcode,
-                request.stateIdentifier,
-                request.contactName,
-                request.telephone,
-                request.facsimile,
-                request.contactEmail,
+                organizationConstant.suburb,
+                organizationConstant.postcode,
+                STATE_IDENTIFIERS_VIC,
+                organizationConstant.contactName,
+                organizationConstant.contactPhone,
+                organizationConstant.contactFax,
+                organizationConstant.contactEmail,
                 softwareProduct,
                 softwareVendorEmailAddress};
 

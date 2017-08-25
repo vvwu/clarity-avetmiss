@@ -1,9 +1,12 @@
 package avetmiss;
 
+import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.controller.payload.nat.*;
+import avetmiss.domain.EnrolmentSubject;
 import avetmiss.domain.UnitRepository;
 import avetmiss.domain.nat.*;
 import avetmiss.controller.payload.nat.Nat00090DisabilityFileRequest;
+import avetmiss.export.Client;
 import avetmiss.util.NatFile;
 import avetmiss.util.ZipWriter;
 import com.google.common.io.Files;
@@ -29,7 +32,7 @@ public class AvetmissNatGenerationApplicationService {
 
     public byte[] getNatFileZip(NatFilesRequest natFilesRequest) throws IOException {
         NatFile nat00010 = getNat00010TrainingOrganizationFile(natFilesRequest.nat00010TrainingOrganizationFileRequest);
-        NatFile nat00020 = getNat00020TrainingOrganisationDeliveryLocationFile(natFilesRequest.nat00020TrainingOrganisationDeliveryLocationFileRequest);
+        NatFile nat00020 = getNat00020TrainingOrganisationDeliveryLocationFile(natFilesRequest.rtoIdentifier);
         NatFile nat00030 = getNat00030CourseFileRequest(natFilesRequest.nat00030CourseFileRequests);
         NatFile nat00060 = getNat00060SubjectFile(natFilesRequest.nat00060SubjectFileRequests);
         List<NatFile> nat80And85 = getsClientFiles(natFilesRequest.clientFileRequest);
@@ -54,7 +57,7 @@ public class AvetmissNatGenerationApplicationService {
     }
 
     private NatFile getNat00010TrainingOrganizationFile(
-            Nat00010TrainingOrganizationFileRequest nat00010TrainingOrganizationFileRequest) {
+            OrganizationConstantReadModel nat00010TrainingOrganizationFileRequest) {
         NatFile natFile = new NatFile("NAT00010.txt");
         if(nat00010TrainingOrganizationFileRequest == null) {
             return natFile;
@@ -67,13 +70,13 @@ public class AvetmissNatGenerationApplicationService {
     }
 
     private NatFile getNat00020TrainingOrganisationDeliveryLocationFile(
-            Nat00020TrainingOrganisationDeliveryLocationFileRequest nat00020TrainingOrganisationDeliveryLocationFileRequest) {
+            String rtoIdentifier) {
         NatFile natFile = new NatFile("NAT00020.txt");
-        if(nat00020TrainingOrganisationDeliveryLocationFileRequest == null) {
+        if(rtoIdentifier == null) {
             return natFile;
         }
 
-        String content = new Nat00020TrainingOrganisationDeliveryLocationFile().export(nat00020TrainingOrganisationDeliveryLocationFileRequest.rtoIdentifier);
+        String content = new Nat00020TrainingOrganisationDeliveryLocationFile().export(rtoIdentifier);
 
         logger.info("[nat00020TrainingOrganisationDeliveryLocationFile]: \n{}", content);
         return natFile.withContent(content);
@@ -91,7 +94,7 @@ public class AvetmissNatGenerationApplicationService {
         return natFile.withContent(content);
     }
 
-    private List<NatFile> getsClientFiles(List<ClientFileRequest> requests) {
+    private List<NatFile> getsClientFiles(List<Client> requests) {
         NatFile natFile1 = new NatFile("NAT00080.txt");
         NatFile natFile2 = new NatFile("NAT00085.txt");
         if(requests == null || requests.isEmpty()) {
@@ -105,7 +108,7 @@ public class AvetmissNatGenerationApplicationService {
                 natFile2.withContent(content2));
     }
 
-    private NatFile getNat00060SubjectFile(List<Nat00060SubjectFileRequest> requests) {
+    private NatFile getNat00060SubjectFile(List<EnrolmentSubject> requests) {
         NatFile natFile = new NatFile("NAT00060.txt");
         if(requests == null || requests.isEmpty()) {
             return natFile;

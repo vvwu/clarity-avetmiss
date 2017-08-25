@@ -76,7 +76,6 @@ public class NatFileWriter {
 		return this;
 	}
 
-
 	public String close(int lengthAssertionExcludingCarriageReturn) {
 		return closeWithAssertion(lengthAssertionExcludingCarriageReturn);
 	}

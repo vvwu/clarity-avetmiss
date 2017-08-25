@@ -13,10 +13,10 @@ public class EnrolmentSubjectTest {
     @Test
     public void fieldOfEducationIdentifierIsRequired() throws Exception {
         thrown.expect(IllegalArgumentException.class);
-        thrown.expectMessage("fieldOfEducationIdentifier can not be null, subjectIdentifier: BSBCMN407A, subjectName: Coordinate business resources");
+        thrown.expectMessage("fieldOfEducationIdentifier can not be null, subjectIdentifier: BSBCMN407A");
 
         new EnrolmentSubject(
-                "BSBCMN407A", "Coordinate business resources", null, 100);
+                "BSBCMN407A", null, 100);
 
     }
 }

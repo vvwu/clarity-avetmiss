@@ -28,7 +28,6 @@ public class Nat00020TrainingOrganisationDeliveryLocationFile {
         public final String identifier;
     }
 
-
     private final static Header header = Header(
             of("Training Organisation Identifier", 10),
             of("Training Organisation Delivery Location Identifier", 10),

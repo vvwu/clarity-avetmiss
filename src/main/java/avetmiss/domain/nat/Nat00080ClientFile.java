@@ -1,10 +1,9 @@
 package avetmiss.domain.nat;
 
-import avetmiss.controller.payload.nat.ClientFileRequest;
-import avetmiss.domain.AvetmissUtil;
-import avetmiss.domain.ExportHelper;
-import avetmiss.domain.Header;
-import avetmiss.domain.Row;
+import avetmiss.client.payload.EnrolmentInfoReadModel;
+import avetmiss.domain.*;
+import avetmiss.export.Client;
+import avetmiss.util.DateUtil;
 import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -51,15 +50,14 @@ public class Nat00080ClientFile {
             of("Client Occupation Identifier", 1));
 
 
-    public String export(List<ClientFileRequest> requests) {
+    public String export(List<Client> requests) {
         List<Row> rows = new ArrayList();
-        for (ClientFileRequest client: requests) {
+        for (Client client: requests) {
             rows.add(exportOneRow(client));
         }
 
         return ExportHelper.writeToString(header.sizes(), rows);
     }
-
 
     /**
      * AVETMISS field: Name for Encryption must be recorded in the following
@@ -76,59 +74,48 @@ public class Nat00080ClientFile {
         return dob == null ? "@@@@@@@@" : AvetmissUtil.toDate(dob);
     }
 
-    public String postCode(String studentID, String aPostcode) {
-        String postCode = aPostcode;
-        if(isBlank(postCode)) {
-            return "@@@@";
-        } else if(Integer.valueOf(postCode) > 9999 || Integer.valueOf(postCode) < 1 || postCode.length() != 4) {
-            System.err.println(String.format("[Export Client]: student '%s' data error: '%s' is not a valid value for 'PostCode', " +
-                    "valid range is [0001, 9999]", studentID, postCode));
-            return "0000"; // post code unknown
-        }
-        return postCode;
-    }
+    private Row exportOneRow(Client client) {
+        String studentID = client.studentId();
+        EnrolmentInfoReadModel enrolmentInfo = client.enrolmentInfo();
 
-    private Row exportOneRow(ClientFileRequest client) {
-        String studentID = client.studentID;
-
-        String priorEducationalAchievementFlag = client.priorEducationalAchievementFlag; // prior educational achievement('@' means not specified)
+        String priorEducationalAchievementFlag = enrolmentInfo.priorEducationalAchievementFlag; // prior educational achievement('@' means not specified)
         checkArgument(!"@".equals(priorEducationalAchievementFlag), "SID: %s, priorEducationalAchievementFlag = '@',  This field is now <b>mandatory</b> (@ is not valid) for all government funded and domestic fee for service enrolments that commence on or after 1/1/2010.", studentID);
 
-        String labourForceStatusIdentifier = client.labourForceStatusIdentifier;
-        String usi = requiredUsi(studentID, client.usi);
+        String labourForceStatusIdentifier = enrolmentInfo.labourForceStatusIdentifier;
+        String usi = requiredUsi(studentID, client.usi());
 
         return new Row(
                 studentID,
-                nameForEncryption(client.lastName, client.firstName),
-                client.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
-                client.yearHighestSchoolLevelCompleted,
-                client.sex,
-                dateOfBirth(Dates.toLocalDateISO(client.dateOfBirth)),
-                postCode(studentID, client.postCode),
-                client.indigenousStatusIdentifier,
-                client.mainLanguageSpokenAtHomeIdentifier,
+                nameForEncryption(client.lastName(), client.firstName()),
+                enrolmentInfo.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
+                enrolmentInfo.yearHighestSchoolLevelCompleted,
+                client.sex(),
+                dateOfBirth(Dates.toLocalDateISO(DateUtil.toISO(client.dateOfBirthObject()))),
+                StudentPostCode.postCode(studentID, client.getPostCode()),
+                enrolmentInfo.indigenousStatusIdentifier,
+                enrolmentInfo.mainLanguageSpokenAtHomeIdentifier,
                 labourForceStatusIdentifier,
-                client.countryIdentifier,
-                client.disabilityFlag,
+                enrolmentInfo.countryIdentifier,
+                enrolmentInfo.disabilityFlag,
                 priorEducationalAchievementFlag,
-                client.atSchoolFlag,  // At School Flag ('@' means not specified)
-                proficiencyInSpokenEnglishIdentifier(client),
-                client.suburb,
+                enrolmentInfo.atSchoolFlag,  // At School Flag ('@' means not specified)
+                proficiencyInSpokenEnglishIdentifier(enrolmentInfo),
+                client.suburb(),
                 usi,
-                client.stateIdentifier,
-                client.addressBuildingName,
-                client.addressFlatOrUnitDetails,
-                client.addressStreetNumber,
-                client.addressStreetName,
+                enrolmentInfo.stateIdentifier,
+                client.address().addressBuildingName(),
+                client.address().addressFlatOrUnitDetails(),
+                client.address().addressStreetNumber(),
+                client.address().addressStreetName(),
                 statisticalAreaLevel1IdentifierOf(),
                 statisticalAreaLevel2IdentifierOf(),
-                client.vsn,
+                client.vsn(),
                 ClientIndustryOfEmployment.clientIndustryOfEmployment(labourForceStatusIdentifier),
                 ClientOccupationIdentifier.clientOccupationIdentifier(labourForceStatusIdentifier));
     }
 
-    public String proficiencyInSpokenEnglishIdentifier(ClientFileRequest client) {
-        String mainLanguageSpokenAtHomeIdentifier = client.mainLanguageSpokenAtHomeIdentifier;
+    public String proficiencyInSpokenEnglishIdentifier(EnrolmentInfoReadModel enrolmentInfo) {
+        String mainLanguageSpokenAtHomeIdentifier = enrolmentInfo.mainLanguageSpokenAtHomeIdentifier;
 
         // Leave this field blank if the Language (Main Language Other Than English Spoken at Home) Identifier field is one of the following:
         // 1201 - ENGLISH
@@ -140,7 +127,7 @@ public class Nat00080ClientFile {
         if(isEqualToAny(mainLanguageSpokenAtHomeIdentifier, new String[]{"1201", "9700", "9701", "9702", "9799", "@@@@"}))
             return null;
 
-        return client.proficiencyInSpokenEnglishIdentifier;
+        return enrolmentInfo.proficiencyInSpokenEnglishIdentifier;
     }
 
     private String requiredUsi(String studentID, String usi) {

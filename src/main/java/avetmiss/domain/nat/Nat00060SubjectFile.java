@@ -1,6 +1,5 @@
 package avetmiss.domain.nat;
 
-import avetmiss.controller.payload.nat.Nat00060SubjectFileRequest;
 import avetmiss.domain.*;
 
 import java.util.List;
@@ -23,7 +22,7 @@ public class Nat00060SubjectFile {
         UNIT_OF_COMPETENCY_IDENTIFIER("C");
 
         private String flag;
-        private SubjectFlag(String flag) {this.flag = flag;}
+        SubjectFlag(String flag) {this.flag = flag;}
 
         public String flag() {
             return flag;
@@ -38,7 +37,7 @@ public class Nat00060SubjectFile {
             of("VET Flag", 1),
             of("Nominal Hours", 4));
 
-    public String export(List<Nat00060SubjectFileRequest> requests) {
+    public String export(List<EnrolmentSubject> requests) {
         List<Row> dataRows = requests
                         .stream()
                         .map(s -> exportRow(s))
@@ -47,12 +46,12 @@ public class Nat00060SubjectFile {
         return ExportHelper.writeToString(header.sizes(), dataRows);
     }
 
-    public Row exportRow(Nat00060SubjectFileRequest request) {
+    public Row exportRow(EnrolmentSubject request) {
         // All alphabetic characters in the Module/Unit of Competency Identifier field must be in upper case
         // The name must be in upper case.
 
-        Unit unit = unitRepository.findByCode(request.subjectIdentifier);
-        checkArgument(unit != null, "unit not found, identifier: {}", request.subjectIdentifier);
+        Unit unit = unitRepository.findByCode(request.subjectIdentifier());
+        checkArgument(unit != null, "unit not found, identifier: {}", request.subjectIdentifier());
 
         return new Row(
                 SubjectFlag.UNIT_OF_COMPETENCY_IDENTIFIER.flag(),
@@ -60,7 +59,7 @@ public class Nat00060SubjectFile {
                 unit.name().toUpperCase(),
                 unit.fieldOfEducationIdentifier(),
                 VetFlag.VOCATIONAL.flag,
-                nominalHours(request.nominalHours));
+                nominalHours(request.norminalHours()));
     }
 
     private String nominalHours(int nominalHours) {

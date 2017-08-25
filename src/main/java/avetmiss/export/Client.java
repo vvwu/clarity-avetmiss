@@ -106,28 +106,30 @@ public class Client {
     private List<NatVetStudentCourse> qualificationCompletedCoursesForDomesticStudentWithCurrentLogic() {
         // courseIdentifier => course
         // ensure each course only appear once
-        // TODO: student/course/courseCommencementDate should be unique (not student/course)
-        Map<String, NatVetStudentCourse> uniqueCourses = new LinkedHashMap<>();
+        // student/course/courseCommencementDate should be unique (not student/course)
+        Map<CourseIdentifierAndCourseStartKey, NatVetStudentCourse> uniqueCourses = new LinkedHashMap<>();
 
         for(NatVetStudentCourse finishedCourse: studentCoursesWithCoeStatus(CoeStatus.FINISHED)) {
-            String courseIdentifier = finishedCourse.getCourseIdentifier();
-            if(!uniqueCourses.containsKey(courseIdentifier)) {
-                uniqueCourses.put(courseIdentifier, finishedCourse);
+            CourseIdentifierAndCourseStartKey key = finishedCourse.courseIdentifierAndCourseStartKey();
+
+            if(!uniqueCourses.containsKey(key)) {
+                uniqueCourses.put(key, finishedCourse);
             }
         }
 
         for(NatVetStudentCourse studyingCourse: studentCoursesWithCoeStatus(CoeStatus.STUDYING)) {
-            String courseIdentifier = studyingCourse.getCourseIdentifier();
-            if(!uniqueCourses.containsKey(courseIdentifier)) {
-                uniqueCourses.put(courseIdentifier, studyingCourse);
+            CourseIdentifierAndCourseStartKey key = studyingCourse.courseIdentifierAndCourseStartKey();
+
+            if(!uniqueCourses.containsKey(key)) {
+                uniqueCourses.put(key, studyingCourse);
             }
         }
 
         for(NatVetStudentCourse cancelledCourse: studentCoursesWithCoeStatus(CoeStatus.CANCELLED)) {
-            String courseIdentifier = cancelledCourse.getCourseIdentifier();
-            if(!cancelledCourse.isDeferred() &&
-                    !uniqueCourses.containsKey(courseIdentifier)) {
-                uniqueCourses.put(courseIdentifier, cancelledCourse);
+            CourseIdentifierAndCourseStartKey key = cancelledCourse.courseIdentifierAndCourseStartKey();
+
+            if(!cancelledCourse.isDeferred() && !uniqueCourses.containsKey(key)) {
+                uniqueCourses.put(key, cancelledCourse);
             }
         }
 
@@ -150,10 +152,6 @@ public class Client {
 		return studentID;
 	}
 
-    public String dateOfBirth() {
-        return dob == null ? "@@@@@@@@" : AvetmissUtil.toDate(dob);
-    }
-
     public Date dateOfBirthObject() {
         return dob;
     }
@@ -165,65 +163,14 @@ public class Client {
         return sex.toUpperCase();
     }
 
-    /**
-     * AVETMISS field: Name for Encryption must be recorded in the following
-     * order: family name (comma) (space) first given name (space) second given
-     * name.
-     */
-    public String nameForEncryption() {
-        return format("%s, %s",
-                nullSafeTrimString(this.lastName),
-                nullSafeTrimString(this.firstName));
-    }
-
     public Integer totalSupervisedHours(String courseCode) {
         for (Enrolment enrolment : this.enrolments) {
-            if (StringUtils.equals(courseCode, enrolment.courseCode())) {
+            if (Objects.equals(courseCode, enrolment.courseCode())) {
                 return enrolment.getTotalSupervisedHours();
             }
         }
         return null;
     }
-
-    public String countryIdentifier() {
-        String countryIdentifier = this.enrolmentInfo.countryIdentifier;
-        return isBlank(countryIdentifier) ? "@@@@" : countryIdentifier;
-    }
-
-    public String proficiencyInSpokenEnglishIdentifier() {
-        String mainLanguageSpokenAtHomeIdentifier = this.enrolmentInfo.mainLanguageSpokenAtHomeIdentifier;
-
-        // Leave this field blank if the Language (Main Language Other Than English Spoken at Home) Identifier field is one of the following:
-        // 1201 - ENGLISH
-        // 9700 - SIGN LANGUAGE
-        // 9701 - AUSLAN
-        // 9702 - MAKATON
-        // 9799 - SIGN LANGUAGE NOT ELSEWHERE CLASSIFIED
-        // or @@@@
-        if(isEqualToAny(mainLanguageSpokenAtHomeIdentifier, new String[]{"1201", "9700", "9701", "9702", "9799", "@@@@"}))
-            return null;
-
-        return enrolmentInfo.proficiencyInSpokenEnglishIdentifier;
-    }
-
-	@Override
-	public boolean equals(Object obj) {
-		if (obj == this) {
-			return true;
-		}
-
-		if (!(obj instanceof Client)) {
-			return false;
-		}
-
-		Client that = (Client) obj;
-        return StringUtils.equals(this.studentID, that.studentID);
-    }
-	
-	@Override
-	public int hashCode() {
-		return studentID.hashCode();
-	}
 
     public String contactPhoneNo() {
         return this.phone;
@@ -326,7 +273,6 @@ public class Client {
      * The same Enrolment Identifier must be reported against the same records in all subsequent submissions.
      */
     public String enrolmentIdentifier(int enrolmentRowNum) {
-
         Enrolment matchEnrolment = null;
         Bag identifiers = new HashBag();
 
@@ -349,4 +295,22 @@ public class Client {
         return matchEnrolment.enrolmentIdentifierWithStartDate();
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+
+        if (!(obj instanceof Client)) {
+            return false;
+        }
+
+        Client that = (Client) obj;
+        return Objects.equals(this.studentID, that.studentID);
+    }
+
+    @Override
+    public int hashCode() {
+        return studentID.hashCode();
+    }
 }
