@@ -22,13 +22,9 @@ public class InputRowMapperTest {
     private String[] mockHeader = {"mockheader"};
 
     private int studentId = 33642;
-    private String studentName = "Nimesh Patel";
     private String courseCode = "SIT31107";
-    private String courseName = "Certificate III in Hospitality (Patisserie) (SIT31107)";
     private String unitCode = "SITXCOM002A";
-    private String unitName = "Work in a socially diverse environment";
     private int nominalHours = 20;
-    private int supervisedHours = 4;
     private int totalSupervisedHours = 40;
 
     private Integer hoursAttended = 10;
@@ -39,13 +35,9 @@ public class InputRowMapperTest {
 
     private String[] inputRow = {
             studentId + "",
-            studentName,
             courseCode,
-            courseName,
             unitCode,
-            unitName,
             nominalHours + "",
-            supervisedHours + "",
             totalSupervisedHours + "",
             hoursAttended + "",
             startDate,
@@ -70,13 +62,14 @@ public class InputRowMapperTest {
 
     @Test
     public void shouldMapAEnrolmentFromTheInputRow() {
+        String unitName = "Work in a socially diverse environment";
+
         when(unitRepository.findByCode(unitCode)).thenReturn(new Unit(unitCode, unitName, "02"));
 
         EnrolmentInput enrolment = this.inputRowMapper.mapRow(inputRow, 1);
 
 
         assertThat(enrolment.getStudentId(), is(studentId));
-        assertThat(enrolment.studentName(), is(studentName));
         assertThat(enrolment.courseCode(), is(courseCode));
         assertThat(enrolment.getUnitCode(), is(unitCode));
         assertThat(enrolment.nominalHour(), is(nominalHours));
@@ -110,7 +103,7 @@ public class InputRowMapperTest {
                 this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'nominalHour' in [column G]"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'nominalHour' in [column D]"), is(true));
     }
 
     @Test
@@ -122,7 +115,7 @@ public class InputRowMapperTest {
                 this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'hoursAttended' in [column I]"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid 'hoursAttended' in [column F]"), is(true));
     }
 
     @Test
@@ -134,7 +127,7 @@ public class InputRowMapperTest {
                 this.endDate);
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column K] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column G] in format: dd/mm/yyyy"), is(true));
     }
 
     @Test
@@ -146,7 +139,7 @@ public class InputRowMapperTest {
                 "unparsable-end-date");
 
         this.inputRowMapper.mapRow(inputRow, 1);
-        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column L] in format: dd/mm/yyyy"), is(true));
+        assertThat(inputRowMapper.errors().contains("rowNum=2: Must provide a valid date in [column H] in format: dd/mm/yyyy"), is(true));
     }
 
 
@@ -165,13 +158,9 @@ public class InputRowMapperTest {
     private String[] getInputRow(String aNominalHours, String aHoursAttended, String aStartDate, String anEndDate) {
         String[] inputRow = {
                 studentId + "",
-                studentName,
                 courseCode,
-                courseName,
                 unitCode,
-                unitName,
                 aNominalHours + "",
-                supervisedHours + "",
                 totalSupervisedHours + "",
                 aHoursAttended + "",
                 aStartDate,

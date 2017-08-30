@@ -1,7 +1,6 @@
 package avetmiss.domain;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
@@ -9,7 +8,6 @@ public class EnrolmentInput {
 
     private int rowNum;
     private int studentId;
-    private String studentName;
     private String courseCode;
     private String unitCode;
     private LocalDate startDate;
@@ -22,14 +20,6 @@ public class EnrolmentInput {
 
     // associations
     private EnrolmentSubject unit;
-
-    public String studentName() {
-        return studentName;
-    }
-
-    public void setStudentName(String studentName) {
-        this.studentName = studentName;
-    }
 
     public String getUnitCode() {
         return unitCode;

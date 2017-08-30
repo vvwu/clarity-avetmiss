@@ -1,25 +1,50 @@
 package avetmiss.domain;
 
 import avetmiss.util.CSVRowMapper;
-import avetmiss.util.StringUtil;
-import org.apache.commons.lang.Validate;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static avetmiss.util.Csv.*;
 import static avetmiss.util.StringUtil.isBlank;
+import static avetmiss.util.StringUtil.isInteger;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
 import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.hasLength;
 
 public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
+
+    enum column {
+        SID("SID", COLUMN_A, "column A"),
+        COURSE_IDENTIFIER("Course Identifier", COLUMN_B, "column B"),
+        UNIT_CODE("Unit Code", COLUMN_C, "column C"),
+        NOMINAL_HOURS("Nominal Hours", COLUMN_D, "column D"),
+        TOTAL_SUPERVISED_HOURS("Total Supervised Hours", COLUMN_E, "column E"),
+        HOURS_ATTENDED("Hours Attended", COLUMN_F, "column F"),
+        START_DATE("Start Date", COLUMN_G, "column G"),
+        END_DATE("End Date", COLUMN_H, "column H"),
+        OUTCOME_IDENTIFIER("Outcome Identifier", COLUMN_I, "column I"),
+        TUITION_FEE("Tuition Fee", COLUMN_J, "column J");
+
+        private String title;
+        private int index;
+        private String indexString;
+
+        column(String title, int index, String indexString) {
+            this.title = title;
+            this.index = index;
+            this.indexString = indexString;
+        }
+
+        public static Collection<String> requiredColumnNames() {
+            return Arrays.stream(column.values()).map(column -> column.title).collect(Collectors.toList());
+        }
+    }
+
 
     private UnitRepository unitRepository;
 
@@ -56,35 +81,31 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
     }
 
     private EnrolmentInput doMap(String[] cols, int rowNum) {
-        //String hoursClaimedStr = cols[9];
-
         ensureRequiredColumns(cols);
         ensureColumnAContainsStudentID(cols);
-        ensureColumnGContainsNominalHourStr(cols);
-        ensureColumnJHoursAttendedContainsEmptyOrInteger(cols);
+        ensureColumnDContainsNominalHourStr(cols);
+        ensureColumnFHoursAttendedContainsEmptyOrInteger(cols);
 
-        ensureColumnKContainsValidDate(cols);
-        ensureValidEndDateProvidedInColumnL(cols);
+        ensureColumnGContainsValidDate(cols);
+        ensureValidEndDateProvidedInColumnH(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
 
         EnrolmentInput enrolment = new EnrolmentInput();
         enrolment.setRowNum(rowNum);
 
-        int studentID = Integer.parseInt(cols[COLUMN_A]);
+        int studentID = Integer.parseInt(cols[column.SID.index]);
         enrolment.setStudentId(studentID);
 
-        enrolment.setStudentName(cols[COLUMN_B]);
-        enrolment.setCourseCode(cols[COLUMN_C]);
-        enrolment.setUnitCode(cols[COLUMN_E]);
-        String nominalHourStr = cols[COLUMN_G];
-        String supervisedHourStr = cols[COLUMN_H];
-        String totalSupervisedHourStr = cols[COLUMN_I];
-        String hoursAttendedStr = cols[COLUMN_J];
+        enrolment.setCourseCode(cols[column.COURSE_IDENTIFIER.index]);
+        enrolment.setUnitCode(cols[column.UNIT_CODE.index]);
+        String nominalHourStr = cols[column.NOMINAL_HOURS.index];
+        String totalSupervisedHourStr = cols[column.TOTAL_SUPERVISED_HOURS.index];
+        String hoursAttendedStr = cols[column.HOURS_ATTENDED.index];
 
-        String startDateStr = cols[COLUMN_K];
-        String endDateStr = cols[COLUMN_L];
-        String outcomeIdentifier = cols[COLUMN_M];
-        String tuitionFee = cols[COLUMN_N];
+        String startDateStr = cols[column.START_DATE.index];
+        String endDateStr = cols[column.END_DATE.index];
+        String outcomeIdentifier = cols[column.OUTCOME_IDENTIFIER.index];
+        String tuitionFee = cols[column.TUITION_FEE.index];
 
         if(hasLength(totalSupervisedHourStr)) {
             enrolment.setTotalSupervisedHours(Integer.parseInt(totalSupervisedHourStr));
@@ -128,60 +149,54 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         }
     }
 
-    private Collection<String> requiredColumnNames() {
-        return Collections.unmodifiableCollection(
-                asList("SID",
-                        "Student Name",
-                        "Course Identifier",
-                        "Course Name",
-                        "Unit Code",
-                        "Unit Name",
-                        "Nominal Hours",
-                        "Supervised Hours",
-                        "Hours Attended",
-                        "Start Date",
-                        "End Date",
-                        "Outcome Identifier"));
-    }
-
     private void ensureRequiredColumns(String[] cols) {
-        final int requiredColumns = COLUMN_N + 1;
+        final int requiredColumns = column.values().length;
         checkArgument(cols.length == requiredColumns, "%s columns are provided, but %s columns are required, expected columns: %s",
-                cols.length, requiredColumns, requiredColumnNames());
+                cols.length, requiredColumns, column.requiredColumnNames());
     }
 
     private void ensureColumnAContainsStudentID(String[] cols) {
-        String sid = cols[COLUMN_A];
-        checkArgument(StringUtil.isInteger(sid), "Must provide a valid Student ID in [column A]");
+        column sidColumn = column.SID;
+
+        String sid = cols[sidColumn.index];
+        checkArgument(isInteger(sid), "Must provide a valid Student ID in [%s]", sidColumn.index);
     }
 
-    private void ensureColumnGContainsNominalHourStr(String[] cols) {
-        String nominalHourStr = cols[COLUMN_G];
-        checkArgument(StringUtil.isInteger(nominalHourStr), "Must provide a valid 'nominalHour' in [column G]");
+    private void ensureColumnDContainsNominalHourStr(String[] cols) {
+        column nominalHours = column.NOMINAL_HOURS;
+
+        String nominalHourStr = cols[nominalHours.index];
+        checkArgument(isInteger(nominalHourStr), "Must provide a valid 'nominalHour' in [%s]", nominalHours.indexString);
     }
 
-    private void ensureColumnJHoursAttendedContainsEmptyOrInteger(String[] cols) {
-        String hoursAttendedStr = cols[COLUMN_J];
+    private void ensureColumnFHoursAttendedContainsEmptyOrInteger(String[] cols) {
+        column hoursAttended = column.HOURS_ATTENDED;
+
+        String hoursAttendedStr = cols[hoursAttended.index];
         if(hasLength(hoursAttendedStr)) {
-            Validate.isTrue(StringUtil.isInteger(hoursAttendedStr), "Must provide a valid 'hoursAttended' in [column I]");
+            checkArgument(isInteger(hoursAttendedStr), "Must provide a valid 'hoursAttended' in [%s]", hoursAttended.indexString);
         }
     }
 
-    private void ensureColumnKContainsValidDate(String[] cols) {
-        String startDateStr = cols[COLUMN_K];
+    private void ensureColumnGContainsValidDate(String[] cols) {
+        column startDateColumn = column.START_DATE;
+
+        String startDateStr = cols[startDateColumn.index];
         LocalDate startDate = toLocalDate(startDateStr);
-        checkArgument(startDate != null, "Must provide a valid date in [column K] in format: dd/mm/yyyy");
+        checkArgument(startDate != null, "Must provide a valid date in [%s] in format: dd/mm/yyyy", startDateColumn.indexString);
     }
 
-    private void ensureValidEndDateProvidedInColumnL(String[] cols) {
-        String endDateStr = cols[COLUMN_L];
+    private void ensureValidEndDateProvidedInColumnH(String[] cols) {
+        column endDateColumn = column.END_DATE;
+
+        String endDateStr = cols[endDateColumn.index];
         LocalDate endDate = toLocalDate(endDateStr);
-        checkArgument(endDate != null, "Must provide a valid date in [column L] in format: dd/mm/yyyy");
+        checkArgument(endDate != null, "Must provide a valid date in [%s] in format: dd/mm/yyyy", endDateColumn.indexString);
     }
 
     private void ensureStartDateIsNoLaterThanEndDate(String[] cols) {
-        LocalDate startDate = toLocalDate(cols[COLUMN_K]);
-        LocalDate endDate = toLocalDate(cols[COLUMN_L]);
+        LocalDate startDate = toLocalDate(cols[column.START_DATE.index]);
+        LocalDate endDate = toLocalDate(cols[column.END_DATE.index]);
 
         checkArgument(!startDate.isAfter(endDate), "Start date cannot be later than end date");
     }

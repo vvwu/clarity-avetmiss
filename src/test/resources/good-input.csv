@@ -1,4 +1,4 @@
-SID,Student Name,Course Identifier, Course Name,Unit Code,Unit Name,Nominal Hours,Supervised Hours,Hours Attended,Start Date,End Date,Outcome Identifier,Tuition Fee
-50038,Syed MUSTAFA,BSB60207,Advanced Diploma of Business (BSB60207),BSBINN601B,Manage organisational change,60,10,,16/02/2015,20/05/2015,30,420
-50301,CHUNGHIENG ANAK JETIM CHUNGHIENG ANAK JETIM,BSB41013,Certificate IV in Human Resources (BSB41013),BSBADM405B,Organise Meetings,20,5,,15/01/2015,15/01/2015,60,0
-50301,CHUNGHIENG ANAK JETIM CHUNGHIENG ANAK JETIM,BSB41013,Certificate IV in Human Resources (BSB41013),BSBCMM401A,Make a presentation,20,10,,15/01/2015,15/01/2015,60,0
+SID,Course Identifier,Unit Code,Nominal Hours,Total Supervised Hours,Hours Attended,Start Date,End Date,Outcome Identifier,Tuition Fee
+50038,BSB60207,BSBINN601B,60,20,,16/2/15,20/5/15,30,420
+50301,BSB41013,BSBADM405B,20,40,,15/1/15,15/1/15,60,0
+50301,BSB41013,BSBCMM401A,20,40,,15/1/15,15/1/15,60,0
