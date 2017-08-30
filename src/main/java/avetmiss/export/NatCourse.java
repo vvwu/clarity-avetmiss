@@ -2,6 +2,13 @@ package avetmiss.export;
 
 import static com.google.common.base.Preconditions.checkArgument;
 
+/**
+ * The Program (Course) (NAT00030) file provides information about programs (courses) or skill sets that are
+ * undertaken and/or completed by clients during the collection period.
+ * <p/>
+ * Each program (course) record listed in this file must appear in either the Enrolment (NAT00120) file or the Program
+ * (Qualification) Completed (NAT00130) file
+ */
 public class NatCourse {
 
     public NatCourse(

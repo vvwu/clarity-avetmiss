@@ -1,10 +1,11 @@
 package avetmiss.export;
 
-import avetmiss.export.natfile.*;
+import avetmiss.export.natfile.NAT0009DisabilityFile;
+import avetmiss.export.natfile.NAT00100PriorEducationFile;
+import avetmiss.export.natfile.NAT00120EnrolmentFile;
+import avetmiss.export.natfile.NAT00130QualificationCompletedFile;
 
 public interface NatFileConfig {
-
-    NAT00030CourseFile nat00030CourseFile();
 
     NAT00120EnrolmentFile nat00120EnrolmentFile();
 

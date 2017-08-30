@@ -7,6 +7,7 @@ import avetmiss.domain.UnitRepository;
 import avetmiss.domain.nat.*;
 import avetmiss.controller.payload.nat.Nat00090DisabilityFileRequest;
 import avetmiss.export.Client;
+import avetmiss.export.NatCourse;
 import avetmiss.util.NatFile;
 import avetmiss.util.ZipWriter;
 import com.google.common.io.Files;
@@ -19,6 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static com.google.common.base.Strings.nullToEmpty;
@@ -82,7 +84,7 @@ public class AvetmissNatGenerationApplicationService {
         return natFile.withContent(content);
     }
 
-    private NatFile getNat00030CourseFileRequest(List<Nat00030CourseFileRequest> requests) {
+    private NatFile getNat00030CourseFileRequest(Collection<NatCourse> requests) {
         NatFile natFile = new NatFile("NAT00030.txt");
         if(requests == null || requests.isEmpty()) {
             return natFile;
@@ -158,8 +160,7 @@ public class AvetmissNatGenerationApplicationService {
         return natFile.withContent(content);
     }
 
-    private NatFile getNat00130QualificationCompletedFile(
-            List<Nat00130QualificationCompletedFileRequest> requests) {
+    private NatFile getNat00130QualificationCompletedFile(List<Nat00130QualificationCompletedFileRequest> requests) {
         NatFile natFile = new NatFile("NAT00130.txt");
         if(requests == null || requests.isEmpty()) {
             return natFile;

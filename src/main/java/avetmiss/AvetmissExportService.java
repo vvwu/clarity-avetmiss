@@ -9,6 +9,7 @@ import avetmiss.domain.EnrolmentSubject;
 import avetmiss.export.Client;
 import avetmiss.export.InputReader2;
 import avetmiss.export.NatFileConfig;
+import avetmiss.export.natfile.NAT00030CourseFileReader;
 import avetmiss.export.natfile.V20140301NATFileConfig;
 import avetmiss.util.hudson.StreamTaskListener;
 import avetmiss.util.hudson.TaskListener;
@@ -146,7 +147,7 @@ public class AvetmissExportService {
         Set<EnrolmentSubject> competencies = collectCompetencies(clients);
 
         natFilesRequest.enrolmentFileRequests = natFileConfig.nat00120EnrolmentFile().enrolmentFileRequests(clients, TOID, listener);
-        natFilesRequest.nat00030CourseFileRequests = natFileConfig.nat00030CourseFile().nat00030CourseFileRequests(clients, listener);
+        natFilesRequest.nat00030CourseFileRequests = new NAT00030CourseFileReader().enrolledAndQualificationCompletedCourses(clients);
         natFilesRequest.nat00060SubjectFileRequests = Lists.newArrayList(competencies);
         natFilesRequest.clientFileRequest = clients;
         natFilesRequest.nat00100PriorEducationFileRequests = natFileConfig.nat00100PriorEducationFile().priorEducationFileRequests(clients, listener);

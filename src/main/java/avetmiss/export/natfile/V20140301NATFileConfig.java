@@ -11,11 +11,6 @@ public class V20140301NATFileConfig implements NatFileConfig {
     }
 
     @Override
-    public NAT00030CourseFile nat00030CourseFile() {
-        return new NAT00030CourseFile();
-    }
-
-    @Override
     public NAT00120EnrolmentFile nat00120EnrolmentFile() {
         return new NAT00120EnrolmentFile(deliveryProviderABN);
     }

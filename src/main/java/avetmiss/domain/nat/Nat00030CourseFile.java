@@ -1,11 +1,12 @@
 package avetmiss.domain.nat;
 
-import avetmiss.controller.payload.nat.Nat00030CourseFileRequest;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
+import avetmiss.export.NatCourse;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
@@ -31,7 +32,7 @@ public class Nat00030CourseFile {
             of("ANZSCO (Occupation Type) Identifier", 6),
             of("VET Flag", 1));
 
-    public String export(List<Nat00030CourseFileRequest> requests) {
+    public String export(Collection<NatCourse> requests) {
 
         // Each program (course) record listed in this file must appear in either the Enrolment (NAT00120) file or
         // the Program (Qualification) Completed (NAT00130) file
@@ -40,30 +41,30 @@ public class Nat00030CourseFile {
         return ExportHelper.writeToString(header.sizes(), rows);
     }
 
-    List<Row> exportCoursesRaw(List<Nat00030CourseFileRequest> requests) {
+    List<Row> exportCoursesRaw(Collection<NatCourse> requests) {
         List<Row> rows = new ArrayList();
 
-        for (Nat00030CourseFileRequest request : requests) {
+        for (NatCourse request : requests) {
             rows.add(courseInfo(request));
         }
         return rows;
     }
 
-    private Row courseInfo(Nat00030CourseFileRequest request) {
-        String courseIdentifier = request.courseIdentifier;
+    private Row courseInfo(NatCourse request) {
+        String courseIdentifier = request.courseIdentifier();
 
         // Yes/Y - the intention of the training program is vocational.
         // No/N - the intention of the training program is not vocational.
-        String nominalHours = leftPad(request.nominalHour + "", 4, '0');
+        String nominalHours = leftPad(request.nominalHour() + "", 4, '0');
 
         return new Row(
                 courseIdentifier.toUpperCase(),
-                request.courseName.toUpperCase(),
+                request.courseName().toUpperCase(),
                 nominalHours,
-                request.programRecognitionIdentifier,
-                request.levelOfEducationIdentifier,
-                request.fieldOfEducationIdentifier,
-                request.occupationTypeIdentifier,
+                request.programRecognitionIdentifier(),
+                request.levelOfEducationIdentifier(),
+                request.fieldOfEducationIdentifier(),
+                request.occupationTypeIdentifier(),
                 vetFlag());
     }
 
