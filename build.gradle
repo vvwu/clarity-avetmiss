@@ -39,6 +39,7 @@ dependencies {
     compile group: 'commons-lang', name: 'commons-lang', version: '2.6'
     compile group: 'commons-collections', name: 'commons-collections', version: '3.2.2'
     compile "commons-io:commons-io:1.4"
+    compile "net.sf.opencsv:opencsv:2.3"
 
     compile group: 'org.hsqldb', name: 'hsqldb', version: '2.3.3'
 

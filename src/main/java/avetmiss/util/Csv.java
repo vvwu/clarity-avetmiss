@@ -1,6 +1,6 @@
 package avetmiss.util;
 
-import avetmiss.util.ostermiller.CSVParser;
+import au.com.bytecode.opencsv.CSVReader;
 import com.google.common.io.Closeables;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,25 +72,25 @@ public class Csv {
 		List<T> rows = new ArrayList<T>();
 		Reader reader = null;
 		try {
-			boolean BOM_exist = removeBOM(is);
-			if(BOM_exist) {
-				log.debug("The input stream has BOM and has been removed." );
-			}
-				
-			reader = new InputStreamReader(is);
-			CSVParser parser = new CSVParser(reader);
-			String values[][] = parser.getAllValues();
+			reader = new BufferedReader(new InputStreamReader(is, "UTF-8"));
+
+			CSVReader csvReader = new CSVReader(reader);
+			List<String[]> values = csvReader.readAll();
+
+			// String values[][] = parser.getAllValues();
 
 			if (values == null) {
 				return rows;
 			}
 
-			for (int i = 0; i < values.length; i++) {
-				String[] row = values[i];
+			for (int i = 0; i < values.size(); i++) {
+				String[] row = values.get(i);
 
-				T rowToObject = rowMapper.mapRow(row, i);
-				if(rowToObject != null) {
-					rows.add(rowToObject);
+				if (row != null) {
+					T rowToObject = rowMapper.mapRow(row, i);
+					if (rowToObject != null) {
+						rows.add(rowToObject);
+					}
 				}
 			}
 		} catch (Exception e1) {
@@ -113,55 +113,4 @@ public class Csv {
 
 		return new ArrayList<>();
 	}
-	
-	/**
-	 * Remove the BOM header [0xEF, 0xBB, 0xBF] from the input stream if exist
-	 * @param inputStream
-	 * @return
-	 * @throws java.io.IOException
-	 */
-	private static boolean removeBOM(InputStream inputStream) throws IOException {
-		inputStream.mark( 1024 );
-
-		int byte1 = inputStream.read();
-		int byte2 = inputStream.read();
-		int byte3 = inputStream.read();
-		
-		if(0xEF == byte1 && 0xBB == byte2 && 0xBF == byte3) {
-			return true;
-		}
-		
-		inputStream.reset();
-		return false;
-	}
-	
-
-	//-----------------------------------------------------------------------
-    /**
-     * <p>Escapes the characters in a <code>String</code> to be suitable to pass to
-     * an SQL query.</p>
-     *
-     * <p>For example,
-     * <pre>statement.executeQuery("SELECT * FROM MOVIES WHERE TITLE='" + 
-     *   StringEscapeUtils.escapeSql("McHale's Navy") + 
-     *   "'");</pre>
-     * </p>
-     *
-     * <p>At present, this method only turns single-quotes into doubled single-quotes
-     * (<code>"McHale's Navy"</code> => <code>"McHale''s Navy"</code>). It does not
-     * handle the cases of percent (%) or underscore (_) for use in LIKE clauses.</p>
-     *
-     * see http://www.jguru.com/faq/view.jsp?EID=8881
-     * @param str  the string to escape, may be null
-     * @return a new String, escaped for SQL, <code>null</code> if null string input
-     */
-    public static String escapeSql(String str) {
-        if (str == null) {
-			return null;
-		}
-
-        str = str.replaceAll("\"", "");
-        str = str.replaceAll("'", "''");
-        return str;
-    }
 }
