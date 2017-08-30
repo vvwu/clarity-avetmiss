@@ -65,64 +65,7 @@ public class Csv {
 	public final static int COLUMN_AX = 49;
 	public final static int COLUMN_AY = 50;
 	public final static int COLUMN_AZ = 51;
-	
-	public static List<String[]> read(File file, int numOfRowsToSkip) {
-		Assert.isTrue(numOfRowsToSkip >= 0, "'numOfRowsToSkip' can not be negative");
-		try {
-			return read(new FileInputStream(file), numOfRowsToSkip);
-		} catch (FileNotFoundException e) {
-			throw new IllegalArgumentException(e.getMessage());
-		}
-	}
-	
-	/**
-	 * Read the CSV file into a list of rows. Each element in the return
-	 * <code>List</code> is a String array (<code>String[]</code>). Elements in
-	 * the CSV file is separated using default delimiter ",".
-	 * @param filePath
-	 *            full path of the CSV file
-	 * @param numOfRowsToSkip
-	 *            number of rows (headers) to skip, have to be positive. Specify
-	 *            <code>0</code> if no skip is needed.
-	 */
-	public static List<String[]> read(String filePath, int numOfRowsToSkip) {
-		return read(new File(filePath), numOfRowsToSkip);
-	}
-	
-	public static List<String[]> read(InputStream is, int numOfRowsToSkip) {
-		Assert.isTrue(numOfRowsToSkip >= 0, "'numOfRowsToSkip' can not be negative");
-		List<String[]> rows = new ArrayList<>();
 
-		try (BufferedReader reader = new BufferedReader(new InputStreamReader(is))) {
-			// Skip the header lines (usually table header)
-			while (numOfRowsToSkip-- > 0) {
-				reader.readLine();
-			}
-
-			CSVParser parser = new CSVParser(reader);
-			String values[][] = parser.getAllValues();
-
-			if (values == null) {
-				return rows;
-			}
-
-			for (String[] value : values) {
-				String[] row = value;
-				if (row != null) {
-					for (int j = 0; j < row.length; j++) {
-						row[j] = escapeSql(row[j]);
-					}
-				}
-				rows.add(row);
-			}
-
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-
-		return rows;
-	}
-	
 	public static <T> List<T> read(InputStream is, CSVRowMapper<T> rowMapper) {
 		Assert.notNull(rowMapper, "RowMapper is required");
 		
@@ -157,18 +100,6 @@ public class Csv {
 		}
 
 		return rows;
-	}
-
-	public static <T> List<T> read(File file, CSVRowMapper<T> rowMapper) {
-		Assert.notNull(rowMapper, "RowMapper is required");
-		try {
-			InputStream is = new BufferedInputStream(new FileInputStream(file));
-			return read(is, rowMapper);
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		
-		return new ArrayList<>();
 	}
 
 	public static <T> List<T> read(String csvContent, CSVRowMapper<T> rowMapper) {
