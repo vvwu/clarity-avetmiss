@@ -5,9 +5,10 @@ import java.util.List;
 
 public class ExportHelper {
 
-    public static String writeToString(int[] sizeRow,  List<Row> rows) {
+    public static String writeToString(Header header,  List<Row> rows) {
+        int[] sizeRow = header.sizes();
         NatFileWriter natFileWriter = new NatFileWriter();
-        natFileWriter.append(rows, sizeRow);
+        natFileWriter.append(rows, header.columnNames(), sizeRow);
         return natFileWriter.closeWithAssertion(lengthPerRowAssertion(sizeRow) * rows.size());
     }
 

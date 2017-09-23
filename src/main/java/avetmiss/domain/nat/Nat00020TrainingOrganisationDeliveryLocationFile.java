@@ -43,7 +43,7 @@ public class Nat00020TrainingOrganisationDeliveryLocationFile {
 
     public String export(String rtoIdentifier) {
         List<Row> rows = exportRaw(rtoIdentifier);
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     public List<Row> exportRaw(String rtoIdentifier) {

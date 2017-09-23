@@ -43,7 +43,7 @@ public class Nat00060SubjectFile {
                         .map(s -> exportRow(s))
                         .collect(Collectors.toList());
 
-        return ExportHelper.writeToString(header.sizes(), dataRows);
+        return ExportHelper.writeToString(header, dataRows);
     }
 
     public Row exportRow(EnrolmentSubject request) {

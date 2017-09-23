@@ -62,7 +62,7 @@ public class Nat00120EnrolmentFile {
         for (EnrolmentFileRequest request: requests) {
             rows.add(exportOneRow(request));
         }
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     private Row exportOneRow(EnrolmentFileRequest request) {

@@ -41,7 +41,7 @@ public class Nat00130QualificationCompletedFile {
 
     public String export(List<Nat00130QualificationCompletedFileRequest> requests) {
         List<Row> rows = exportRaw(requests);
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
 

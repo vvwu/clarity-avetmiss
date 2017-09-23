@@ -41,7 +41,7 @@ public class Nat00085ClientPostalDetailsFile {
             rows.add(exportOneRow(client));
         }
 
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     private Row exportOneRow(Client client) {

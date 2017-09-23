@@ -75,7 +75,7 @@ public class Nat00010TrainingOrganizationFile {
                 softwareProduct,
                 softwareVendorEmailAddress};
 
-        return ExportHelper.writeToString(header.sizes(), asList(new Row(dataRow)));
+        return ExportHelper.writeToString(header, asList(new Row(dataRow)));
     }
 
 }

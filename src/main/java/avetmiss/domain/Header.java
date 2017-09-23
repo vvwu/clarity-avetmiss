@@ -34,6 +34,15 @@ public class Header {
         }
         return sizes;
     }
+    public String[] columnNames() {
+        String[] columnNames = new String[fields.size()];
+
+        int i = 0;
+        for(Field f: fields) {
+            columnNames[i++] = f.name();
+        }
+        return columnNames;
+    }
 
     private int totalRecordLength() {
         int length = 0;

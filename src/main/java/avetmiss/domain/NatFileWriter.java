@@ -22,29 +22,29 @@ public class NatFileWriter {
 		this.buffer = new StringBuilder();
 	}
 	
-    public NatFileWriter append(String[] rowCols, int[] lengthTable) {
-		Validate.isTrue(rowCols.length == lengthTable.length);
-		for (int i = 0; i < rowCols.length; i++) {
-			append(rowCols[i], lengthTable[i]);
-		}
-		// add a line break
-		this.append("\r\n");
-		return this;
-	}
-	
-	public NatFileWriter append(List<Row> rows, int[] lengthTable) {
+	public NatFileWriter append(List<Row> rows, String[] columnNameTable, int[] lengthTable) {
 		for (Row row : rows) {
 			Validate.isTrue(row.values().length == lengthTable.length);
 		}
-		
+
 		for (Row row : rows) {
-			append(row.values(), lengthTable);
+			append(row.values(), columnNameTable, lengthTable);
 		}
 		return this;
 	}
 
     public NatFileWriter append(String value) {
 		this.buffer.append(value);
+		return this;
+	}
+
+	private NatFileWriter append(String[] rowCols, String[] columnNameTable, int[] lengthTable) {
+		Validate.isTrue(rowCols.length == lengthTable.length);
+		for (int i = 0; i < rowCols.length; i++) {
+			append(rowCols[i], columnNameTable[i], lengthTable[i]);
+		}
+		// add a line break
+		this.append("\r\n");
 		return this;
 	}
 
@@ -67,9 +67,9 @@ public class NatFileWriter {
         return str;
 	}
 
-	private NatFileWriter append(String value, int length) {
+	private NatFileWriter append(String value, String columnName, int length) {
 		String str = trim(value);
-		Validate.isTrue(str.length() <= length, format("length of str '%s' must not be greater than %s", value, length));
+		Validate.isTrue(str.length() <= length, format("length of the value '%s' in column '%s' must not be greater than %s", value, columnName, length));
 		String valueWithPadding = StringUtils.rightPad(str, length, SPACE);
 
 		this.buffer.append(valueWithPadding);

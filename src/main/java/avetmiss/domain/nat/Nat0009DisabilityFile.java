@@ -17,7 +17,7 @@ public class Nat0009DisabilityFile {
 
     public String export(List<Nat00090DisabilityFileRequest> requests) {
         List<Row> rows = exportRaw(requests);
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     List<Row> exportRaw(List<Nat00090DisabilityFileRequest> nat0009DisabilityFileRequests) {

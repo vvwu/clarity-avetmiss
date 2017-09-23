@@ -38,7 +38,7 @@ public class Nat00030CourseFile {
         // the Program (Qualification) Completed (NAT00130) file
 
         List<Row> rows = exportCoursesRaw(requests);
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     List<Row> exportCoursesRaw(Collection<NatCourse> requests) {

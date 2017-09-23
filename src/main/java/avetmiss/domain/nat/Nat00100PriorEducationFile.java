@@ -18,7 +18,7 @@ public class Nat00100PriorEducationFile {
 
     public String export(List<Nat00100PriorEducationFileRequest> requests) {
         List<Row> rows = exportRaw(requests);
-        return ExportHelper.writeToString(header.sizes(), rows);
+        return ExportHelper.writeToString(header, rows);
     }
 
     public List<Row> exportRaw(List<Nat00100PriorEducationFileRequest> nat00100PriorEducationFileRequests) {
