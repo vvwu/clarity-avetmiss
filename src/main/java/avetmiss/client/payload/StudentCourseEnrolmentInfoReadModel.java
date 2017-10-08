@@ -14,7 +14,7 @@ public class StudentCourseEnrolmentInfoReadModel {
     public String domesticFeeForServiceTypeDisplayValue;
 
     public String concessionTypeIdentifier;
-    public String anzsicCode;
+    // public String anzsicCode;
     public String trainingContractIdentifierApprenticeships;
     public String clientIdentifierApprenticeships;
 

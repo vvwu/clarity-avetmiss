@@ -116,6 +116,7 @@ public class Nat00120EnrolmentFile {
         // Result not yet available (Code 90)
         OutcomeIdentifierNational outcomeIdentifierNational = new OutcomeIdentifierNational(request.outcomeIdentifier);
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
+        String anzsicCode = null;
 
         return new Row(
                 deliveryLocationIdentifier,
@@ -145,7 +146,7 @@ public class Nat00120EnrolmentFile {
                 courseCommencementDate,
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
-                request.anzsicCode,
+                anzsicCode,
                 AvetmissUtil.toDate(Dates.toLocalDateISO(request.enrolmentDate)),
                 request.enrolmentIdentifier,
                 request.clientFeesOther,

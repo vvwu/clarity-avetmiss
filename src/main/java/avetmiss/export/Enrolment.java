@@ -112,9 +112,9 @@ public class Enrolment {
         return studentCourse.concessionTypeIdentifier();
     }
 
-    public String anzsicCode() {
-        return studentCourse.anzsicCode();
-    }
+//    public String anzsicCode() {
+//        return studentCourse.anzsicCode();
+//    }
 
     public NatVetStudentCourse studentCourse() {
         return this.studentCourse;

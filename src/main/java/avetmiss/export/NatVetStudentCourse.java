@@ -37,7 +37,7 @@ public class NatVetStudentCourse {
     private String trainingContractIdentifierApprenticeships;
     private String concessionTypeIdentifier;
     private String clientIdentifierApprenticeships;
-    private String anzsicCode;
+    // private String anzsicCode;
 
     private NatCourse natCourse;
 
@@ -71,7 +71,7 @@ public class NatVetStudentCourse {
         this.trainingContractIdentifierApprenticeships = enrolmentInfo.trainingContractIdentifierApprenticeships;
         this.concessionTypeIdentifier = enrolmentInfo.concessionTypeIdentifier;
         this.clientIdentifierApprenticeships = enrolmentInfo.clientIdentifierApprenticeships;
-        this.anzsicCode = enrolmentInfo.anzsicCode;
+        // this.anzsicCode = enrolmentInfo.anzsicCode;
 
         this.courseIdentifier = course.courseIdentifier;
         this.natCourse = new NatCourse(
@@ -169,10 +169,6 @@ public class NatVetStudentCourse {
 
     public String clientIdentifierApprenticeships() {
         return clientIdentifierApprenticeships;
-    }
-
-    public String anzsicCode() {
-        return anzsicCode;
     }
 
     public String uniqueIdentifier() {

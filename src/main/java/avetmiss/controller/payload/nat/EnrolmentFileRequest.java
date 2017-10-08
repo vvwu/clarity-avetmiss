@@ -19,7 +19,7 @@ public class EnrolmentFileRequest {
     public String unitCode;
     public String courseIdentifier;
     public String hoursAttended;
-    public String anzsicCode;
+    // public String anzsicCode;
     public String enrolmentDate;
     public String enrolmentIdentifier;
     public String clientFeesOther;

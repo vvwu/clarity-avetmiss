@@ -17,7 +17,7 @@ public class Nat00120EnrolmentFileTest {
         String export = instance.export(Arrays.asList(request()));
         assertThat(export, is("CITY      300020    BSBCMN407A  053261G   15012015230220111070140 114CONT2     Client1" +
                 "   01N          NYCP  1500G2015208290                   " +
-                "02012015NN0605122014s30234-c9999999-uBSBCMN407A                       230  ABN-Number           \r\n"));
+                "02012015NN  05122014s30234-c9999999-uBSBCMN407A                       230  ABN-Number           \r\n"));
     }
 
     private EnrolmentFileRequest request() {
@@ -39,7 +39,6 @@ public class Nat00120EnrolmentFileTest {
         request.unitCode = "BSBCMN407A";
         request.courseIdentifier = "053261G";
         request.hoursAttended = "250";
-        request.anzsicCode = "06";
         request.enrolmentDate = "2014-12-05";
         request.enrolmentIdentifier = "s30234-c9999999-uBSBCMN407A";
         request.clientFeesOther = "230";
