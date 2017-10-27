@@ -5,7 +5,7 @@ import avetmiss.client.payload.OrganizationConstantReadModel;
 import avetmiss.controller.payload.inputFile.AvetmissInputFileProcessResult;
 import avetmiss.controller.payload.inputFile.TaskListenerReadModel;
 import avetmiss.controller.payload.nat.NatFilesRequest;
-import avetmiss.domain.EnrolmentSubject;
+import avetmiss.domain.AvetmissUtil;
 import avetmiss.export.Client;
 import avetmiss.export.InputReader2;
 import avetmiss.export.NatFileConfig;
@@ -13,7 +13,6 @@ import avetmiss.export.natfile.NAT00030CourseFileReader;
 import avetmiss.export.natfile.V20140301NATFileConfig;
 import avetmiss.util.hudson.StreamTaskListener;
 import avetmiss.util.hudson.TaskListener;
-import com.google.common.collect.Lists;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.io.output.ByteArrayOutputStream;
@@ -34,10 +33,8 @@ import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Set;
 
-import static avetmiss.domain.AvetmissUtil.collectCompetencies;
-import static com.google.common.base.Preconditions.checkArgument;
+import static com.google.common.base.Preconditions.checkState;
 import static com.google.common.base.Strings.nullToEmpty;
 import static java.nio.charset.StandardCharsets.UTF_8;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
@@ -91,7 +88,6 @@ public class AvetmissExportService {
         StreamTaskListener listener = new StreamTaskListener(baos);
 
         try {
-
             OrganizationConstantReadModel organizationConstant = clarityShareServiceClient.organizationConstant();
 
             assertThatTrainingOrganisationIdentifierIsConfigured(organizationConstant);
@@ -144,17 +140,16 @@ public class AvetmissExportService {
         String TOID = organizationConstant.toid + "";
 
         NatFilesRequest natFilesRequest = new NatFilesRequest();
-        Set<EnrolmentSubject> competencies = collectCompetencies(clients);
 
         natFilesRequest.enrolmentFileRequests = natFileConfig.nat00120EnrolmentFile().enrolmentFileRequests(clients, TOID, listener);
         natFilesRequest.nat00030CourseFileRequests = new NAT00030CourseFileReader().enrolledAndQualificationCompletedCourses(clients);
-        natFilesRequest.nat00060SubjectFileRequests = Lists.newArrayList(competencies);
+        natFilesRequest.nat00060SubjectFileRequests = AvetmissUtil.collectCompetencies(clients);
         natFilesRequest.clientFileRequest = clients;
         natFilesRequest.nat00100PriorEducationFileRequests = natFileConfig.nat00100PriorEducationFile().priorEducationFileRequests(clients, listener);
         natFilesRequest.nat00010TrainingOrganizationFileRequest = organizationConstant;
         natFilesRequest.rtoIdentifier = TOID;
         natFilesRequest.nat0009DisabilityFileRequests = natFileConfig.nat000900DisabilityFile().nat0009DisabilityFileRequests(clients);
-        natFilesRequest.nat00130QualificationCompletedFileRequests = natFileConfig.nat00130QualificationCompletedFile().qualificationCompletedFile(clients, TOID);
+        natFilesRequest.nat00130QualificationCompletedFileRequests = natFileConfig.nat00130QualificationCompletedFile().qualificationCompletedFile(clients, TOID, listener);
 
         byte[] natZip = avetmissNatGenerationApplicationService.getNatFileZip(natFilesRequest);
         Files.write(outputZipFile.toPath(), natZip);
@@ -164,7 +159,7 @@ public class AvetmissExportService {
 
     private void assertThatTrainingOrganisationIdentifierIsConfigured(OrganizationConstantReadModel organizationConstant) {
         String TOID = organizationConstant.toid + "";
-        checkArgument(isNotBlank(TOID), "training.organisation.identifier is not available, please provide the identifier in clarity.properties file");
+        checkState(isNotBlank(TOID), "training.organisation.identifier is not available, please provide the identifier in clarity.properties file");
     }
 
     private void logToTaskListener(TaskListener listener, TaskListenerReadModel taskListener) {

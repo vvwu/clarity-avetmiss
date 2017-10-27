@@ -159,13 +159,13 @@ public class Enrolment {
         this.setStudentCourse(new NatVetStudentCourse(this.getStudentId(), clientFeesOther, sc, course));
     }
 
-    public Date enrolmentDateObject() {
+    public LocalDate enrolmentDateObject() {
         String fundingSourceStateIdentifier = studentCourse.fundingSourceStateIdentifier();
         if (AvetmissConstant.isFeeForServiceFundingSourceStateIdentifier(fundingSourceStateIdentifier)) {
             return null;
         }
 
-        return studentCourse.courseStart();
+        return Dates.toLocalDate(studentCourse.courseStart());
     }
 
     protected String simpleEnrolmentIdentifier() {

@@ -3,24 +3,22 @@ package avetmiss.export;
 import avetmiss.client.CoeStatus;
 import avetmiss.client.payload.EnrolmentInfoReadModel;
 import avetmiss.client.payload.StudentReadModel;
-import avetmiss.domain.AvetmissUtil;
+import avetmiss.util.Dates;
 import avetmiss.util.hudson.TaskListener;
+import com.google.common.base.Verify;
 import org.apache.commons.collections.Bag;
 import org.apache.commons.collections.bag.HashBag;
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.commons.lang.StringUtils;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static avetmiss.domain.AvetmissConstant.DISABILITY_TYPE_IDENTIFIER_NOT_SPECIFIED;
 import static avetmiss.domain.AvetmissConstant.DISABILITY_TYPE_OTHER;
 import static avetmiss.util.StringUtil.isEqualToAny;
-import static avetmiss.util.StringUtil.nullSafeTrimString;
 import static com.google.common.base.Preconditions.checkArgument;
-import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.split;
+import static org.apache.commons.lang.StringUtils.*;
 import static org.apache.commons.lang.Validate.isTrue;
 
 public class Client {
@@ -59,8 +57,13 @@ public class Client {
         this.international = student.international;
 
         this.vsn = student.vsn;
-        this.usi = student.usi;
 
+        String anUsi = student.usi;
+        if(isNotBlank(anUsi)) {
+            checkArgument(anUsi.length() == 10, "SID: %s, invalid USI: %s. USI must be 10 digits", studentID, anUsi);
+        }
+
+        this.usi = anUsi;
         this.enrolmentInfo = student.enrolmentInfo;
 
         this.sex = student.sex;
@@ -152,8 +155,8 @@ public class Client {
 		return studentID;
 	}
 
-    public Date dateOfBirthObject() {
-        return dob;
+    public LocalDate dob() {
+        return Dates.toLocalDate(dob);
     }
 
     public String sex() {
@@ -285,7 +288,7 @@ public class Client {
         }
 
 
-        checkArgument(matchEnrolment != null, "enrolment not found, clientID: %s, rowNum: %s", this.studentID, enrolmentRowNum);
+        Verify.verifyNotNull(matchEnrolment, "enrolment not found, clientID: %s, rowNum: %s", this.studentID, enrolmentRowNum);
 
         String identifier = matchEnrolment.simpleEnrolmentIdentifier();
         if(identifiers.getCount(identifier) == 1) {

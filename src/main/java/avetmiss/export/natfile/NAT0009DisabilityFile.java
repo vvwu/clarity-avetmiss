@@ -7,7 +7,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.Arrays.asList;
 import static org.apache.commons.lang.ArrayUtils.isEmpty;
+import static org.apache.commons.lang.ArrayUtils.isNotEmpty;
 
 public class NAT0009DisabilityFile {
 
@@ -18,14 +20,12 @@ public class NAT0009DisabilityFile {
                 .filter(Client::hasDisability)
                 .forEach(client -> {
                     String[] identifiers = client.disabilityTypeIdentifiers();
-                    if (!isEmpty(identifiers)) {
 
-                        Nat00090DisabilityFileRequest request
-                                = new Nat00090DisabilityFileRequest(client.studentId(), Arrays.asList(identifiers));
-
-                        requests.add(request);
+                    if (isNotEmpty(identifiers)) {
+                        requests.add(new Nat00090DisabilityFileRequest(client.studentId(), asList(identifiers)));
                     }
                 });
+
         return requests;
     }
 

@@ -3,8 +3,6 @@ package avetmiss.domain.nat;
 import avetmiss.client.payload.EnrolmentInfoReadModel;
 import avetmiss.domain.*;
 import avetmiss.export.Client;
-import avetmiss.util.DateUtil;
-import avetmiss.util.Dates;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +12,6 @@ import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.util.StringUtil.*;
-import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
 
 public class Nat00080ClientFile {
@@ -53,7 +50,8 @@ public class Nat00080ClientFile {
     public String export(List<Client> requests) {
         List<Row> rows = new ArrayList();
         for (Client client: requests) {
-            rows.add(exportOneRow(client));
+            Row row = exportOneRow(client);
+            rows.add(row);
         }
 
         return ExportHelper.writeToString(header, rows);
@@ -79,7 +77,10 @@ public class Nat00080ClientFile {
         EnrolmentInfoReadModel enrolmentInfo = client.enrolmentInfo();
 
         String priorEducationalAchievementFlag = enrolmentInfo.priorEducationalAchievementFlag; // prior educational achievement('@' means not specified)
-        checkArgument(!"@".equals(priorEducationalAchievementFlag), "SID: %s, priorEducationalAchievementFlag = '@',  This field is now <b>mandatory</b> (@ is not valid) for all government funded and domestic fee for service enrolments that commence on or after 1/1/2010.", studentID);
+
+        if ("@".equals(priorEducationalAchievementFlag)) {
+            logger.error("SID: {}, priorEducationalAchievementFlag = '@',  This field is now <b>mandatory</b> (@ is not valid) for all government funded and domestic fee for service enrolments that commence on or after 1/1/2010.", studentID);
+        }
 
         String labourForceStatusIdentifier = enrolmentInfo.labourForceStatusIdentifier;
         String usi = requiredUsi(studentID, client.usi());
@@ -90,7 +91,7 @@ public class Nat00080ClientFile {
                 enrolmentInfo.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
                 enrolmentInfo.yearHighestSchoolLevelCompleted,
                 client.sex(),
-                dateOfBirth(Dates.toLocalDateISO(DateUtil.toISO(client.dateOfBirthObject()))),
+                dateOfBirth(client.dob()),
                 StudentPostCode.postCode(studentID, client.getPostCode()),
                 enrolmentInfo.indigenousStatusIdentifier,
                 enrolmentInfo.mainLanguageSpokenAtHomeIdentifier,
@@ -136,7 +137,6 @@ public class Nat00080ClientFile {
             return null;
         }
 
-        checkArgument(usi.length() == 10, "SID: %s, invalid USI: %s. USI must be 10 digits", studentID, usi);
         return usi;
     }
 

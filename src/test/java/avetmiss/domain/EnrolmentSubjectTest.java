@@ -16,7 +16,7 @@ public class EnrolmentSubjectTest {
         thrown.expectMessage("fieldOfEducationIdentifier can not be null, subjectIdentifier: BSBCMN407A");
 
         new EnrolmentSubject(
-                "BSBCMN407A", null, 100);
+                "BSBCMN407A", "Cooking for Children", null,100);
 
     }
 }

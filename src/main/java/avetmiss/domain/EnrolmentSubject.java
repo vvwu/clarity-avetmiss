@@ -5,21 +5,32 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import static com.google.common.base.Preconditions.checkArgument;
 
 public class EnrolmentSubject {
+    // unit.code()
     private String subjectIdentifier;
+
+    // unit.name();
+    private String subjectName;
+
+    // unit.fieldOfEducationIdentifier()
     private String fieldOfEducationIdentifier;
     private int nominalHours;
 
-    public EnrolmentSubject(String subjectIdentifier, String fieldOfEducationIdentifier, int nominalHours) {
+    public EnrolmentSubject(String subjectIdentifier, String subjectName, String fieldOfEducationIdentifier, int nominalHours) {
         checkArgument(subjectIdentifier != null, "subjectIdentifier can not be null");
         checkArgument(fieldOfEducationIdentifier != null, "fieldOfEducationIdentifier can not be null, subjectIdentifier: %s", subjectIdentifier);
 
         this.subjectIdentifier = subjectIdentifier;
+        this.subjectName = subjectName;
         this.fieldOfEducationIdentifier = fieldOfEducationIdentifier;
         this.nominalHours = nominalHours;
     }
 
     public String subjectIdentifier() {
         return subjectIdentifier;
+    }
+
+    public String subjectName() {
+        return subjectName;
     }
 
     public String fieldOfEducationIdentifier() {

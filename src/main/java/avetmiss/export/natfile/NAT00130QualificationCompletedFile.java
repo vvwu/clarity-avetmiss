@@ -3,6 +3,7 @@ package avetmiss.export.natfile;
 import avetmiss.controller.payload.nat.Nat00130QualificationCompletedFileRequest;
 import avetmiss.export.Client;
 import avetmiss.export.NatVetStudentCourse;
+import avetmiss.util.hudson.TaskListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,16 +29,16 @@ public class NAT00130QualificationCompletedFile {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    public List<Nat00130QualificationCompletedFileRequest> qualificationCompletedFile(List<Client> clients, String TOID) {
+    public List<Nat00130QualificationCompletedFileRequest> qualificationCompletedFile(List<Client> clients, String TOID, TaskListener listener) {
         List<Nat00130QualificationCompletedFileRequest> requests =
                 clients.stream()
-                        .flatMap(client -> completedFileRequestsFromOneClient(client, TOID).stream())
+                        .flatMap(client -> completedFileRequestsFromOneClient(client, TOID, listener).stream())
                         .collect(Collectors.toList());
 
         return requests;
     }
 
-    private List<Nat00130QualificationCompletedFileRequest> completedFileRequestsFromOneClient(Client client, String TOID) {
+    private List<Nat00130QualificationCompletedFileRequest> completedFileRequestsFromOneClient(Client client, String TOID, TaskListener listener) {
         List<Nat00130QualificationCompletedFileRequest> requests = new ArrayList<>();
 
         List<NatVetStudentCourse> completions = client.qualificationCompletedCourses();
@@ -46,15 +47,18 @@ public class NAT00130QualificationCompletedFile {
             log.info("Client sid={} has {} completions: {}", client.studentId(), completions.size(), completions);
         }
 
-        for(NatVetStudentCourse studentCourse: completions) {
+        for(NatVetStudentCourse completion: completions) {
             Integer totalSupervisedHours =
-                    client.totalSupervisedHours(studentCourse.getCourseIdentifier());
+                    client.totalSupervisedHours(completion.getCourseIdentifier());
 
             try {
-                requests.add(
-                        toQualificationCompletedFileRequest(client.studentId(), totalSupervisedHours, studentCourse, TOID));
+                Nat00130QualificationCompletedFileRequest request =
+                        toQualificationCompletedFileRequest(client.studentId(), totalSupervisedHours, completion, TOID);
+
+                requests.add(request);
             } catch (Exception e) {
-                throw new IllegalArgumentException(format("NAT00130QualificationCompletedFile failed at studentID: %s, studentCourseIdentifier: %s", client.studentId(), studentCourse.getCourseIdentifier()), e);
+                String error = format("NAT00130QualificationCompletedFile failed at studentID: %s, studentCourseIdentifier: %s, error: %s", client.studentId(), completion.getCourseIdentifier(), e.getMessage());
+                listener.error(error);
             }
         }
 
@@ -62,11 +66,11 @@ public class NAT00130QualificationCompletedFile {
     }
 
     private Nat00130QualificationCompletedFileRequest toQualificationCompletedFileRequest(
-            String studentID, Integer totalSupervisedHours, NatVetStudentCourse natStudentCourse, String TOID) {
+            String studentID, Integer totalSupervisedHours, NatVetStudentCourse natStudentCourse, String aRtoIdentifier) {
 
         Nat00130QualificationCompletedFileRequest request = new Nat00130QualificationCompletedFileRequest();
 
-        request.rtoIdentifier = TOID;
+        request.rtoIdentifier = aRtoIdentifier;
         request.courseIdentifier = natStudentCourse.getCourseIdentifier();
         request.studentID = studentID;
         request.courseStartDate = toISO(natStudentCourse.courseStart());

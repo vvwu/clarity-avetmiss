@@ -25,7 +25,6 @@ public class AvetmissInputFileApplicationService {
     private UnitRepository unitRepository;
 
     public AvetmissInputFileProcessResult readAndValidate(String csvContent) {
-
         List<String> infoList = new ArrayList<>();
         List<String> warnList = new ArrayList<>();
         List<String> errorList = new ArrayList<>();

@@ -1,5 +1,6 @@
 package avetmiss.domain.nat;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 import avetmiss.controller.payload.nat.EnrolmentFileRequest;
@@ -39,7 +40,7 @@ public class Nat00120EnrolmentFileTest {
         request.unitCode = "BSBCMN407A";
         request.courseIdentifier = "053261G";
         request.hoursAttended = "250";
-        request.enrolmentDate = "2014-12-05";
+        request.enrolmentDate = LocalDate.of(2014, 12, 5);;
         request.enrolmentIdentifier = "s30234-c9999999-uBSBCMN407A";
         request.clientFeesOther = "230";
         request.deliveryProviderABN = "ABN-Number";

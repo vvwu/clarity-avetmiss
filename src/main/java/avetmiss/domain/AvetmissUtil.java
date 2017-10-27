@@ -6,10 +6,7 @@ import avetmiss.util.LabelValue;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.apache.commons.lang.StringUtils.leftPad;
@@ -53,12 +50,13 @@ public class AvetmissUtil {
         return formattedRtoIdentifier(String.valueOf(TOID));
     }
 
-	public static Set<EnrolmentSubject> collectCompetencies(List<Client> clients) {
+	public static List<EnrolmentSubject> collectCompetencies(List<Client> clients) {
 		Set<EnrolmentSubject> competencies = new LinkedHashSet<>();
 		for(Client client: clients) {
 			List<EnrolmentSubject> subjects = client.enrolments().stream().map(Enrolment::getUnit).collect(Collectors.toList());
 			competencies.addAll(subjects);
 		}
-		return competencies;
+
+		return new ArrayList<>(competencies);
 	}
 }

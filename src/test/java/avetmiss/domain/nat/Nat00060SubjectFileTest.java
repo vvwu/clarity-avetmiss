@@ -3,7 +3,6 @@ package avetmiss.domain.nat;
 import java.util.Arrays;
 import java.util.List;
 
-import avetmiss.controller.payload.nat.Nat00060SubjectFileRequest;
 import avetmiss.domain.EnrolmentSubject;
 import avetmiss.domain.Unit;
 import avetmiss.domain.UnitRepository;
@@ -17,7 +16,7 @@ import static org.mockito.Mockito.when;
 public class Nat00060SubjectFileTest {
     private UnitRepository unitRepository = mock(UnitRepository.class);
 
-    private Nat00060SubjectFile instance = new Nat00060SubjectFile(unitRepository);
+    private Nat00060SubjectFile instance = new Nat00060SubjectFile();
 
     @Test
     public void testExport() throws Exception {
@@ -33,7 +32,7 @@ public class Nat00060SubjectFileTest {
     }
 
     public EnrolmentSubject enrolmentSubject() {
-        return new EnrolmentSubject("BSBCMN407A", "1201", 100);
+        return new EnrolmentSubject("BSBCMN407A", "Cooking for Children","1201", 100);
     }
 
 }

@@ -11,12 +11,6 @@ import static org.apache.commons.lang.StringUtils.leftPad;
 
 public class Nat00060SubjectFile {
 
-    private UnitRepository unitRepository;
-
-    public Nat00060SubjectFile(UnitRepository unitRepository) {
-        this.unitRepository = unitRepository;
-    }
-
     public enum SubjectFlag {
         SUBJECT_IDENTIFIER("M"),
         UNIT_OF_COMPETENCY_IDENTIFIER("C");
@@ -50,14 +44,11 @@ public class Nat00060SubjectFile {
         // All alphabetic characters in the Module/Unit of Competency Identifier field must be in upper case
         // The name must be in upper case.
 
-        Unit unit = unitRepository.findByCode(request.subjectIdentifier());
-        checkArgument(unit != null, "unit not found, identifier: {}", request.subjectIdentifier());
-
         return new Row(
                 SubjectFlag.UNIT_OF_COMPETENCY_IDENTIFIER.flag(),
-                unit.code().toUpperCase(),
-                unit.name().toUpperCase(),
-                unit.fieldOfEducationIdentifier(),
+                request.subjectIdentifier().toUpperCase(),
+                request.subjectName().toUpperCase(),
+                request.fieldOfEducationIdentifier(),
                 VetFlag.VOCATIONAL.flag,
                 nominalHours(request.norminalHours()));
     }

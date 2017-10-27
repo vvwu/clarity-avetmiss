@@ -1,5 +1,7 @@
 package avetmiss.controller.payload.nat;
 
+import java.time.LocalDate;
+
 public class EnrolmentFileRequest {
     public String rtoIdentifier;
 
@@ -20,7 +22,7 @@ public class EnrolmentFileRequest {
     public String courseIdentifier;
     public String hoursAttended;
     // public String anzsicCode;
-    public String enrolmentDate;
+    public LocalDate enrolmentDate;
     public String enrolmentIdentifier;
     public String clientFeesOther;
     public String deliveryProviderABN;

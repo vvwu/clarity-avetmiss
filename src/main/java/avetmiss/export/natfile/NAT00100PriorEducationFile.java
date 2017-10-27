@@ -18,19 +18,19 @@ public class NAT00100PriorEducationFile {
         List<Nat00100PriorEducationFileRequest> requests = new ArrayList<>();
 
         for (Client client: clients) {
+            String studentID = client.studentId();
             String priorEducationalAchievementFlag = client.enrolmentInfo().priorEducationalAchievementFlag;
-            ensurePriorEducationAchievementFlagIsProvided(out, client.studentId(), priorEducationalAchievementFlag);
+
+            ensurePriorEducationAchievementFlagIsProvided(out, studentID, priorEducationalAchievementFlag);
 
             if("Y".equals(priorEducationalAchievementFlag)) {
                 // this client has prior educational achievement
                 String priorEducationalAchievement =
                         priorEducationalAchievement(
-                                out,
-                                client.enrolmentInfo().priorEducationalAchievementIdentifier,
-                                client.studentId());
+                                out, client.enrolmentInfo().priorEducationalAchievementIdentifier, studentID);
 
                 requests.add(new Nat00100PriorEducationFileRequest(
-                        client.studentId(),
+                        studentID,
                         priorEducationalAchievement,
                         priorEducationAchievementRecognitionIdentifier()));
             }
@@ -39,8 +39,7 @@ public class NAT00100PriorEducationFile {
         return requests;
     }
 
-    private String priorEducationalAchievement(TaskListener out,
-                                               String priorEducationalAchievement, String SID) {
+    private String priorEducationalAchievement(TaskListener out, String priorEducationalAchievement, String SID) {
         if(isBlank(priorEducationalAchievement)) {
             out.error("Student sid=%s priorEducationalAchievementFlag=Y but the priorEducationalAchievement detail is not provided", SID);
             priorEducationalAchievement = AvetmissConstant.PRIOR_EDUCATIONAL_ACHIEVEMENT_IDENTIFIER_MISCELLANEOUSEDUCATION;
@@ -50,11 +49,7 @@ public class NAT00100PriorEducationFile {
 
     private final static String NOT_SPECIFIED = "@";
 
-    private void ensurePriorEducationAchievementFlagIsProvided(
-            TaskListener out,
-            String studentID,
-            String priorEducationalAchievementFlag) {
-
+    private void ensurePriorEducationAchievementFlagIsProvided(TaskListener out, String studentID, String priorEducationalAchievementFlag) {
         if(NOT_SPECIFIED.equals(priorEducationalAchievementFlag)) {
             out.error("studentID: %s, priorEducationalAchievementFlag = '@',  This field is now <b>mandatory</b> (@ is not valid) for all government funded and domestic fee for service enrolments that commence on or after 1/1/2010.", studentID);
         }

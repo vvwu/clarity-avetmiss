@@ -14,7 +14,7 @@ import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
-import static com.google.common.base.Preconditions.checkArgument;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 public class Nat00120EnrolmentFile {
@@ -141,13 +141,13 @@ public class Nat00120EnrolmentFile {
                 request.concessionTypeIdentifier,
                 purchasingContractIdentifier(courseStart, request.rtoIdentifier),
                 purchasingContractScheduleIdentifier,
-                hoursAttended(request, studentID, outcomeIdentifierNational),
+                hoursAttended(request.hoursAttended),
                 associatedCourseIdentifier(),
                 courseCommencementDate,
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
                 anzsicCode,
-                AvetmissUtil.toDate(Dates.toLocalDateISO(request.enrolmentDate)),
+                AvetmissUtil.toDate(request.enrolmentDate),
                 request.enrolmentIdentifier,
                 request.clientFeesOther,
                 request.deliveryProviderABN,
@@ -163,18 +163,12 @@ public class Nat00120EnrolmentFile {
         }
     }
 
-    private String hoursAttended(
-            EnrolmentFileRequest enrolment,
-            String sid,
-            OutcomeIdentifierNational outcomeIdentifierNational) {
-
-        if (outcomeIdentifierNational.isWithdrawn()) {
-            checkArgument(StringUtils.hasLength(enrolment.hoursAttended), "SID=%s HoursAttended is missing. If outcomeIdentifierNational is 40 (withdraw), HoursAttended must be reported", sid);
-            return leftPad(enrolment.hoursAttended, 4, "0");
-        } else if (StringUtils.hasLength(enrolment.hoursAttended)) {
-            logger.error("SID={} HoursAttended {} is ignored. Only applicable if outcomeIdentifierNational is 40 (withdraw)", sid, enrolment.hoursAttended);
+    private String hoursAttended(String aHoursAttended) {
+        if(isBlank(aHoursAttended)) {
+            return "";
         }
-        return "";
+
+        return leftPad(aHoursAttended, 4, "0");
     }
 
     private String associatedCourseIdentifier() {
