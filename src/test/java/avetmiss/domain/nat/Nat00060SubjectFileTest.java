@@ -14,17 +14,10 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class Nat00060SubjectFileTest {
-    private UnitRepository unitRepository = mock(UnitRepository.class);
-
     private Nat00060SubjectFile instance = new Nat00060SubjectFile();
 
     @Test
     public void testExport() throws Exception {
-        Unit unit = new Unit("BSBCMN407A", "Coordinate business resources", "080301");
-
-        when(unitRepository.findByCode("BSBCMN407A")).thenReturn(unit);
-
-
         List<EnrolmentSubject> units = Arrays.asList(enrolmentSubject());
         String export = instance.export(units);
 
@@ -32,7 +25,7 @@ public class Nat00060SubjectFileTest {
     }
 
     public EnrolmentSubject enrolmentSubject() {
-        return new EnrolmentSubject("BSBCMN407A", "Cooking for Children","1201", 100);
+        return new EnrolmentSubject("BSBCMN407A", "Coordinate business resources","080301", 100);
     }
 
 }

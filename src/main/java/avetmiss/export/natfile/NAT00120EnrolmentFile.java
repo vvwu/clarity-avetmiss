@@ -95,6 +95,7 @@ public class NAT00120EnrolmentFile {
         request.unitCode = enrolment.getUnitCode();
         request.courseIdentifier = enrolment.courseEnrolled().courseIdentifier();
         request.hoursAttended = hoursAttended(client.studentId(), enrolment.hoursAttended(), enrolment.getOutcomeIdentifier());
+        request.associatedCourseIdentifier = enrolment.associatedCourseIdentifier();
         // request.anzsicCode = enrolment.anzsicCode();
         request.enrolmentDate = enrolment.enrolmentDateObject();
         request.enrolmentIdentifier = client.enrolmentIdentifier(enrolment.getRowNum());

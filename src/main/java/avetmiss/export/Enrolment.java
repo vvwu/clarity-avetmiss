@@ -27,10 +27,6 @@ public class Enrolment {
     private EnrolmentInput enrolmentInput;
     private NatVetStudentCourse studentCourse;
 
-    public EnrolmentInput enrolmentInput() {
-        return enrolmentInput;
-    }
-
     public void setEnrolmentInput(EnrolmentInput enrolmentInput) {
         this.enrolmentInput = enrolmentInput;
     }
@@ -106,6 +102,10 @@ public class Enrolment {
 
     public String clientIdentifierApprenticeships() {
         return studentCourse.clientIdentifierApprenticeships();
+    }
+
+    public String associatedCourseIdentifier() {
+        return studentCourse.getAssociatedCourseIdentifier();
     }
 
     public String concessionTypeIdentifier() {

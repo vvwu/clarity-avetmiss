@@ -21,6 +21,7 @@ public class EnrolmentFileRequest {
     public String unitCode;
     public String courseIdentifier;
     public String hoursAttended;
+    public String associatedCourseIdentifier;
     // public String anzsicCode;
     public LocalDate enrolmentDate;
     public String enrolmentIdentifier;

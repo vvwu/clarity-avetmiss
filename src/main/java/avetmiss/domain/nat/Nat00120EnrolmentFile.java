@@ -14,6 +14,7 @@ import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
+import static org.apache.commons.lang.StringUtils.*;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
@@ -142,7 +143,7 @@ public class Nat00120EnrolmentFile {
                 purchasingContractIdentifier(courseStart, request.rtoIdentifier),
                 purchasingContractScheduleIdentifier,
                 hoursAttended(request.hoursAttended),
-                associatedCourseIdentifier(),
+                upperCase(request.associatedCourseIdentifier),
                 courseCommencementDate,
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
