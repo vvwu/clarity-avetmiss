@@ -1,5 +1,6 @@
 package avetmiss.domain;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import static com.google.common.base.Preconditions.checkArgument;
@@ -17,6 +18,7 @@ public class EnrolmentInput {
     private Integer totalSupervisedHours;
     private OutcomeIdentifierNational outcomeIdentifier;
     private String tuitionFee;
+    private int clientOtherFee;
 
     // associations
     private EnrolmentSubject unit;
@@ -109,6 +111,14 @@ public class EnrolmentInput {
 
     public void setTuitionFee(String tuitionFee) {
         this.tuitionFee = tuitionFee;
+    }
+
+    public int clientOtherFee() {
+        return clientOtherFee;
+    }
+
+    public void setClientOtherFee(int clientOtherFee) {
+        this.clientOtherFee = clientOtherFee;
     }
 
     public Integer hoursAttended() {

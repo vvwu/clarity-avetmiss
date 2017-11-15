@@ -6,12 +6,9 @@ import avetmiss.domain.AvetmissConstant;
 import avetmiss.domain.EnrolmentInput;
 import avetmiss.domain.EnrolmentSubject;
 import avetmiss.domain.OutcomeIdentifierNational;
-import avetmiss.export.natfile.vat00120.ClientFeesOther;
 import avetmiss.util.Dates;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.text.SimpleDateFormat;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
@@ -88,8 +85,8 @@ public class Enrolment {
         return (startYear < currentYear) ? "4" : "3";
     }
 
-    public String clientFeesOther() {
-        return studentCourse.clientFeesOther();
+    public int clientFeesOther() {
+        return enrolmentInput.clientOtherFee();
     }
 
     public String fundingSourceStateIdentifier() {
@@ -154,9 +151,7 @@ public class Enrolment {
         boolean isHigherEducation = "H".equalsIgnoreCase(course.vetFlag);
         checkArgument(!isHigherEducation, "the enrolled course: '%s' is a Higher Education course, only VET course is allow in Avetmiss report");
 
-        String clientFeesOther = ClientFeesOther.clientFeesOther(sc);
-
-        this.setStudentCourse(new NatVetStudentCourse(this.getStudentId(), clientFeesOther, sc, course));
+        this.setStudentCourse(new NatVetStudentCourse(this.getStudentId(), sc, course));
     }
 
     public LocalDate enrolmentDateObject() {

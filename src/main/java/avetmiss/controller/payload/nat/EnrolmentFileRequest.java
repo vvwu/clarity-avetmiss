@@ -25,7 +25,7 @@ public class EnrolmentFileRequest {
     // public String anzsicCode;
     public LocalDate enrolmentDate;
     public String enrolmentIdentifier;
-    public String clientFeesOther;
+    public int clientFeesOther;
     public String deliveryProviderABN;
     public String fundingEligibilityKey;
 }

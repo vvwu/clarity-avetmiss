@@ -32,6 +32,7 @@ public class InputRowMapperTest {
     private String endDate = "13/08/2013";
     private String outcomeIdentifier = "90";
     private String tuitionFee = "31";
+    private String clientFeeOthers = "280";
 
     private String[] inputRow = {
             studentId + "",
@@ -43,7 +44,8 @@ public class InputRowMapperTest {
             startDate,
             endDate,
             outcomeIdentifier,
-            tuitionFee};
+            tuitionFee,
+            clientFeeOthers};
 
     private InputRowMapper inputRowMapper;
     private UnitRepository unitRepository;
@@ -166,7 +168,8 @@ public class InputRowMapperTest {
                 aStartDate,
                 anEndDate,
                 outcomeIdentifier,
-                tuitionFee};
+                tuitionFee,
+                clientFeeOthers};
 
         return inputRow;
     }

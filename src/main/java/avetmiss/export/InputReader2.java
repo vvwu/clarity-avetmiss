@@ -6,7 +6,6 @@ import avetmiss.client.payload.StudentCourseReadModel;
 import avetmiss.client.payload.StudentReadModel;
 import avetmiss.controller.payload.inputFile.ClientReadModel;
 import avetmiss.domain.EnrolmentInput;
-import avetmiss.export.natfile.vat00120.ClientFeesOther;
 import avetmiss.util.hudson.TaskListener;
 
 import java.util.ArrayList;
@@ -104,9 +103,7 @@ public class InputReader2 {
 
             boolean isVocational = "Y".equalsIgnoreCase(course.vetFlag);
             if (isVocational) {
-                String clientFeesOther = ClientFeesOther.clientFeesOther(sc);
-
-                natStudentCourses.add(new NatVetStudentCourse(studentID, clientFeesOther, sc, course));
+                natStudentCourses.add(new NatVetStudentCourse(studentID, sc, course));
             }
         }
 

@@ -8,12 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
+import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang.StringUtils.*;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.leftPad;
@@ -150,9 +153,15 @@ public class Nat00120EnrolmentFile {
                 anzsicCode,
                 AvetmissUtil.toDate(request.enrolmentDate),
                 request.enrolmentIdentifier,
-                request.clientFeesOther,
+                to5DigitsDisplayString(request.clientFeesOther),
                 request.deliveryProviderABN,
                 request.fundingEligibilityKey);
+    }
+
+
+    private static String to5DigitsDisplayString(int fee) {
+        checkArgument(fee < 100000, "fee must be less than 100,000");
+        return org.apache.commons.lang.StringUtils.leftPad(fee + "", 5, "0");
     }
 
     private String fundingSourceNationalIdentifier(String sid, String fundingSourceStateIdentifier) {

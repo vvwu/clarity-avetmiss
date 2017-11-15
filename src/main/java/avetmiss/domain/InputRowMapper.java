@@ -2,6 +2,7 @@ package avetmiss.domain;
 
 import avetmiss.util.CSVRowMapper;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -28,7 +29,8 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         START_DATE("Start Date", COLUMN_G, "column G"),
         END_DATE("End Date", COLUMN_H, "column H"),
         OUTCOME_IDENTIFIER("Outcome Identifier", COLUMN_I, "column I"),
-        TUITION_FEE("Tuition Fee", COLUMN_J, "column J");
+        TUITION_FEE("Tuition Fee", COLUMN_J, "column J"),
+        CLIENT_OTHER_FEE("Client Other Fee", COLUMN_K, "column K");
 
         private String title;
         private int index;
@@ -89,6 +91,7 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         ensureColumnGContainsValidDate(cols);
         ensureValidEndDateProvidedInColumnH(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
+        ensureColumnKClientOtherFeeContainsValidInteger(cols);
 
         EnrolmentInput enrolment = new EnrolmentInput();
         enrolment.setRowNum(rowNum);
@@ -106,6 +109,7 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         String endDateStr = cols[column.END_DATE.index];
         String outcomeIdentifier = cols[column.OUTCOME_IDENTIFIER.index];
         String tuitionFee = cols[column.TUITION_FEE.index];
+        String clientOtherFee = cols[column.CLIENT_OTHER_FEE.index];
 
         if(hasLength(totalSupervisedHourStr)) {
             enrolment.setTotalSupervisedHours(Integer.parseInt(totalSupervisedHourStr));
@@ -121,6 +125,7 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         enrolment.setEndDate(toLocalDate(endDateStr));
         enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(outcomeIdentifier));
         enrolment.setTuitionFee(tuitionFee);
+        enrolment.setClientOtherFee(Integer.parseInt(clientOtherFee));
 
         return enrolment;
     }
@@ -161,6 +166,13 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
 
         String sid = cols[sidColumn.index];
         checkArgument(isInteger(sid), "Must provide a valid Student ID in [%s]", sidColumn.index);
+    }
+
+    private void ensureColumnKClientOtherFeeContainsValidInteger(String[] cols) {
+        column col = column.CLIENT_OTHER_FEE;
+
+        String clientOtherFee = cols[col.index];
+        checkArgument(isInteger(clientOtherFee), "Must provide a valid integer in column [%s] 'ClientOtherFee'", col.index);
     }
 
     private void ensureColumnDContainsNominalHourStr(String[] cols) {

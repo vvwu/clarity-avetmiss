@@ -18,8 +18,6 @@ public class NatVetStudentCourse {
 
     private Logger log = LoggerFactory.getLogger(this.getClass());
 
-    private String clientFeesOther;
-
     private String uniqueIdentifier;
     private String status;
     private boolean qualificationIssued;
@@ -41,9 +39,8 @@ public class NatVetStudentCourse {
 
     private NatCourse natCourse;
 
-    public NatVetStudentCourse(int studentID, String clientFeesOther, StudentCourseReadModel studentCourse, CourseReadModel course) {
+    public NatVetStudentCourse(int studentID, StudentCourseReadModel studentCourse, CourseReadModel course) {
         checkArgument(studentCourse != null);
-        this.clientFeesOther = clientFeesOther;
 
         if(studentCourse.startDate == null) {
             log.error("student: {}, course StartDate must not be empty", studentID);
@@ -145,10 +142,6 @@ public class NatVetStudentCourse {
 
     public Date supervisedTeachingActivityCompletionDate() {
         return supervisedTeachingActivityCompletionDate;
-    }
-
-    public String clientFeesOther() {
-        return clientFeesOther;
     }
 
     public String fundingSourceStateIdentifier() {
