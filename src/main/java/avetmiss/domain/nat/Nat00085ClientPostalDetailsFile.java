@@ -16,7 +16,7 @@ import static avetmiss.domain.Header.Header;
 
 public class Nat00085ClientPostalDetailsFile {
 
-    private final static Header header = Header(477,
+    private final static Header header = Header(557,
             of("Client (Student) Identifier", 10),
             of("Client Title", 4),
             of("Client First Given Name", 40),
@@ -26,13 +26,14 @@ public class Nat00085ClientPostalDetailsFile {
             of("Address Street Number", 15),
             of("Address Street Name", 70),
             of("Address Postal Delivery Box", 22),
-            of("Address Postal - Suburb, Locality or Town", 50),
+            of("Address - Suburb, Locality or Town", 50),
             of("Postcode", 4),
             of("State Identifier", 2),
             of("Telephone Number - Home", 20),
             of("Telephone Number - Work", 20),
             of("Telephone Number - Mobile", 20),
-            of("E-mail Address", 80));
+            of("E-mail Address", 80),
+            of("E-mail Address alternative", 80));
 
 
     public String export(List<Client> requests) {
@@ -50,6 +51,7 @@ public class Nat00085ClientPostalDetailsFile {
         String addressPostalDeliveryBox = null;
         String telephoneNumberWork = null;
         EnrolmentInfoReadModel enrolmentInfo = client.enrolmentInfo();
+        String emailAddressAlternative = null;
 
         return new Row(
                 studentID,
@@ -67,6 +69,7 @@ public class Nat00085ClientPostalDetailsFile {
                 client.contactPhoneNo(),
                 telephoneNumberWork,
                 client.contactMobile(),
-                client.contactEmailAddress());
+                client.contactEmailAddress(),
+                emailAddressAlternative);
     }
 }

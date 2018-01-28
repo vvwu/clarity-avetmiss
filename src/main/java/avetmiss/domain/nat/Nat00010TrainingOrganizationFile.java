@@ -43,7 +43,7 @@ public class Nat00010TrainingOrganizationFile {
             of("Training Organisation Type Identifier", 2),
             of("Address First Line", 50),
             of("Address Second Line", 50),
-            of("Address Location - Suburb or Town or Locality", 50),
+            of("Address Suburb, Locality", 50),
             of("Postcode", 4),
             of("State Identifier", 2),
             of("Contact Name", 60),

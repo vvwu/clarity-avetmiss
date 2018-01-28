@@ -17,29 +17,28 @@ import static java.lang.String.format;
 public class Nat00080ClientFile {
     private Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final static Header header = Header.Header(362,
+    private final static Header header = Header.Header(358,
             of("Client (Student) Identifier", 10),
             of("Name for Encryption", 60),
             of("Highest School Level Completed", 2),
-            of("Year Highest School Level Completed", 4),
-            of("Sex", 1),
+            of("Gender", 1),
             of("Date of Birth", 8),
             of("Postcode", 4),
             of("Indigenous Status Identifier", 1),
-            of("Main Language Other Than English Spoken at Home Identifier", 4),
+            of("Language Identifier", 4),
             of("Labour Force Status Identifier", 2),
             of("Country Identifier", 4),
             of("Disability Flag", 1),
             of("Prior Educational Achievement Flag", 1),
             of("At School Flag", 1),
-            of("Proficiency in Spoken English Identifier", 1),
-            of("Address Location - Suburb, Locality or Town", 50),
+            of("Address - Suburb, Locality or Town", 50),
             of("Unique Student Identifier", 10),
             of("State Identifier", 2),
             of("Address Building/Property Name", 50),
             of("Address Flat/Unit Details", 30),
             of("Address Street Number", 15),
             of("Address Street Name", 70),
+            of("Survey contact status", 1),
             of("Statistical Area Level 1 Identifier", 11),
             of("Statistical Area Level 2 Identifier", 9),
             of("Victorian Student Number (VSN)", 9),
@@ -85,11 +84,22 @@ public class Nat00080ClientFile {
         String labourForceStatusIdentifier = enrolmentInfo.labourForceStatusIdentifier;
         String usi = requiredUsi(studentID, client.usi());
 
+        // Survey contact status identifies reasons to exclude clients from the Student Outcomes Survey and other communications.
+
+        //Value
+        //A Available for survey use
+        //C Correctional facility (address or enrolment)
+        //D Deceased student
+        //E Excluded
+        //I Invalid address/Itinerant student (very low likelihood of response)
+        //M Minor – under age of 15 (not to be surveyed)
+        //O Overseas (address or enrolment)
+        String surveyContactStatus = "A";
+
         return new Row(
                 studentID,
                 nameForEncryption(client.lastName(), client.firstName()),
                 enrolmentInfo.highestSchoolLevelCompletedIdentifier,  // FIXME: we assume Highest School Level Completed at year 12 (Completed Year 12)
-                enrolmentInfo.yearHighestSchoolLevelCompleted,
                 client.sex(),
                 dateOfBirth(client.dob()),
                 StudentPostCode.postCode(studentID, client.getPostCode()),
@@ -100,7 +110,6 @@ public class Nat00080ClientFile {
                 enrolmentInfo.disabilityFlag,
                 priorEducationalAchievementFlag,
                 enrolmentInfo.atSchoolFlag,  // At School Flag ('@' means not specified)
-                proficiencyInSpokenEnglishIdentifier(enrolmentInfo),
                 client.suburb(),
                 usi,
                 enrolmentInfo.stateIdentifier,
@@ -108,6 +117,7 @@ public class Nat00080ClientFile {
                 client.address().addressFlatOrUnitDetails(),
                 client.address().addressStreetNumber(),
                 client.address().addressStreetName(),
+                surveyContactStatus,
                 statisticalAreaLevel1IdentifierOf(),
                 statisticalAreaLevel2IdentifierOf(),
                 client.vsn(),

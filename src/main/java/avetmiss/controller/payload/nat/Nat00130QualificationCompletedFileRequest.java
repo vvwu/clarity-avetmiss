@@ -7,7 +7,8 @@ public class Nat00130QualificationCompletedFileRequest {
     public String courseStartDate;
     public boolean isQualificationIssued;
     public boolean isCourseCompleted;
-    public int yearCourseEnd;
+    public String programStatusIdentifier;
+    public String dateCourseEnd;
     public String supervisedTeachingActivityCompletionDate;
     public Integer supervisedHours;
 }

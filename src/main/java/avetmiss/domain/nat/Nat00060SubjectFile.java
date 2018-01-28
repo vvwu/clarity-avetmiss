@@ -6,25 +6,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static avetmiss.domain.Field.of;
-import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang.StringUtils.leftPad;
 
 public class Nat00060SubjectFile {
 
-    public enum SubjectFlag {
-        SUBJECT_IDENTIFIER("M"),
-        UNIT_OF_COMPETENCY_IDENTIFIER("C");
-
-        private String flag;
-        SubjectFlag(String flag) {this.flag = flag;}
-
-        public String flag() {
-            return flag;
-        }
-    }
-
-    private final static Header header = Header.Header(124,
-            of("Subject (Module/Unit of Competency) Flag", 1),
+    private final static Header header = Header.Header(123,
             of("Subject Identifier (Module/Unit of Competency Identifier)", 12),
             of("Subject (Module/Unit of Competency) Name", 100),
             of("Subject (Module/Unit of Competency) Field of Education Identifier", 6),
@@ -45,7 +31,6 @@ public class Nat00060SubjectFile {
         // The name must be in upper case.
 
         return new Row(
-                SubjectFlag.UNIT_OF_COMPETENCY_IDENTIFIER.flag(),
                 request.subjectIdentifier().toUpperCase(),
                 request.subjectName().toUpperCase(),
                 request.fieldOfEducationIdentifier(),

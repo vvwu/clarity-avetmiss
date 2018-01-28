@@ -2,7 +2,6 @@ package avetmiss.domain;
 
 import avetmiss.util.CSVRowMapper;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -14,7 +13,6 @@ import static avetmiss.util.StringUtil.isBlank;
 import static avetmiss.util.StringUtil.isInteger;
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Preconditions.checkNotNull;
-import static java.util.Arrays.asList;
 import static org.springframework.util.StringUtils.hasLength;
 
 public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
@@ -91,7 +89,7 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         ensureColumnGContainsValidDate(cols);
         ensureValidEndDateProvidedInColumnH(cols);
         ensureStartDateIsNoLaterThanEndDate(cols);
-        ensureColumnKClientOtherFeeContainsValidInteger(cols);
+        ensureColumnKClientOtherFeeContainsEmptyOrValidInteger(cols);
 
         EnrolmentInput enrolment = new EnrolmentInput();
         enrolment.setRowNum(rowNum);
@@ -125,7 +123,12 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         enrolment.setEndDate(toLocalDate(endDateStr));
         enrolment.setOutcomeIdentifier(new OutcomeIdentifierNational(outcomeIdentifier));
         enrolment.setTuitionFee(tuitionFee);
-        enrolment.setClientOtherFee(Integer.parseInt(clientOtherFee));
+
+        if(hasLength(clientOtherFee)) {
+            enrolment.setClientOtherFee(Integer.parseInt(clientOtherFee));
+        } else {
+            enrolment.setClientOtherFee(0);
+        }
 
         return enrolment;
     }
@@ -168,11 +171,13 @@ public class InputRowMapper implements CSVRowMapper<EnrolmentInput> {
         checkArgument(isInteger(sid), "Must provide a valid Student ID in [%s]", sidColumn.index);
     }
 
-    private void ensureColumnKClientOtherFeeContainsValidInteger(String[] cols) {
+    private void ensureColumnKClientOtherFeeContainsEmptyOrValidInteger(String[] cols) {
         column col = column.CLIENT_OTHER_FEE;
-
         String clientOtherFee = cols[col.index];
-        checkArgument(isInteger(clientOtherFee), "Must provide a valid integer in column [%s] 'ClientOtherFee'", col.index);
+
+        if(hasLength(clientOtherFee)) {
+            checkArgument(isInteger(clientOtherFee), "Must provide a valid integer in column [%s] 'ClientOtherFee'", col.index);
+        }
     }
 
     private void ensureColumnDContainsNominalHourStr(String[] cols) {

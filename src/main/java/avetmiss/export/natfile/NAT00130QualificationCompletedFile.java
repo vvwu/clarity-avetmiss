@@ -39,13 +39,13 @@ public class NAT00130QualificationCompletedFile {
     }
 
     private List<Nat00130QualificationCompletedFileRequest> completedFileRequestsFromOneClient(Client client, String TOID, TaskListener listener) {
-        List<Nat00130QualificationCompletedFileRequest> requests = new ArrayList<>();
-
         List<NatVetStudentCourse> completions = client.qualificationCompletedCourses();
 
         if(completions.size() > 1) {
             log.info("Client sid={} has {} completions: {}", client.studentId(), completions.size(), completions);
         }
+
+        List<Nat00130QualificationCompletedFileRequest> requests = new ArrayList<>();
 
         for(NatVetStudentCourse completion: completions) {
             Integer totalSupervisedHours =
@@ -76,7 +76,8 @@ public class NAT00130QualificationCompletedFile {
         request.courseStartDate = toISO(natStudentCourse.courseStart());
         request.isQualificationIssued = natStudentCourse.isQualificationIssued();
         request.isCourseCompleted = natStudentCourse.isCourseCompleted();
-        request.yearCourseEnd = natStudentCourse.yearCourseEnd();
+        request.programStatusIdentifier = natStudentCourse.programStatusIdentifier();
+        request.dateCourseEnd = toISO(natStudentCourse.courseEnd());
         request.supervisedTeachingActivityCompletionDate = toISO(supervisedTeachingActivityCompletionDate2(natStudentCourse));
         request.supervisedHours = totalSupervisedHours;
 

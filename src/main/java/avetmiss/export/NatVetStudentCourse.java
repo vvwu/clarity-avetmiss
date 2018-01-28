@@ -3,6 +3,7 @@ package avetmiss.export;
 import avetmiss.client.payload.CourseReadModel;
 import avetmiss.client.payload.StudentCourseEnrolmentInfoReadModel;
 import avetmiss.client.payload.StudentCourseReadModel;
+import avetmiss.util.Dates;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +12,9 @@ import java.util.Date;
 
 import static avetmiss.util.DateUtil.year;
 import static avetmiss.util.Dates.currentYear;
+import static avetmiss.util.Dates.toLocalDate;
 import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.String.format;
 
 // replacement of StudentCourse in svts domain
 public class NatVetStudentCourse {
@@ -85,6 +88,36 @@ public class NatVetStudentCourse {
         // include isCancelled() to avoid warning 120087: For Client ID xxx in Qualification/Course ID yyy there
         // must be a corresponding record on the Program/Qualifications Completions file.
         return "Finished".equalsIgnoreCase(status);
+    }
+
+    // Program status identifier identifies the status of a program a client is enrolled in.
+    // Program status identifier is used to determine program completion rates
+    public String programStatusIdentifier() {
+
+        if ("Finished".equalsIgnoreCase(status)) {
+            if (isQualificationIssued()) {
+                // 10 Program completed (issued)
+                return "10";
+            } else {
+                // 20 Program completed (not issued)
+                return "20";
+            }
+        }
+
+        // 30 In training
+        if("Studying".equalsIgnoreCase(status)) {
+            return "30";
+        }
+
+        // 40 - Withdrawn - Official
+        if("Cancelled".equalsIgnoreCase(status)) {
+            return "40";
+        }
+
+        String exception =
+            format("student id: '%s', courseIdentifier: '%s', startDate: '%s', course status '%s' is not one of 'Finished|Studying|Cancelled'",
+                    studentID, courseIdentifier, toLocalDate(courseStartDate), status);
+        throw new IllegalStateException(exception);
     }
 
     public boolean isQualificationIssued() {

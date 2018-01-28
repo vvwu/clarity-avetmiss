@@ -29,6 +29,7 @@ public class OutcomeIdentifierNational {
         identifiers.put(90, "Result not yet available - Activity End Date (Enrolment Activity End Date) is in the current collection year");
         identifiers.put(81, "Non-assessable enrolment - Satisfactorily completed");
         identifiers.put(82, "Non-assessable enrolment – Withdrawn or not satisfactorily completed");
+        identifiers.put(85, "Not yet started");
     }
 
     private final static int OUTCOME_IDENTIFIER_WITHDRAWN = 40;

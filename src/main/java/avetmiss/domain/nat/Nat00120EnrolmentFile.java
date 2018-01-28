@@ -4,53 +4,56 @@ package avetmiss.domain.nat;
 import avetmiss.controller.payload.nat.EnrolmentFileRequest;
 import avetmiss.domain.*;
 import avetmiss.util.Dates;
+import com.google.common.base.Strings;
+import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.util.StringUtils;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
 import static com.google.common.base.Preconditions.checkArgument;
 import static org.apache.commons.lang.StringUtils.*;
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.leftPad;
 
+// Training Activity
 public class Nat00120EnrolmentFile {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     public final static String DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET = "CITY";
 
-    private final static Header header = Header(238,
+    private final static Header header = Header(304,
+            of("Training Organisation Identifier", 10),
             of("Training Organisation Delivery Location Identifier", 10),
             of("Client (Student) Identifier", 10),
             of("Subject (Module/Unit of Competency) Identifier", 12),
             of("Program (Qualification/Course) Identifier", 10),
             of("Activity Start Date (Enrolment Activity Start Date)", 8),
             of("Activity End Date (Enrolment Activity End Date)", 8),
-            of("Delivery Mode Identifier", 2),
+            of("Delivery Mode Identifier", 3),
             of("Outcome Identifier - National", 2),
             of("Scheduled Hours", 4),
             of("Funding Source - National", 2),
             of("Commencing Program (Course) Identifier", 1),
-            of("Training Contract Identifier - Australian Apprenticeships", 10),
+            of("Training Contract Identifier", 10),
             of("Client Identifier - Australian Apprenticeships", 10),
             of("Study Reason Identifier", 2),
             of("VET in Schools Flag", 1),
             of("Specific Funding (Specific Program) Identifier", 10),
+            of("School type identifier", 2),
             of("Outcome Identifier - Training Organisation", 3),
             of("Funding Source - State Training Authority", 3),
-            of("Client Tuition Fee", 4),
-            of("Fee Exemption/Concession Type Identifier", 1),
+            of("Client Tuition Fee", 5),
+            of("Fee Exemption/Concession Type Identifier", 2),
             of("Purchasing Contract Identifier", 12),
             of("Purchasing Contract Schedule Identifier", 3),
             of("Hours Attended", 4),
             of("Associated Course Identifier", 10),
+            of("Scheduled Hours", 4),
+            of("Predominant delivery mode", 1),
             of("Program (Course) Commencement Date", 8),
             of("Eligibility Exemption indicator", 1),
             of("VET FEE-HELP (Income Contingent Loan) Indicator", 1),
@@ -59,7 +62,8 @@ public class Nat00120EnrolmentFile {
             of("Enrolment Identifier", 50),
             of("Client Fees - Other", 5),
             of("Delivery Provider ABN", 11),
-            of("Funding Eligibility Key", 10));
+            of("Funding Eligibility Key", 10),
+            of("Program Enrolment Identifier", 50));
 
     public String export(List<EnrolmentFileRequest> requests) {
         List<Row> rows = new ArrayList<>();
@@ -71,10 +75,31 @@ public class Nat00120EnrolmentFile {
 
     private Row exportOneRow(EnrolmentFileRequest request) {
         // data
+        String trainingOrganisationIdentifier = Objects.requireNonNull(request.rtoIdentifier);
+
+        // RTOs are not required to report this data element so no further details are included in these Victorian VET
+        // Student Statistical Collection Guidelines
+        String schoolTypeIdentifier = null;
+
+        //E External delivery
+        //I Internal delivery
+        //W Workplace-based delivery
+        //N Not applicable – recognition of prior learning/credit transfer
+        String predominantDeliveryMode = "I";
+
         String deliveryLocationIdentifier = DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET;
         String unitIdentifier = request.unitCode;
         String courseIdentifier = request.courseIdentifier;
-        String deliveryModeIdentifier = "10"; // 10 (Classroom based)
+
+        //Delivery mode identifier identifies whether or not a subject comprises
+        //internal, external or workplace-based delivery – or a combination of these modes.
+
+        // Delivery mode identifier is used to analyse training activity by training delivery modes. It can be used to
+        // differentiate classroom-based delivery from self-paced learning. It can also be used to identify training
+        // that is delivered in more than one mode, for example, internal and workplace- based delivery.
+
+        String DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY = "YNN";
+        String deliveryModeIdentifier = DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY;
 
         // Outcome Identifier - National
 
@@ -122,7 +147,10 @@ public class Nat00120EnrolmentFile {
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
         String anzsicCode = null;
 
+        String programEnrolmentIdentifier = programEnrolmentIdentifier(studentID, courseIdentifier, courseStart, "ABzc");
+
         return new Row(
+                trainingOrganisationIdentifier,
                 deliveryLocationIdentifier,
                 studentID,
                 unitIdentifier,
@@ -131,7 +159,6 @@ public class Nat00120EnrolmentFile {
                 AvetmissUtil.toDate(enrolmentEndDate),
                 deliveryModeIdentifier,
                 outcomeIdentifier + "",
-                scheduledHours,
                 fundingSourceNationalIdentifier,
                 commencingCourseIdentifier,
                 request.trainingContractIdentifierApprenticeships,
@@ -139,6 +166,7 @@ public class Nat00120EnrolmentFile {
                 request.studyReasonIdentifier,
                 vetInSchoolsFlag,
                 specificFundingIdentifier(),
+                schoolTypeIdentifier,
                 outcomeIdentifierTrainingOrganisation,
                 fundingSourceStateIdentifier,
                 clientTuitionFee,
@@ -147,6 +175,8 @@ public class Nat00120EnrolmentFile {
                 purchasingContractScheduleIdentifier,
                 hoursAttended(request.hoursAttended),
                 upperCase(request.associatedCourseIdentifier),
+                scheduledHours,
+                predominantDeliveryMode,
                 courseCommencementDate,
                 eligibilityExemptionIndicator,
                 VETFEEHELPIndicator,
@@ -155,13 +185,21 @@ public class Nat00120EnrolmentFile {
                 request.enrolmentIdentifier,
                 to5DigitsDisplayString(request.clientFeesOther),
                 request.deliveryProviderABN,
-                request.fundingEligibilityKey);
+                request.fundingEligibilityKey,
+                programEnrolmentIdentifier);
     }
 
+    // Program = Course
+    // This identifier should remain unique to the combination of Student, Program, Program Commencement Date
+    // and ContractID once uploaded. If any of these values change for an identifier where activity has been
+    // successfully paid for, the submission will be rejected.
+    private String programEnrolmentIdentifier(String studentID, String programIdentifier, LocalDate programStartDate, String contractID) {
+        return StringUtils.join(new String[]{studentID, programIdentifier, Dates.toISO(programStartDate), contractID}, "-");
+    }
 
     private static String to5DigitsDisplayString(int fee) {
         checkArgument(fee < 100000, "fee must be less than 100,000");
-        return org.apache.commons.lang.StringUtils.leftPad(fee + "", 5, "0");
+        return StringUtils.leftPad(fee + "", 5, "0");
     }
 
     private String fundingSourceNationalIdentifier(String sid, String fundingSourceStateIdentifier) {

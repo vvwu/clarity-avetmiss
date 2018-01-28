@@ -12,7 +12,7 @@ public class Nat00130QualificationCompletedFileTest {
     private Nat00130QualificationCompletedFile instance = new Nat00130QualificationCompletedFile();
 
     @Test
-    public void testExport() throws Exception {
+    public void testExport() {
         String export = instance.export(Arrays.asList(request()));
         assertThat(export, is("0000020829SIT50307  300020    2016Y15012015        00000\r\n"));
     }
@@ -25,7 +25,7 @@ public class Nat00130QualificationCompletedFileTest {
         request.courseStartDate = "2015-01-15";
         request.isQualificationIssued = true;
         request.isCourseCompleted = true;
-        request.yearCourseEnd = 2016;
+        request.dateCourseEnd = "2016-05-01";
 
         return request;
     }
