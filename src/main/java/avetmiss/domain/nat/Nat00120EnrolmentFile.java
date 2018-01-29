@@ -147,7 +147,8 @@ public class Nat00120EnrolmentFile {
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
         String anzsicCode = null;
 
-        String programEnrolmentIdentifier = programEnrolmentIdentifier(studentID, courseIdentifier, courseStart, "ABzc");
+        String contractID = request.international ? null : "2017208290";
+        String programEnrolmentIdentifier = programEnrolmentIdentifier(studentID, courseIdentifier, courseStart, contractID);
 
         return new Row(
                 trainingOrganisationIdentifier,

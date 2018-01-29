@@ -316,4 +316,8 @@ public class Client {
     public int hashCode() {
         return studentID.hashCode();
     }
+
+    public boolean isInternational() {
+        return international;
+    }
 }

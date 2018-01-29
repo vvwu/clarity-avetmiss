@@ -80,6 +80,7 @@ public class NAT00120EnrolmentFile {
 
         request.rtoIdentifier = TOID;
         request.studentID = client.studentId();
+        request.international = client.isInternational();
         request.concessionTypeIdentifier = requiredConcessionTypeIdentifier(client.studentId(), enrolment.concessionTypeIdentifier());
         request.trainingContractIdentifierApprenticeships = enrolment.trainingContractIdentifierApprenticeships();
         request.clientIdentifierApprenticeships = enrolment.clientIdentifierApprenticeships();
