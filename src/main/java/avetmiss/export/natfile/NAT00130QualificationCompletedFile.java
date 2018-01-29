@@ -2,6 +2,7 @@ package avetmiss.export.natfile;
 
 import avetmiss.controller.payload.nat.Nat00130QualificationCompletedFileRequest;
 import avetmiss.domain.ProgramEnrolmentIdentifier;
+import avetmiss.domain.PurchasingContractIdentifier;
 import avetmiss.export.Client;
 import avetmiss.export.NatVetStudentCourse;
 import avetmiss.util.Dates;
@@ -82,7 +83,7 @@ public class NAT00130QualificationCompletedFile {
         request.dateCourseEnd = toISO(natStudentCourse.courseEnd());
         request.supervisedTeachingActivityCompletionDate = toISO(supervisedTeachingActivityCompletionDate2(natStudentCourse));
         request.supervisedHours = totalSupervisedHours;
-        request.programEnrolmentIdentifier = ProgramEnrolmentIdentifier.programEnrolmentIdentifier(client.isInternational(), client.studentId(), natStudentCourse.getCourseIdentifier(), Dates.toLocalDate(natStudentCourse.courseStart()));
+        request.programEnrolmentIdentifier = ProgramEnrolmentIdentifier.programEnrolmentIdentifier(PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), aRtoIdentifier), client.studentId(), natStudentCourse.getCourseIdentifier(), Dates.toLocalDate(natStudentCourse.courseStart()));
         return request;
     }
 

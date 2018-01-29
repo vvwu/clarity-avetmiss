@@ -16,7 +16,7 @@ public class Nat00120EnrolmentFileTest {
     @Test
     public void testExport() throws Exception {
         String export = instance.export(Arrays.asList(request()));
-        assertThat(export, is("20829     CITY      300020    BSBCMN407A  053261G   1501201523022011YNN70114CONT2     Client1   01N            NYCP  1500 G 2015208290     0251SIT30813  140 I02012015NN  05122014s30234-c9999999-uBSBCMN407A                       00230ABN-Number           300020-053261G-2015-01-02-2017208290              \r\n"));
+        assertThat(export, is("0000020829CITY      300020    BSBCMN407A  053261G   1501201523022011YNN70114CONT2     Client1   01N            NYCP  1500 G 2017208290     0251SIT30813  140 I02012015NN  05122014s30234-c9999999-uBSBCMN407A                       00230ABN-Number           300020-053261G-2015-01-02-2017208290              \r\n"));
     }
 
     private EnrolmentFileRequest request() {

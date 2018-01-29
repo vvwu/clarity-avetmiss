@@ -69,9 +69,11 @@ public class Nat00130QualificationCompletedFile {
             // Parchment issue date should not be before Date program completed. Parchment issue date cannot be blank if
             // Parchment number is not blank.
 
-            // This field may be blank
+            // Specific:
+            // Parchment Issue Date should not be before Date program Completed.(130031)
+            // Parchment Issue Date cannot be blank if Parchment number is not blank.(vr.130027)
+            // When Parchment Issue Date is blank, Issue Flag should be N
             String parchmentIssueDate = null;
-
 
             // Parchment number contains the recorded number on a certificate for a qualification or course which is issued
             // for the completion of a program by a student

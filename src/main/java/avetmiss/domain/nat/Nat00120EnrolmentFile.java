@@ -74,8 +74,6 @@ public class Nat00120EnrolmentFile {
 
     private Row exportOneRow(EnrolmentFileRequest request) {
         // data
-        String trainingOrganisationIdentifier = Objects.requireNonNull(request.rtoIdentifier);
-
         // RTOs are not required to report this data element so no further details are included in these Victorian VET
         // Student Statistical Collection Guidelines
         String schoolTypeIdentifier = null;
@@ -89,16 +87,6 @@ public class Nat00120EnrolmentFile {
         String deliveryLocationIdentifier = DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET;
         String unitIdentifier = request.unitCode;
         String courseIdentifier = request.courseIdentifier;
-
-        //Delivery mode identifier identifies whether or not a subject comprises
-        //internal, external or workplace-based delivery – or a combination of these modes.
-
-        // Delivery mode identifier is used to analyse training activity by training delivery modes. It can be used to
-        // differentiate classroom-based delivery from self-paced learning. It can also be used to identify training
-        // that is delivered in more than one mode, for example, internal and workplace- based delivery.
-
-        String DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY = "YNN";
-        String deliveryModeIdentifier = DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY;
 
         // Outcome Identifier - National
 
@@ -144,10 +132,23 @@ public class Nat00120EnrolmentFile {
         // Result not yet available (Code 90)
         OutcomeIdentifierNational outcomeIdentifierNational = new OutcomeIdentifierNational(request.outcomeIdentifier);
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
+
+
+        //Delivery mode identifier identifies whether or not a subject comprises
+        //internal, external or workplace-based delivery – or a combination of these modes.
+
+        // Delivery mode identifier is used to analyse training activity by training delivery modes. It can be used to
+        // differentiate classroom-based delivery from self-paced learning. It can also be used to identify training
+        // that is delivered in more than one mode, for example, internal and workplace- based delivery.
+
+        String DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY = "YNN";
+        String DELIVERY_MODE_IDENTIFIER_NOT_APPLICABLE_CREDIT_TRANSFER = "NNN";
+        String deliveryModeIdentifier = (outcomeIdentifier == 60) ? DELIVERY_MODE_IDENTIFIER_NOT_APPLICABLE_CREDIT_TRANSFER : DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY;
+
         String anzsicCode = null;
 
         return new Row(
-                trainingOrganisationIdentifier,
+        AvetmissUtil.formattedRtoIdentifier(request.rtoIdentifier),
                 deliveryLocationIdentifier,
                 studentID,
                 unitIdentifier,
@@ -168,7 +169,7 @@ public class Nat00120EnrolmentFile {
                 fundingSourceStateIdentifier,
                 clientTuitionFee,
                 request.concessionTypeIdentifier,
-                purchasingContractIdentifier(courseStart, request.rtoIdentifier),
+                PurchasingContractIdentifier.purchasingContractIdentifier(request.international, request.rtoIdentifier),
                 purchasingContractScheduleIdentifier,
                 hoursAttended(request.hoursAttended),
                 upperCase(request.associatedCourseIdentifier),
@@ -227,22 +228,5 @@ public class Nat00120EnrolmentFile {
         // This field must be blank
         return null;
     }
-
-    private String purchasingContractIdentifier(LocalDate courseStart, String TOID) {
-        // The Purchasing Contract Identifier must be consistent with the
-        // year the student commenced their course. That is, the Purchasing
-        // Contract Identifier remains constant for a given student, course
-        // and course commencement date.
-
-        // The Purchasing Contract Identifier
-        // should be left blank by ACE providers which are not paid by
-        // Skills Victoria.
-
-        // This field should be blank for all enrolments for which payment
-        // is not being claimed through SVTS.
-        String purchasingContractIdentifier = AvetmissUtil.getPurchasingContractYear(courseStart) + TOID + "0";
-        return purchasingContractIdentifier;
-    }
-
 
 }
