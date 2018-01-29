@@ -21,7 +21,7 @@ public class Nat00060SubjectFileTest {
         List<EnrolmentSubject> units = Arrays.asList(enrolmentSubject());
         String export = instance.export(units);
 
-        assertThat(export, is("CBSBCMN407A  COORDINATE BUSINESS RESOURCES                                                                       080301Y0100\r\n"));
+        assertThat(export, is("BSBCMN407A  COORDINATE BUSINESS RESOURCES                                                                       080301Y0100\r\n"));
     }
 
     public EnrolmentSubject enrolmentSubject() {

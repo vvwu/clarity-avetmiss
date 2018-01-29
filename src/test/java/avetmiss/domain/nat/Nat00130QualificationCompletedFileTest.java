@@ -14,7 +14,7 @@ public class Nat00130QualificationCompletedFileTest {
     @Test
     public void testExport() {
         String export = instance.export(Arrays.asList(request()));
-        assertThat(export, is("0000020829SIT50307  300020    2016Y15012015        00000\r\n"));
+        assertThat(export, is("0000020829SIT50307  300020    01052016Y                                 15012015        00000                                                    \r\n"));
     }
 
     private Nat00130QualificationCompletedFileRequest request() {

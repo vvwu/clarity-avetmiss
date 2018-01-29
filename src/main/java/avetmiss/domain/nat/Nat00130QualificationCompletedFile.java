@@ -80,15 +80,6 @@ public class Nat00130QualificationCompletedFile {
             // This field may be blank
             String parchmentNumber = null;
 
-            // To tie attributes of training in a Subject to attributes of the Program that the student is
-            // undertaking
-
-            // This identifier should remain unique to the combination of Student, Program, Program
-            // Commencement Date and ContractID once uploaded. If any of these values change for an
-            // identifier where activity has been successfully paid for, the submission will be
-            // rejected. (vr.120111)
-            String programEnrolmentIdentifier = Objects.requireNonNull(null);
-
             String supervisedHours = (request.supervisedHours == null) ? repeat("0", 5) : leftPad(request.supervisedHours.toString(), 5, "0");
             Row row = new Row(
                     AvetmissUtil.formattedRtoIdentifier(request.rtoIdentifier),
@@ -102,7 +93,7 @@ public class Nat00130QualificationCompletedFile {
                     AvetmissUtil.toDate(supervisedTeachingActivityCompletionDate),
                     supervisedHours,
                     request.programStatusIdentifier,
-                    programEnrolmentIdentifier);
+                    request.programEnrolmentIdentifier);
 
             rows.add(row);
         }
@@ -121,7 +112,7 @@ public class Nat00130QualificationCompletedFile {
     // DDMMYYYY   A valid year date, not in the future or more than 10 years before the collection period.
     // Blank      Not yet completed
     private String dateCourseCompleted(Nat00130QualificationCompletedFileRequest request) {
-        return request.isCourseCompleted ? request.dateCourseEnd : "";
+        return request.isCourseCompleted ? AvetmissUtil.toDate(Dates.toLocalDateISO(request.dateCourseEnd)) : "";
     }
 
 }

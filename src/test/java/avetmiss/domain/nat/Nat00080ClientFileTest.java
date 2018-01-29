@@ -23,7 +23,7 @@ public class Nat00080ClientFileTest {
         Client client = createClient();
         String export = instance.export(Arrays.asList(client));
         assertThat(export, is(
-                "30000     Lname, Fname                                                121996F100919813181@1201011203NYN Windsor                                           Z7ZSVMLTRG03                                                                                NOT SPECIFIED  NOT SPECIFIED                                                                             VSN123   S5\r\n"));
+                "30000     Lname, Fname                                                12F100919813181@1201011203NYNWindsor                                           Z7ZSVMLTRG03                                                                                NOT SPECIFIED  NOT SPECIFIED                                                         A                    VSN123   S5\r\n"));
     }
 
     private Client createClient() {
@@ -37,7 +37,6 @@ public class Nat00080ClientFileTest {
 
         student.enrolmentInfo = new EnrolmentInfoReadModel();
         student.enrolmentInfo.highestSchoolLevelCompletedIdentifier = "12";
-        student.enrolmentInfo.yearHighestSchoolLevelCompleted = "1996";
         student.sex = "F";
         student.dob = Dates.toDate(LocalDate.of(1981, 9, 10));
         student.postCode = "3181";
@@ -48,7 +47,6 @@ public class Nat00080ClientFileTest {
         student.enrolmentInfo.disabilityFlag = "N";
         student.enrolmentInfo.atSchoolFlag = "N";
         student.enrolmentInfo.priorEducationalAchievementFlag = "Y";
-        student.enrolmentInfo.proficiencyInSpokenEnglishIdentifier = "1";
         student.enrolmentInfo.stateIdentifier = "03";
 
         student.suburb = "Windsor";

@@ -35,7 +35,6 @@ public class Nat00120EnrolmentFile {
             of("Activity End Date (Enrolment Activity End Date)", 8),
             of("Delivery Mode Identifier", 3),
             of("Outcome Identifier - National", 2),
-            of("Scheduled Hours", 4),
             of("Funding Source - National", 2),
             of("Commencing Program (Course) Identifier", 1),
             of("Training Contract Identifier", 10),
@@ -147,9 +146,6 @@ public class Nat00120EnrolmentFile {
         int outcomeIdentifier = outcomeIdentifierNational.selfCorrectedCode(studentID, enrolmentEndDate);
         String anzsicCode = null;
 
-        String contractID = request.international ? null : "2017208290";
-        String programEnrolmentIdentifier = programEnrolmentIdentifier(studentID, courseIdentifier, courseStart, contractID);
-
         return new Row(
                 trainingOrganisationIdentifier,
                 deliveryLocationIdentifier,
@@ -187,7 +183,7 @@ public class Nat00120EnrolmentFile {
                 to5DigitsDisplayString(request.clientFeesOther),
                 request.deliveryProviderABN,
                 request.fundingEligibilityKey,
-                programEnrolmentIdentifier);
+                request.programEnrolmentIdentifier);
     }
 
     // Program = Course

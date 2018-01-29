@@ -22,7 +22,7 @@ public class Nat00085ClientPostalDetailsFileTest {
     public void testExportRaw() throws Exception {
         Client client = createClient();
         String export = instance.export(Arrays.asList(client));
-        assertThat(export, is("30000     Mr  Fname                                   Lname                                                                                                                   NOT SPECIFIED  NOT SPECIFIED                                                                               Windsor                                           3181030395234323                              04342532340         user@company.com                                                                \r\n"));
+        assertThat(export, is("30000     Mr  Fname                                   Lname                                                                                                                   NOT SPECIFIED  NOT SPECIFIED                                                                               Windsor                                           3181030395234323                              04342532340         user@company.com                                                                                                                                                \r\n"));
     }
 
     private Client createClient() {

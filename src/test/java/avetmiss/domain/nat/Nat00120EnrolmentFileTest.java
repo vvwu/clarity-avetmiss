@@ -16,9 +16,7 @@ public class Nat00120EnrolmentFileTest {
     @Test
     public void testExport() throws Exception {
         String export = instance.export(Arrays.asList(request()));
-        assertThat(export, is("CITY      300020    BSBCMN407A  053261G   15012015230220111070140 114CONT2     Client1" +
-                "   01N          NYCP  1500G2015208290     0251SIT30813  " +
-                "02012015NN  05122014s30234-c9999999-uBSBCMN407A                       00230ABN-Number           \r\n"));
+        assertThat(export, is("20829     CITY      300020    BSBCMN407A  053261G   1501201523022011YNN70114CONT2     Client1   01N            NYCP  1500 G 2015208290     0251SIT30813  140 I02012015NN  05122014s30234-c9999999-uBSBCMN407A                       00230ABN-Number           300020-053261G-2015-01-02-2017208290              \r\n"));
     }
 
     private EnrolmentFileRequest request() {
@@ -45,7 +43,7 @@ public class Nat00120EnrolmentFileTest {
         request.enrolmentIdentifier = "s30234-c9999999-uBSBCMN407A";
         request.clientFeesOther = 230;
         request.deliveryProviderABN = "ABN-Number";
-
+        request.programEnrolmentIdentifier = "300020-053261G-2015-01-02-2017208290";
         return request;
     }
 }

@@ -1,8 +1,10 @@
 package avetmiss.export.natfile;
 
 import avetmiss.controller.payload.nat.Nat00130QualificationCompletedFileRequest;
+import avetmiss.domain.ProgramEnrolmentIdentifier;
 import avetmiss.export.Client;
 import avetmiss.export.NatVetStudentCourse;
+import avetmiss.util.Dates;
 import avetmiss.util.hudson.TaskListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -53,7 +55,7 @@ public class NAT00130QualificationCompletedFile {
 
             try {
                 Nat00130QualificationCompletedFileRequest request =
-                        toQualificationCompletedFileRequest(client.studentId(), totalSupervisedHours, completion, TOID);
+                        toQualificationCompletedFileRequest(client, totalSupervisedHours, completion, TOID);
 
                 requests.add(request);
             } catch (Exception e) {
@@ -66,13 +68,13 @@ public class NAT00130QualificationCompletedFile {
     }
 
     private Nat00130QualificationCompletedFileRequest toQualificationCompletedFileRequest(
-            String studentID, Integer totalSupervisedHours, NatVetStudentCourse natStudentCourse, String aRtoIdentifier) {
+            Client client, Integer totalSupervisedHours, NatVetStudentCourse natStudentCourse, String aRtoIdentifier) {
 
         Nat00130QualificationCompletedFileRequest request = new Nat00130QualificationCompletedFileRequest();
 
         request.rtoIdentifier = aRtoIdentifier;
         request.courseIdentifier = natStudentCourse.getCourseIdentifier();
-        request.studentID = studentID;
+        request.studentID = client.studentId();
         request.courseStartDate = toISO(natStudentCourse.courseStart());
         request.isQualificationIssued = natStudentCourse.isQualificationIssued();
         request.isCourseCompleted = natStudentCourse.isCourseCompleted();
@@ -80,7 +82,7 @@ public class NAT00130QualificationCompletedFile {
         request.dateCourseEnd = toISO(natStudentCourse.courseEnd());
         request.supervisedTeachingActivityCompletionDate = toISO(supervisedTeachingActivityCompletionDate2(natStudentCourse));
         request.supervisedHours = totalSupervisedHours;
-
+        request.programEnrolmentIdentifier = ProgramEnrolmentIdentifier.programEnrolmentIdentifier(client.isInternational(), client.studentId(), natStudentCourse.getCourseIdentifier(), Dates.toLocalDate(natStudentCourse.courseStart()));
         return request;
     }
 

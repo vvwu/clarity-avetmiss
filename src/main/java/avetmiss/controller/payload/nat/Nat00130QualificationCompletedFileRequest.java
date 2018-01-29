@@ -11,4 +11,5 @@ public class Nat00130QualificationCompletedFileRequest {
     public String dateCourseEnd;
     public String supervisedTeachingActivityCompletionDate;
     public Integer supervisedHours;
+    public String programEnrolmentIdentifier;
 }

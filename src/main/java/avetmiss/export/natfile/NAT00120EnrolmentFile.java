@@ -2,6 +2,7 @@ package avetmiss.export.natfile;
 
 import avetmiss.controller.payload.nat.EnrolmentFileRequest;
 import avetmiss.domain.OutcomeIdentifierNational;
+import avetmiss.domain.ProgramEnrolmentIdentifier;
 import avetmiss.export.Client;
 import avetmiss.export.Enrolment;
 import avetmiss.util.DateUtil;
@@ -103,6 +104,7 @@ public class NAT00120EnrolmentFile {
         request.clientFeesOther = enrolment.clientFeesOther();
         request.deliveryProviderABN = deliveryProviderABN();
         request.fundingEligibilityKey = "";
+        request.programEnrolmentIdentifier = ProgramEnrolmentIdentifier.programEnrolmentIdentifier(client.isInternational(), client.studentId(), enrolment.studentCourse().getCourseIdentifier(), Dates.toLocalDate(enrolment.studentCourse().courseStart()));
 
        return request;
     }
