@@ -93,7 +93,6 @@ public class NatVetStudentCourse {
     // Program status identifier identifies the status of a program a client is enrolled in.
     // Program status identifier is used to determine program completion rates
     public String programStatusIdentifier() {
-
         if ("Finished".equalsIgnoreCase(status)) {
             if (isQualificationIssued()) {
                 // 10 Program completed (issued)

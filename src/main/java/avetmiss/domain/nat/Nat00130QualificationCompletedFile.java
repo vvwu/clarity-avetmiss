@@ -5,12 +5,14 @@ import avetmiss.domain.AvetmissUtil;
 import avetmiss.domain.ExportHelper;
 import avetmiss.domain.Header;
 import avetmiss.domain.Row;
+import avetmiss.util.Csv;
 import avetmiss.util.Dates;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
+import java.util.Optional;
 
 import static avetmiss.domain.Field.of;
 import static avetmiss.domain.Header.Header;
@@ -47,14 +49,80 @@ public class Nat00130QualificationCompletedFile {
         return ExportHelper.writeToString(header, rows);
     }
 
+    private static String QUALIFICATION_ISSUED_CSV =  
+            "39002,10362NAT,20/7/17,CC39002\n" +
+            "39155,10362NAT,10/10/17,CC39155\n" +
+            "38621,10362NAT,21/2/17,CC38621\n" +
+            "38684,10362NAT,20/4/17,CC38684\n" +
+            "39352,10363NAT,10/10/17,CC39352\n" +
+            "39090,10363NAT,3/7/17,CC39090\n" +
+            "39264,10363NAT,4/8/17,CC39264\n" +
+            "36282,22255VIC,20/7/17,CC36282\n" +
+            "36595,10363NAT,15/8/17,CC36595\n" +
+            "39107,22255VIC,18/8/17,CC39107\n" +
+            "36282,22255VIC,20/7/17,CC36282\n" +
+            "36210,22255VIC,4/8/17,CC36210\n" +
+            "38829,22255VIC,15/9/17,CC38829\n" +
+            "37553,SIT31113,23/5/17,CC37553\n" +
+            "36282,10363NAT,11/8/16,CC36282";
+
+
+    private static class QualificationIssued {
+        private String studentID;
+        private String courseIdentifier;
+        private LocalDate issueDate;
+        private String parchmentNumber;
+
+        public QualificationIssued(String studentID, String courseIdentifier, LocalDate issueDate, String parchmentNumber) {
+            this.studentID = studentID;
+            this.courseIdentifier = courseIdentifier;
+            this.issueDate = issueDate;
+            this.parchmentNumber = parchmentNumber;
+        }
+
+        public String getStudentID() {
+            return studentID;
+        }
+
+        public String getCourseIdentifier() {
+            return courseIdentifier;
+        }
+
+        public LocalDate getIssueDate() {
+            return issueDate;
+        }
+
+        public String getParchmentNumber() {
+            return parchmentNumber;
+        }
+
+        @Override
+        public String toString() {
+            return "QualificationIssued{" +
+                    "studentID='" + studentID + '\'' +
+                    ", courseIdentifier='" + courseIdentifier + '\'' +
+                    ", issueDate=" + issueDate +
+                    ", parchmentNumber='" + parchmentNumber + '\'' +
+                    '}';
+        }
+    }
+
+    private static List<QualificationIssued> qualificationIssued() {
+        List<QualificationIssued> qualificationIssues =
+                Csv.read(QUALIFICATION_ISSUED_CSV, (line, rowNum) ->
+                        new QualificationIssued(line[0], line[1], LocalDate.parse(line[2], DateTimeFormatter.ofPattern("d/M/yy")), line[3]));
+
+        return qualificationIssues;
+    }
 
     private List<Row> exportRaw(List<Nat00130QualificationCompletedFileRequest> requests) {
         List<Row> rows = new ArrayList();
 
+        List<QualificationIssued> qualificationIssues = qualificationIssued();
+
+
         for (Nat00130QualificationCompletedFileRequest request : requests) {
-            String qualificationIssuedFlag = request.isQualificationIssued ? "Y" : "N";
             LocalDate courseStartDate = Dates.toLocalDateISO(request.courseStartDate);
-            String dateCompleted = dateCourseCompleted(request);
 
             LocalDate supervisedTeachingActivityCompletionDate =
                     Dates.toLocalDateISO(request.supervisedTeachingActivityCompletionDate);
@@ -81,8 +149,24 @@ public class Nat00130QualificationCompletedFile {
             // Parchment number cannot be blank if Parchment issue date is not blank.
             // This field may be blank
             String parchmentNumber = null;
+            String qualificationIssuedFlag = "N";
+
+            if(request.isQualificationIssued) {
+                qualificationIssuedFlag = "Y";
+                Optional<QualificationIssued> qualificationIssued = findQualificationIssued(qualificationIssues, request.studentID, request.courseIdentifier);
+
+                if(qualificationIssued.isPresent()) {
+                    QualificationIssued issued = qualificationIssued.get();
+
+                    parchmentNumber = issued.getParchmentNumber();
+                    parchmentIssueDate = AvetmissUtil.toDate(issued.getIssueDate());
+                }
+            }
+
 
             String supervisedHours = (request.supervisedHours == null) ? repeat("0", 5) : leftPad(request.supervisedHours.toString(), 5, "0");
+            String dateCompleted = dateCourseCompleted(request);
+
             Row row = new Row(
                     AvetmissUtil.formattedRtoIdentifier(request.rtoIdentifier),
                     request.courseIdentifier.toUpperCase(),
@@ -102,6 +186,10 @@ public class Nat00130QualificationCompletedFile {
         return rows;
     }
 
+    private Optional<QualificationIssued> findQualificationIssued(List<QualificationIssued> qualificationIssues, String studentID, String courseIdentifier) {
+        return qualificationIssues.stream().filter(qualificationIssued -> qualificationIssued.studentID.equals(studentID) && qualificationIssued.courseIdentifier.equalsIgnoreCase(courseIdentifier)).findFirst();
+    }
+
 
     // Date program completed must be the date that the activity in the program was completed, including any on-the-job
     // training components and the time required for the trainer to determine the final outcome.
@@ -114,7 +202,9 @@ public class Nat00130QualificationCompletedFile {
     // DDMMYYYY   A valid year date, not in the future or more than 10 years before the collection period.
     // Blank      Not yet completed
     private String dateCourseCompleted(Nat00130QualificationCompletedFileRequest request) {
-        return request.isCourseCompleted ? AvetmissUtil.toDate(Dates.toLocalDateISO(request.dateCourseEnd)) : "";
+        boolean notCompletedYet = "30".equals(request.programStatusIdentifier);
+
+        return notCompletedYet ? "" : AvetmissUtil.toDate(Dates.toLocalDateISO(request.dateCourseEnd));
     }
 
 }

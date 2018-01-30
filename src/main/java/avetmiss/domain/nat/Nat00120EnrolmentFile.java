@@ -78,12 +78,6 @@ public class Nat00120EnrolmentFile {
         // Student Statistical Collection Guidelines
         String schoolTypeIdentifier = null;
 
-        //E External delivery
-        //I Internal delivery
-        //W Workplace-based delivery
-        //N Not applicable – recognition of prior learning/credit transfer
-        String predominantDeliveryMode = "I";
-
         String deliveryLocationIdentifier = DELIVERY_LOCATION_IDENTIFIER_QUEEN_STREET;
         String unitIdentifier = request.unitCode;
         String courseIdentifier = request.courseIdentifier;
@@ -143,7 +137,16 @@ public class Nat00120EnrolmentFile {
 
         String DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY = "YNN";
         String DELIVERY_MODE_IDENTIFIER_NOT_APPLICABLE_CREDIT_TRANSFER = "NNN";
-        String deliveryModeIdentifier = (outcomeIdentifier == 60) ? DELIVERY_MODE_IDENTIFIER_NOT_APPLICABLE_CREDIT_TRANSFER : DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY;
+
+        boolean isCreditTransfer = (outcomeIdentifier == 60);
+
+        String deliveryModeIdentifier = isCreditTransfer ? DELIVERY_MODE_IDENTIFIER_NOT_APPLICABLE_CREDIT_TRANSFER : DELIVERY_MODE_IDENTIFIER_INTERNAL_ONLY;
+
+        //E External delivery
+        //I Internal delivery
+        //W Workplace-based delivery
+        //N Not applicable – recognition of prior learning/credit transfer
+        String predominantDeliveryMode = isCreditTransfer ? "N" : "I";
 
         String anzsicCode = null;
 
