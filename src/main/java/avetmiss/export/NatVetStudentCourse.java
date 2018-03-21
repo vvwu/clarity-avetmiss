@@ -8,6 +8,7 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import static avetmiss.util.DateUtil.year;
@@ -162,6 +163,10 @@ public class NatVetStudentCourse {
 
     public Date courseStart() {
         return this.courseStartDate;
+    }
+
+    public LocalDate courseStart2() {
+        return Dates.toLocalDate(this.courseStartDate);
     }
 
     public Date courseEnd() {

@@ -57,7 +57,7 @@ public class JdbcUnitRepository implements UnitRepository {
         }
     }
 
-    private Unit internalUnitWithCode(String unitCode) {
+    private Unit    internalUnitWithCode(String unitCode) {
         String sql =
                 "select * from unit where (code=?)";
 

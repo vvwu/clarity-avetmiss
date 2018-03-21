@@ -14,7 +14,7 @@ public class Nat00120EnrolmentFileTest {
     private Nat00120EnrolmentFile instance = new Nat00120EnrolmentFile();
 
     @Test
-    public void testExport() throws Exception {
+    public void testExport() {
         String export = instance.export(Arrays.asList(request()));
         assertThat(export, is("0000020829CITY      300020    BSBCMN407A  053261G   1501201523022011YNN70114CONT2     Client1   01N            NYCP  1500 G 2017208290     0251SIT30813  140 I02012015NN  05122014s30234-c9999999-uBSBCMN407A                       00230ABN-Number           300020-053261G-2015-01-02-2017208290              \r\n"));
     }
@@ -23,6 +23,7 @@ public class Nat00120EnrolmentFileTest {
         EnrolmentFileRequest request = new EnrolmentFileRequest();
         request.rtoIdentifier = "20829";
         request.studentID = "300020";
+        request.international = false;
         request.concessionTypeIdentifier = "G";
         request.trainingContractIdentifierApprenticeships = "CONT2";
         request.clientIdentifierApprenticeships = "Client1";
@@ -44,6 +45,7 @@ public class Nat00120EnrolmentFileTest {
         request.clientFeesOther = 230;
         request.deliveryProviderABN = "ABN-Number";
         request.programEnrolmentIdentifier = "300020-053261G-2015-01-02-2017208290";
+        request.purchasingContractIdentifier = "2017208290";
         return request;
     }
 }

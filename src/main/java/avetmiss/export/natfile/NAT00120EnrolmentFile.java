@@ -6,11 +6,8 @@ import avetmiss.domain.ProgramEnrolmentIdentifier;
 import avetmiss.domain.PurchasingContractIdentifier;
 import avetmiss.export.Client;
 import avetmiss.export.Enrolment;
-import avetmiss.util.DateUtil;
 import avetmiss.util.Dates;
 import avetmiss.util.hudson.TaskListener;
-import com.google.common.base.Preconditions;
-import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,9 +18,7 @@ import static avetmiss.util.DateUtil.toISO;
 import static avetmiss.util.Dates.toISO;
 import static com.google.common.base.Preconditions.checkArgument;
 import static java.lang.String.format;
-import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
-import static org.apache.commons.lang.StringUtils.leftPad;
 import static org.springframework.util.StringUtils.hasLength;
 
 public class NAT00120EnrolmentFile {
@@ -83,6 +78,7 @@ public class NAT00120EnrolmentFile {
         request.rtoIdentifier = TOID;
         request.studentID = client.studentId();
         request.international = client.isInternational();
+        request.purchasingContractIdentifier = PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), enrolment.startDate(), TOID);
         request.concessionTypeIdentifier = requiredConcessionTypeIdentifier(client.studentId(), enrolment.concessionTypeIdentifier());
         request.trainingContractIdentifierApprenticeships = enrolment.trainingContractIdentifierApprenticeships();
         request.clientIdentifierApprenticeships = enrolment.clientIdentifierApprenticeships();
@@ -106,7 +102,7 @@ public class NAT00120EnrolmentFile {
         request.deliveryProviderABN = deliveryProviderABN();
         request.fundingEligibilityKey = "";
         request.programEnrolmentIdentifier =
-                ProgramEnrolmentIdentifier.programEnrolmentIdentifier(PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), TOID), client.studentId(), enrolment.studentCourse().getCourseIdentifier(), Dates.toLocalDate(enrolment.studentCourse().courseStart()));
+                ProgramEnrolmentIdentifier.programEnrolmentIdentifier(PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), enrolment.startDate(), TOID), client.studentId(), enrolment.studentCourse().getCourseIdentifier(), Dates.toLocalDate(enrolment.studentCourse().courseStart()));
 
        return request;
     }

@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 public class AvetmissUtilTest {
 
     @Test
-    public void asLabelValue() throws Exception {
+    public void asLabelValue() {
         Map<String, String> map = new LinkedHashMap();
         map.put("key1", "value1");
         map.put("key2", "value2");
@@ -27,8 +27,16 @@ public class AvetmissUtilTest {
     }
 
     @Test
-    public void toDate() throws Exception {
+    public void toDate() {
         LocalDate date = LocalDate.of(2016, 12, 1);
         assertEquals("01122016", AvetmissUtil.toDate(date));
+    }
+
+    @Test
+    public void purchasingContractIdentifier() {
+        String toid = "20829";
+
+        assertEquals("2017208290", AvetmissUtil.purchasingContractIdentifier(LocalDate.of(2016, 6, 21), toid));
+        assertEquals("2017208290", AvetmissUtil.purchasingContractIdentifier(LocalDate.of(2017, 6, 21), toid));
     }
 }

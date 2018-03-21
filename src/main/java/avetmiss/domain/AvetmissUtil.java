@@ -31,8 +31,32 @@ public class AvetmissUtil {
 		return DateTimeFormatter.ofPattern("ddMMyyyy").format(date);
 	}
 
-	public static String getPurchasingContractYear(LocalDate enrolmentStartDate) {
-		return DateTimeFormatter.ofPattern("yyyy").format(enrolmentStartDate);
+	public static String purchasingContractIdentifier(LocalDate courseStart, String TOID) {
+		// The Purchasing Contract Identifier must be consistent with the
+		// year the student commenced their course. That is, the Purchasing
+		// Contract Identifier remains constant for a given student, course
+		// and course commencement date.
+
+		// The Purchasing Contract Identifier
+		// should be left blank by ACE providers which are not paid by
+		// Skills Victoria.
+
+		// This field should be blank for all enrolments for which payment
+		// is not being claimed through SVTS.
+		String purchasingContractIdentifier = purchasingContractYear(courseStart) + TOID + "0";
+		return purchasingContractIdentifier;
+	}
+
+	private static int purchasingContractYear(LocalDate enrolmentStartDate) {
+		int year = enrolmentStartDate.getYear();
+
+		if(year <= 2016) {
+			// Course Commencement Date "10/10/2016" is earlier than the purchasing contract/service agreement
+			// contract date "1/01/2017" that the RTO has with The Department.
+			return 2017;
+		}
+
+		return year;
 	}
 
     public static List<LabelValue> asLabelValue(Map<String, String> valueToLabel) {

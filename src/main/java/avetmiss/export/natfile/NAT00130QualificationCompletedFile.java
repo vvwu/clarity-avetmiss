@@ -83,7 +83,8 @@ public class NAT00130QualificationCompletedFile {
         request.dateCourseEnd = toISO(natStudentCourse.courseEnd());
         request.supervisedTeachingActivityCompletionDate = toISO(supervisedTeachingActivityCompletionDate2(natStudentCourse));
         request.supervisedHours = totalSupervisedHours;
-        request.programEnrolmentIdentifier = ProgramEnrolmentIdentifier.programEnrolmentIdentifier(PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), aRtoIdentifier), client.studentId(), natStudentCourse.getCourseIdentifier(), Dates.toLocalDate(natStudentCourse.courseStart()));
+        request.programEnrolmentIdentifier =
+                ProgramEnrolmentIdentifier.programEnrolmentIdentifier(PurchasingContractIdentifier.purchasingContractIdentifier(client.isInternational(), natStudentCourse.courseStart2(), aRtoIdentifier), client.studentId(), natStudentCourse.getCourseIdentifier(), Dates.toLocalDate(natStudentCourse.courseStart()));
         return request;
     }
 

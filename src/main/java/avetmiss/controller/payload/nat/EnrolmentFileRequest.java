@@ -7,6 +7,7 @@ public class EnrolmentFileRequest {
 
     public String studentID;
     public boolean international;
+    public String purchasingContractIdentifier;
     public String concessionTypeIdentifier;
     public String trainingContractIdentifierApprenticeships;
     public String clientIdentifierApprenticeships;

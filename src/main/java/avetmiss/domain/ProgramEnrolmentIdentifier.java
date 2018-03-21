@@ -14,7 +14,9 @@ public class ProgramEnrolmentIdentifier {
     // This identifier should remain unique to the combination of Student, Program, Program Commencement Date
     // and ContractID once uploaded. If any of these values change for an identifier where activity has been
     // successfully paid for, the submission will be rejected.
+
     public static String programEnrolmentIdentifier(String purchasingContractorID, String studentID, String programIdentifier, LocalDate programStartDate) {
-        return StringUtils.join(new String[]{studentID, programIdentifier, Dates.toISO(programStartDate), purchasingContractorID}, "-");
+        String[] params = {studentID, programIdentifier, Dates.toISO(programStartDate), purchasingContractorID};
+        return StringUtils.join(params, "-");
     }
 }

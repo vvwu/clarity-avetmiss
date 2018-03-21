@@ -172,7 +172,7 @@ public class Nat00120EnrolmentFile {
                 fundingSourceStateIdentifier,
                 clientTuitionFee,
                 request.concessionTypeIdentifier,
-                PurchasingContractIdentifier.purchasingContractIdentifier(request.international, request.rtoIdentifier),
+                request.purchasingContractIdentifier,
                 purchasingContractScheduleIdentifier,
                 hoursAttended(request.hoursAttended),
                 upperCase(request.associatedCourseIdentifier),
