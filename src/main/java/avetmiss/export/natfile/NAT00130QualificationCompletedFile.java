@@ -55,10 +55,8 @@ public class NAT00130QualificationCompletedFile {
                     client.totalSupervisedHours(completion.getCourseIdentifier());
 
             try {
-                Nat00130QualificationCompletedFileRequest request =
-                        toQualificationCompletedFileRequest(client, totalSupervisedHours, completion, TOID);
-
-                requests.add(request);
+                requests.add(
+                        toQualificationCompletedFileRequest(client, totalSupervisedHours, completion, TOID));
             } catch (Exception e) {
                 String error = format("NAT00130QualificationCompletedFile failed at studentID: %s, studentCourseIdentifier: %s, error: %s", client.studentId(), completion.getCourseIdentifier(), e.getMessage());
                 listener.error(error);
@@ -77,7 +75,11 @@ public class NAT00130QualificationCompletedFile {
         request.courseIdentifier = natStudentCourse.getCourseIdentifier();
         request.studentID = client.studentId();
         request.courseStartDate = toISO(natStudentCourse.courseStart());
+
         request.isQualificationIssued = natStudentCourse.isQualificationIssued();
+        request.parchmentNumber = natStudentCourse.parchmentNumber();
+        request.parchmentIssueDate = Dates.toLocalDate(natStudentCourse.parchmentIssueDate());
+
         request.isCourseCompleted = natStudentCourse.isCourseCompleted();
         request.programStatusIdentifier = natStudentCourse.programStatusIdentifier();
         request.dateCourseEnd = toISO(natStudentCourse.courseEnd());

@@ -11,7 +11,11 @@ public class StudentCourseReadModel {
     public int studentCourseID;
     public int courseID;
     public String status;
+
     public boolean qualificationIssued;
+    public String parchmentNumber;
+    public Date parchmentIssueDate;
+
     public boolean deferred;
     public String supersededOldCourseIdentifier;
     public BigDecimal otherFees;

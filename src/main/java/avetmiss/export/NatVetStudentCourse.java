@@ -24,7 +24,11 @@ public class NatVetStudentCourse {
 
     private String uniqueIdentifier;
     private String status;
+
     private boolean qualificationIssued;
+    private String parchmentNumber;
+    private Date parchmentIssueDate;
+
     private boolean isDeferred;
     private String courseIdentifier;
     private String associatedCourseIdentifier;
@@ -56,7 +60,11 @@ public class NatVetStudentCourse {
         this.studentID = studentID;
         this.uniqueIdentifier = studentCourse.studentCourseID + "";
         this.status = studentCourse.status;
+
         this.qualificationIssued = studentCourse.qualificationIssued;
+        this.parchmentNumber = studentCourse.parchmentNumber;
+        this.parchmentIssueDate = studentCourse.parchmentIssueDate;
+
         this.isDeferred = studentCourse.deferred;
 
         this.associatedCourseIdentifier = studentCourse.supersededOldCourseIdentifier;
@@ -129,6 +137,14 @@ public class NatVetStudentCourse {
         }
 
         return qualificationIssued;
+    }
+
+    public String parchmentNumber() {
+        return this.parchmentNumber;
+    }
+
+    public Date parchmentIssueDate() {
+        return parchmentIssueDate;
     }
 
     private void ensureYearCourseEndDateNotInTheFuture(Integer studentId, String courseCode, int yearCourseEnd) {
